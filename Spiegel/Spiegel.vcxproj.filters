@@ -27,9 +27,15 @@
     <ClInclude Include="src\Spiegel\EntryPoint.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Spiegel\Log.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Spiegel\Application.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spiegel\Log.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
