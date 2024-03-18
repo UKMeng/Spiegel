@@ -64,6 +64,9 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y "$(SolutionDir)bin\$(Configuration)-$(Platform)\Spiegel\Spiegel.dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -82,6 +85,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y "$(SolutionDir)bin\$(Configuration)-$(Platform)\Spiegel\Spiegel.dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spiegel\Spiegel.vcxproj">
