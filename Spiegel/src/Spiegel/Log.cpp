@@ -1,3 +1,4 @@
+#include "spgpch.h"
 #include "Log.h"
 
 namespace spg {

@@ -42,12 +42,18 @@
     <ClInclude Include="src\Spiegel\Events\ApplicationEvent.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\spgpch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Spiegel\Application.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Log.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spgpch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

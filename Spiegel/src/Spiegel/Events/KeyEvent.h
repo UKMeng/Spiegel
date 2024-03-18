@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Event.h"
-#include "Log.h"
 
 namespace spg {
 	class SPG_API KeyEvent : public Event {

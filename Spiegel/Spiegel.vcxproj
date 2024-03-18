@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\spgpch.h" />
     <ClInclude Include="src\Spiegel\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Spiegel\Events\Event.h" />
     <ClInclude Include="src\Spiegel\Events\KeyEvent.h" />
@@ -22,6 +23,10 @@
     <ClInclude Include="src\Spiegel\EntryPoint.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\spgpch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\Spiegel\Log.cpp" />
     <ClCompile Include="src\Spiegel\Application.cpp" />
   </ItemGroup>
@@ -73,7 +78,9 @@
       <PreprocessorDefinitions>SPG_PLATFORM_WINDOWS;SPG_BUILD_DLL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Spiegel\vendor\spdlog\include;$(ProjectDir)src\Spiegel;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Spiegel\vendor\spdlog\include;$(ProjectDir)src;</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>spgpch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -89,7 +96,9 @@
       <PreprocessorDefinitions>SPG_PLATFORM_WINDOWS;SPG_BUILD_DLL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Spiegel\vendor\spdlog\include;$(ProjectDir)src\Spiegel;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Spiegel\vendor\spdlog\include;$(ProjectDir)src;</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>spgpch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
