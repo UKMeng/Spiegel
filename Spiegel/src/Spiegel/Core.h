@@ -10,4 +10,12 @@
 	#error Spiegel ONLY support Windows
 #endif
 
+#ifdef SPG_ENABLE_ASSERTS
+	#define SPG_ASSERT(x, ...) { if(!x) { SPG_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+	#define SPG_CORE_ASSERT(x, ...) { if(!x) { SPG_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+#else
+	#define SPG_ASSERT(x, ...)
+	#define SPG_CORE_ASSERT(x, ...)
+#endif
+
 #define BIT(x) (1 << x)
