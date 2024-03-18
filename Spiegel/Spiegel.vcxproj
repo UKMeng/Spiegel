@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\spgpch.h" />
     <ClInclude Include="src\Spiegel\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Spiegel\Events\Event.h" />
@@ -21,8 +22,10 @@
     <ClInclude Include="src\Spiegel\Application.h" />
     <ClInclude Include="src\Spiegel\Core.h" />
     <ClInclude Include="src\Spiegel\EntryPoint.h" />
+    <ClInclude Include="src\Spiegel\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\spgpch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
