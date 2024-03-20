@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include "Spiegel/Application.h"
+#include "Spiegel/Layer.h"
 #include "Spiegel/Log.h"
 
 // --Entry Point

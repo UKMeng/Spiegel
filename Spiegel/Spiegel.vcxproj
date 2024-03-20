@@ -17,6 +17,8 @@
     <ClInclude Include="src\Spiegel\Events\Event.h" />
     <ClInclude Include="src\Spiegel\Events\KeyEvent.h" />
     <ClInclude Include="src\Spiegel\Events\MouseEvent.h" />
+    <ClInclude Include="src\Spiegel\Layer.h" />
+    <ClInclude Include="src\Spiegel\LayerStack.h" />
     <ClInclude Include="src\Spiegel\Log.h" />
     <ClInclude Include="src\Spiegel.h" />
     <ClInclude Include="src\Spiegel\Application.h" />
@@ -30,6 +32,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Spiegel\Layer.cpp" />
+    <ClCompile Include="src\Spiegel\LayerStack.cpp" />
     <ClCompile Include="src\Spiegel\Log.cpp" />
     <ClCompile Include="src\Spiegel\Application.cpp" />
   </ItemGroup>
