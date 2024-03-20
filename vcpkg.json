@@ -1,0 +1,12 @@
+{
+  "dependencies": [
+    {
+      "name": "glad",
+      "features": [
+        "gl-api-46"
+      ]
+    },
+    "spdlog",
+    "glfw3"
+  ]
+}
