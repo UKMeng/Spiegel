@@ -8,6 +8,8 @@
 
 namespace spg {
 
+	Application* Application::s_Instance = nullptr;
+
 // 回调函数
 // 修改成Lambdas函数格式，原因：
 // https://cntransgroup.github.io/EffectiveModernCppChinese/6.LambdaExpressions/item34.html
@@ -17,6 +19,9 @@ namespace spg {
 //#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 	Application::Application() {
+		SPG_CORE_ASSERT(!s_Instance, "Application already exists!");
+		s_Instance = this;
+
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback([this](Event& e) {
 			EventDispatcher dispatcher(e);
@@ -50,9 +55,11 @@ namespace spg {
 
 	void Application::PushLayer(Layer* layer) {
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 	void Application::PushOverlay(Layer* layer) {
 		m_LayerStack.PushOverlay(layer);
+		layer->OnAttach();
 	}
 
 	// Item 34: Prefer lambdas to std::bind

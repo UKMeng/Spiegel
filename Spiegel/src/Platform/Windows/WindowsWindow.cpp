@@ -90,6 +90,12 @@ namespace spg {
 			}
 		});
 
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int character) {
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			KeyTypedEvent event(character);
+			data.EventCallback(event);
+		});
+
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
@@ -131,8 +137,8 @@ namespace spg {
 	}
 
 	void WindowsWindow::OnUpdate() {
-		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		glfwPollEvents(); // 检查有没有触发什么事件（比如键盘输入、鼠标移动等），然后调用对应的回调函数（可以通过回调方法手动设置）。
+		glfwSwapBuffers(m_Window); // 交换颜色缓冲（它是一个储存着GLFW窗口每一个像素颜色的大缓冲），它在这一迭代中被用来绘制，并且将会作为输出显示在屏幕上。
 	}
 
 	void WindowsWindow::SetVSync(bool enabled) {

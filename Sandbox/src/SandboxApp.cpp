@@ -17,6 +17,7 @@ class Sandbox : public spg::Application {
 public:
 	Sandbox() {
 		PushLayer(new ExampleLayer());
+		PushOverlay(new spg::ImGuiLayer());
 	}
 
 	~Sandbox() {
