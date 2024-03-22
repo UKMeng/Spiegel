@@ -5,11 +5,16 @@ public:
 	ExampleLayer() : Layer("Example") {}
 
 	void OnUpdate() override {
-		SPG_INFO("ExampleLayer::OnUpdate");
+		if (spg::Input::IsKeyPressed(SPG_KEY_TAB)) {
+			SPG_INFO("Tab key is pressed");
+		}
 	}
 
 	void OnEvent(spg::Event& event) override {
-		SPG_INFO("{0}", event.ToString());
+		if (event.GetEventType() == spg::EventType::KeyPressed) {
+			spg::KeyPressedEvent& e = (spg::KeyPressedEvent&)event;
+			SPG_TRACE("{0}", (char)e.GetKeyCode());
+		}
 	}
 };
 

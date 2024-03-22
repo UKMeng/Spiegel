@@ -21,6 +21,7 @@
     <ClInclude Include="src\Spiegel\Events\MouseEvent.h" />
     <ClInclude Include="src\Spiegel\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Spiegel\Input.h" />
+    <ClInclude Include="src\Spiegel\KeyCodes.h" />
     <ClInclude Include="src\Spiegel\Layer.h" />
     <ClInclude Include="src\Spiegel\LayerStack.h" />
     <ClInclude Include="src\Spiegel\Log.h" />
@@ -28,6 +29,7 @@
     <ClInclude Include="src\Spiegel\Application.h" />
     <ClInclude Include="src\Spiegel\Core.h" />
     <ClInclude Include="src\Spiegel\EntryPoint.h" />
+    <ClInclude Include="src\Spiegel\MouseButtonCodes.h" />
     <ClInclude Include="src\Spiegel\Window.h" />
   </ItemGroup>
   <ItemGroup>

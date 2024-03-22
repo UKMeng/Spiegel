@@ -65,12 +65,16 @@ namespace spg {
 		});
 
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+			// glfw键盘事件回调函数，在glfw检测到有键盘事件时执行
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			switch (action) {
 				case GLFW_PRESS: 
 				{
+					// 创建对应类型event
 					KeyPressedEvent event(key, 0);
+					// 执行实现定义好的回调函数
+					// 在Application.cpp中为m_Window定义并设置了回调函数
 					data.EventCallback(event);
 					break;
 				}
