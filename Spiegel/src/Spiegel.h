@@ -6,6 +6,7 @@
 #include "Spiegel/Application.h"
 #include "Spiegel/Layer.h"
 #include "Spiegel/Log.h"
+#include "Spiegel/Input.h"
 #include "Spiegel/ImGui/ImGuiLayer.h"
 
 // --Entry Point

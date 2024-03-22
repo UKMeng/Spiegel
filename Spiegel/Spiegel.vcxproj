@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\spgpch.h" />
     <ClInclude Include="src\Spiegel\Events\ApplicationEvent.h" />
@@ -19,6 +20,7 @@
     <ClInclude Include="src\Spiegel\Events\KeyEvent.h" />
     <ClInclude Include="src\Spiegel\Events\MouseEvent.h" />
     <ClInclude Include="src\Spiegel\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\Spiegel\Input.h" />
     <ClInclude Include="src\Spiegel\Layer.h" />
     <ClInclude Include="src\Spiegel\LayerStack.h" />
     <ClInclude Include="src\Spiegel\Log.h" />
@@ -30,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\spgpch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -89,7 +92,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>SPG_PLATFORM_WINDOWS;SPG_BUILD_DLL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SPG_DEBUG;SPG_PLATFORM_WINDOWS;SPG_BUILD_DLL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)src;</AdditionalIncludeDirectories>
