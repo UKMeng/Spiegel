@@ -60,9 +60,6 @@
     <ClInclude Include="src\Spiegel\ImGui\ImGuiLayer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\Spiegel\Input.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -96,9 +93,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\ImGui\ImGuiLayer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">

@@ -3,7 +3,6 @@
 
 namespace spg {
 	LayerStack::LayerStack() {
-		m_LayerInsert = m_Layers.begin();
 	}
 
 	LayerStack::~LayerStack() {
@@ -11,9 +10,7 @@ namespace spg {
 	}
 
 	void LayerStack::PushLayer(Layer* layer) {
-		// emplace() 在m_LayerInsert之前的位置插入元素
-		// 并返回指向这个插入元素的指针
-		m_LayerInsert = m_Layers.emplace(m_LayerInsert, layer);
+		m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex++, layer);
 	}
 
 	void LayerStack::PushOverlay(Layer* overlay) {
@@ -24,7 +21,7 @@ namespace spg {
 		auto it = std::find(m_Layers.begin(), m_Layers.end(), layer);
 		if (it != m_Layers.end()) {
 			m_Layers.erase(it);
-			m_LayerInsert--;
+			m_LayerInsertIndex--;
 		}
 	}
 
