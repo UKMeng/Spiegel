@@ -4,6 +4,7 @@
 #include "Spiegel/Events/ApplicationEvent.h"
 #include "Spiegel/Events/KeyEvent.h"
 #include "Spiegel/Events/MouseEvent.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace spg {
 	static bool s_GLFWInitialized = false;
@@ -39,9 +40,10 @@ namespace spg {
 		}
 
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		SPG_CORE_ASSERT(status, "Failed to initialize GLAD")
+		
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
+		
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 
@@ -142,7 +144,7 @@ namespace spg {
 
 	void WindowsWindow::OnUpdate() {
 		glfwPollEvents(); // 检查有没有触发什么事件（比如键盘输入、鼠标移动等），然后调用对应的回调函数（可以通过回调方法手动设置）。
-		glfwSwapBuffers(m_Window); // 交换颜色缓冲（它是一个储存着GLFW窗口每一个像素颜色的大缓冲），它在这一迭代中被用来绘制，并且将会作为输出显示在屏幕上。
+		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled) {

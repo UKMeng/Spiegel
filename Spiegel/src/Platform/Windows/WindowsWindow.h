@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Spiegel/Window.h"
+#include "Spiegel/Renderer/GraphicsContext.h"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
 
 namespace spg {
 	class WindowsWindow : public Window {
@@ -27,6 +28,8 @@ namespace spg {
 		virtual void Shutdown();
 	private:
 		GLFWwindow* m_Window;
+
+		GraphicsContext* m_Context;
 
 		struct WindowData {
 			std::string Title;

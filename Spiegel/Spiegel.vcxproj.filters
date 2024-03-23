@@ -72,6 +72,12 @@
     <ClInclude Include="src\Spiegel\MouseButtonCodes.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Spiegel\Renderer\GraphicsContext.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Spiegel\Application.cpp">
@@ -96,6 +102,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
