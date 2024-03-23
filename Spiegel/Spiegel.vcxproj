@@ -31,6 +31,7 @@
     <ClInclude Include="src\Spiegel\EntryPoint.h" />
     <ClInclude Include="src\Spiegel\MouseButtonCodes.h" />
     <ClInclude Include="src\Spiegel\Renderer\GraphicsContext.h" />
+    <ClInclude Include="src\Spiegel\Renderer\Shader.h" />
     <ClInclude Include="src\Spiegel\Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +47,7 @@
     <ClCompile Include="src\Spiegel\LayerStack.cpp" />
     <ClCompile Include="src\Spiegel\Log.cpp" />
     <ClCompile Include="src\Spiegel\Application.cpp" />
+    <ClCompile Include="src\Spiegel\Renderer\Shader.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
