@@ -3,6 +3,7 @@
 #include "Log.h"
 #include "Input.h"
 #include "Renderer/Renderer.h"
+#include "KeyCodes.h"
 
 namespace spg {
 
@@ -27,6 +28,21 @@ namespace spg {
 				m_Running = false;
 				return true;
 				});
+			dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& e) {
+				if (e.GetKeyCode() == SPG_KEY_W) {
+					m_Camera.SetPosition({ m_Camera.GetPosition().x, m_Camera.GetPosition().y - 0.01f, m_Camera.GetPosition().z });
+				}
+				else if (e.GetKeyCode() == SPG_KEY_S) {
+					m_Camera.SetPosition({ m_Camera.GetPosition().x, m_Camera.GetPosition().y + 0.01f, m_Camera.GetPosition().z });
+				}
+				else if (e.GetKeyCode() == SPG_KEY_A) {
+					m_Camera.SetPosition({ m_Camera.GetPosition().x + 0.01f, m_Camera.GetPosition().y, m_Camera.GetPosition().z });
+				}
+				else if (e.GetKeyCode() == SPG_KEY_D) {
+					m_Camera.SetPosition({ m_Camera.GetPosition().x - 0.01f, m_Camera.GetPosition().y, m_Camera.GetPosition().z });
+				}
+				return false;
+			});
 			for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
 				(*--it)->OnEvent(e);
 				if (e.Handled) break;
@@ -157,8 +173,6 @@ namespace spg {
 		while (m_Running) {
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 			RenderCommand::Clear();
-
-			m_Camera.SetRotation(45.0f);
 
 			Renderer::BeginScene(m_Camera);
 			Renderer::Submit(m_BlueShader, m_SquareVA);
