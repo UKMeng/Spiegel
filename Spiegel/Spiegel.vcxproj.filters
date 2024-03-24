@@ -90,6 +90,12 @@
     <ClInclude Include="src\Spiegel\Renderer\Renderer.h">
       <Filter>Header File</Filter>
     </ClInclude>
+    <ClInclude Include="src\Spiegel\Renderer\VertexArray.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Spiegel\Application.cpp">
@@ -129,6 +135,12 @@
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Renderer\Renderer.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spiegel\Renderer\VertexArray.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
   </ItemGroup>
