@@ -2,5 +2,17 @@
 #include "Renderer.h"
 
 namespace spg {
-	RendererAPI Renderer::s_RendererAPI = RendererAPI::OpenGL;
+	void Renderer::BeginScene() {
+
+	}
+
+	void Renderer::EndScene() {
+
+	}
+
+	void Renderer::Submit(const std::shared_ptr<Shader>& shader, std::shared_ptr<VertexArray>& vertexArray) {
+		shader->Bind();
+		vertexArray->Bind();
+		RenderCommand::DrawIndexed(vertexArray);
+	}
 }
