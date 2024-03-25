@@ -2,6 +2,7 @@
 
 #include "Core.h"
 #include "Events/Event.h"
+#include "Core/Timestep.h"
 
 namespace spg {
 	class SPG_API Layer {
@@ -11,7 +12,7 @@ namespace spg {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep timestep) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 

@@ -5,6 +5,7 @@
 #include "LayerStack.h"
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
+#include "Core/Timestep.h"
 #include "ImGui/ImGuiLayer.h"
 
 #include "Renderer/Shader.h"
@@ -31,6 +32,8 @@ namespace spg {
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
+		float m_LastFrameTime = 0.0f;
+
 	private:
 		static Application* s_Instance;
 	};

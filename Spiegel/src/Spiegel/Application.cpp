@@ -5,6 +5,8 @@
 #include "Renderer/Renderer.h"
 #include "KeyCodes.h"
 
+#include <GLFW/glfw3.h>
+
 namespace spg {
 
 	Application* Application::s_Instance = nullptr;
@@ -33,6 +35,7 @@ namespace spg {
 				if (e.Handled) break;
 			}
 		});
+		m_Window->SetVSync(false);
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
@@ -44,8 +47,12 @@ namespace spg {
 
 	void Application::Run() {
 		while (m_Running) {
+			float time = (float)glfwGetTime(); // Platform::GetTime()
+			Timestep timestep = time - m_LastFrameTime;
+			m_LastFrameTime = time;
+
 			for (Layer* layer : m_LayerStack) {
-				layer->OnUpdate();
+				layer->OnUpdate(timestep);
 			}
 
 			m_ImGuiLayer->Begin();

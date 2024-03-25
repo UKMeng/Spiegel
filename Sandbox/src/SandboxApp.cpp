@@ -116,20 +116,22 @@ public:
 		m_BlueShader.reset(new spg::Shader(blueShaderVextexSrc, blueShaderFragmentSrc));
 	}
 
-	void OnUpdate() override {
+	void OnUpdate(spg::Timestep timestep) override {
+		SPG_TRACE("Delta time: {0}s ({1}ms)", timestep.GetSeconds(), timestep.GetMilliseconds());
+
 		// every single update shoule move the camera
 		if (spg::Input::IsKeyPressed(SPG_KEY_W)) {
-			m_CameraPosition.y += m_CameraMoveSpeed;
+			m_CameraPosition.y += m_CameraMoveSpeed * timestep;
 		}
 		else if (spg::Input::IsKeyPressed(SPG_KEY_S)) {
-			m_CameraPosition.y -= m_CameraMoveSpeed;
+			m_CameraPosition.y -= m_CameraMoveSpeed * timestep;
 		}
 
 		if (spg::Input::IsKeyPressed(SPG_KEY_A)) {
-			m_CameraPosition.x -= m_CameraMoveSpeed;
+			m_CameraPosition.x -= m_CameraMoveSpeed * timestep;
 		}
 		else if (spg::Input::IsKeyPressed(SPG_KEY_D)) {
-			m_CameraPosition.x += m_CameraMoveSpeed;
+			m_CameraPosition.x += m_CameraMoveSpeed * timestep;
 		}
 
 		if (spg::Input::IsKeyPressed(SPG_KEY_Q)) {

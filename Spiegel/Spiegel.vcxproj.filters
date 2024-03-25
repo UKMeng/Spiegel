@@ -108,6 +108,9 @@
     <ClInclude Include="src\Spiegel\Renderer\OrthographicCamera.h">
       <Filter>Header File</Filter>
     </ClInclude>
+    <ClInclude Include="src\Spiegel\Core\Timestep.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Spiegel\Application.cpp">
