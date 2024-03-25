@@ -11,6 +11,14 @@
 #include "Spiegel/KeyCodes.h"
 #include "Spiegel/ImGui/ImGuiLayer.h"
 
+#include "Spiegel/Renderer/Renderer.h"
+#include "Spiegel/Renderer/RenderCommand.h"
+#include "Spiegel/Renderer/Buffer.h"
+#include "Spiegel/Renderer/RendererAPI.h"
+#include "Spiegel/Renderer/Shader.h"
+#include "Spiegel/Renderer/VertexArray.h"
+#include "Spiegel/Renderer/OrthographicCamera.h"
+
 // --Entry Point
 #include "Spiegel/EntryPoint.h"
 // ----------
