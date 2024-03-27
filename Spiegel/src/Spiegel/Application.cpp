@@ -37,6 +37,8 @@ namespace spg {
 		});
 		m_Window->SetVSync(false);
 
+		Renderer::Init();
+
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 	}

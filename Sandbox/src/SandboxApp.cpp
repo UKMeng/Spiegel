@@ -160,6 +160,7 @@ public:
 		m_TextureShader.reset(spg::Shader::Create(textureShaderVextexSrc, textureShaderFragmentSrc));
 	
 		m_Texture = spg::Texture2D::Create("assets/textures/Checkerboard.png");
+		m_LogoTexture = spg::Texture2D::Create("assets/textures/ustc.png");
 
 		std::dynamic_pointer_cast<spg::OpenGLShader>(m_TextureShader)->Bind();
 		std::dynamic_pointer_cast<spg::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0); // slot 0
@@ -229,6 +230,8 @@ public:
 		
 		m_Texture->Bind();
 		spg::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		m_LogoTexture->Bind();
+		spg::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		// spg::Renderer::Submit(m_Shader, m_VertexArray);
 		spg::Renderer::EndScene();
@@ -252,6 +255,7 @@ private:
 	spg::Ref<spg::Shader> m_TextureShader;
 	spg::Ref<spg::VertexArray> m_SquareVA;
 	spg::Ref<spg::Texture2D> m_Texture;
+	spg::Ref<spg::Texture2D> m_LogoTexture;
 
 	spg::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;

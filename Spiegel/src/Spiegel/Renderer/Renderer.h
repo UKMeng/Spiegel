@@ -8,6 +8,8 @@ namespace spg {
 	class Renderer {
 		// store the static state of the renderer API
 	public:
+		static void Init();
+
 		static void BeginScene(OrthographicCamera& camera);
 		static void EndScene();
 
