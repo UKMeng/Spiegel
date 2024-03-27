@@ -20,7 +20,7 @@ public:
 
 		// Renderer API Abstraction
 		// vertex buffer
-		std::shared_ptr<spg::VertexBuffer> vertexBuffer;
+		spg::Ref<spg::VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(spg::VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		spg::BufferLayout layout = {
@@ -33,7 +33,7 @@ public:
 
 		// index buffer
 		uint32_t indices[3] = { 0, 1, 2 };
-		std::shared_ptr<spg::IndexBuffer> indexBuffer;
+		spg::Ref<spg::IndexBuffer> indexBuffer;
 		indexBuffer.reset(spg::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
@@ -44,14 +44,14 @@ public:
 			 0.5f,  0.5f, 0.0f,
 			-0.5f,  0.5f, 0.0f
 		};
-		std::shared_ptr<spg::VertexBuffer> squareVB;
+		spg::Ref<spg::VertexBuffer> squareVB;
 		squareVB.reset(spg::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		squareVB->SetLayout({
 			{ spg::ShaderDataType::Float3, "a_Position" },
 			});
 		m_SquareVA->AddVertexBuffer(squareVB);
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<spg::IndexBuffer> squareIB;
+		spg::Ref<spg::IndexBuffer> squareIB;
 		squareIB.reset(spg::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
@@ -182,7 +182,7 @@ public:
 
 		for (int y = 0; y < 20; y++) {
 			for (int x = 0; x < 20; x++) {
-				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+				glm::vec3 pos(m_SquarePosition.x + x * 0.11f, m_SquarePosition.y + y * 0.11f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 				spg::Renderer::Submit(m_BlueShader, m_SquareVA, transform);
 			}
@@ -203,11 +203,11 @@ public:
 
 	}
 private:
-	std::shared_ptr<spg::Shader> m_Shader;
-	std::shared_ptr<spg::VertexArray> m_VertexArray;
+	spg::Ref<spg::Shader> m_Shader;
+	spg::Ref<spg::VertexArray> m_VertexArray;
 
-	std::shared_ptr<spg::Shader> m_BlueShader;
-	std::shared_ptr<spg::VertexArray> m_SquareVA;
+	spg::Ref<spg::Shader> m_BlueShader;
+	spg::Ref<spg::VertexArray> m_SquareVA;
 
 	spg::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;

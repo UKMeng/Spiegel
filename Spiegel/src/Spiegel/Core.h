@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #ifdef SPG_PLATFORM_WINDOWS
 #if SPG_DYNAMIC_LINK
 	#ifdef SPG_BUILD_DLL
@@ -29,3 +31,13 @@
 #define BIT(x) (1 << x)
 
 #define SPG_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+
+namespace spg {
+
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+
+}
