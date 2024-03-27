@@ -11,11 +11,12 @@
     {
       "name": "imgui",
       "features": [
+        "docking-experimental",
         "glfw-binding",
-        "opengl3-binding",
-        "docking-experimental"
+        "opengl3-binding"
       ]
     },
-    "spdlog"
+    "spdlog",
+    "stb"
   ]
 }

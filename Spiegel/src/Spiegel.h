@@ -18,6 +18,7 @@
 #include "Spiegel/Renderer/Buffer.h"
 #include "Spiegel/Renderer/RendererAPI.h"
 #include "Spiegel/Renderer/Shader.h"
+#include "Spiegel/Renderer/Texture.h"
 #include "Spiegel/Renderer/VertexArray.h"
 #include "Spiegel/Renderer/OrthographicCamera.h"
 

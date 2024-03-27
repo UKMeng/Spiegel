@@ -38,16 +38,17 @@ public:
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
 		m_SquareVA.reset(spg::VertexArray::Create());
-		float squareVertices[3 * 4] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
+		float squareVertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 		spg::Ref<spg::VertexBuffer> squareVB;
 		squareVB.reset(spg::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		squareVB->SetLayout({
 			{ spg::ShaderDataType::Float3, "a_Position" },
+			{ spg::ShaderDataType::Float2, "a_TexCoord" },
 			});
 		m_SquareVA->AddVertexBuffer(squareVB);
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
@@ -124,10 +125,48 @@ public:
 		)";
 
 		m_BlueShader.reset(spg::Shader::Create(blueShaderVextexSrc, blueShaderFragmentSrc));
+
+		std::string textureShaderVextexSrc = R"(
+			#version 330 core
+
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+
+			out vec2 v_TexCoord;
+
+			void main() {
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+			}
+		)";
+
+		std::string textureShaderFragmentSrc = R"(
+			#version 330 core
+
+			layout(location = 0) out vec4 color;
+
+			in vec2 v_TexCoord;
+
+			uniform sampler2D u_Texture;
+
+			void main() {
+				color = texture(u_Texture, v_TexCoord);
+			}
+		)";
+
+		m_TextureShader.reset(spg::Shader::Create(textureShaderVextexSrc, textureShaderFragmentSrc));
+	
+		m_Texture = spg::Texture2D::Create("assets/textures/Checkerboard.png");
+
+		std::dynamic_pointer_cast<spg::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<spg::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0); // slot 0
 	}
 
 	void OnUpdate(spg::Timestep timestep) override {
-		SPG_TRACE("Delta time: {0}s ({1}ms)", timestep.GetSeconds(), timestep.GetMilliseconds());
+		// SPG_TRACE("Delta time: {0}s ({1}ms)", timestep.GetSeconds(), timestep.GetMilliseconds());
 
 		// every single update shoule move the camera
 		if (spg::Input::IsKeyPressed(SPG_KEY_W)) {
@@ -188,6 +227,9 @@ public:
 			}
 		}
 		
+		m_Texture->Bind();
+		spg::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
 		// spg::Renderer::Submit(m_Shader, m_VertexArray);
 		spg::Renderer::EndScene();
 
@@ -207,7 +249,9 @@ private:
 	spg::Ref<spg::VertexArray> m_VertexArray;
 
 	spg::Ref<spg::Shader> m_BlueShader;
+	spg::Ref<spg::Shader> m_TextureShader;
 	spg::Ref<spg::VertexArray> m_SquareVA;
+	spg::Ref<spg::Texture2D> m_Texture;
 
 	spg::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
