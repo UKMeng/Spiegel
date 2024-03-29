@@ -91,7 +91,7 @@ public:
 			}
 		)";
 
-		m_Shader.reset(spg::Shader::Create(vertexSrc, fragmentSrc));
+		m_Shader = spg::Shader::Create("Triangle", vertexSrc, fragmentSrc);
 
 		std::string blueShaderVextexSrc = R"(
 			#version 330 core
@@ -124,17 +124,16 @@ public:
 			}
 		)";
 
-		m_BlueShader.reset(spg::Shader::Create(blueShaderVextexSrc, blueShaderFragmentSrc));
+		m_BlueShader = spg::Shader::Create("blue", blueShaderVextexSrc, blueShaderFragmentSrc);
 
 
-
-		m_TextureShader.reset(spg::Shader::Create("assets/shaders/Texture.glsl"));
+		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 	
 		m_Texture = spg::Texture2D::Create("assets/textures/Checkerboard.png");
 		m_LogoTexture = spg::Texture2D::Create("assets/textures/ustc.png");
 
-		std::dynamic_pointer_cast<spg::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<spg::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0); // slot 0
+		std::dynamic_pointer_cast<spg::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<spg::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0); // slot 0
 	}
 
 	void OnUpdate(spg::Timestep timestep) override {
@@ -198,11 +197,13 @@ public:
 				spg::Renderer::Submit(m_BlueShader, m_SquareVA, transform);
 			}
 		}
+
+		auto textureShader = m_ShaderLibrary.Get("Texture");
 		
 		m_Texture->Bind();
-		spg::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		spg::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 		m_LogoTexture->Bind();
-		spg::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		spg::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		// spg::Renderer::Submit(m_Shader, m_VertexArray);
 		spg::Renderer::EndScene();
@@ -219,11 +220,11 @@ public:
 
 	}
 private:
+	spg::ShaderLibrary m_ShaderLibrary;
 	spg::Ref<spg::Shader> m_Shader;
 	spg::Ref<spg::VertexArray> m_VertexArray;
 
 	spg::Ref<spg::Shader> m_BlueShader;
-	spg::Ref<spg::Shader> m_TextureShader;
 	spg::Ref<spg::VertexArray> m_SquareVA;
 	spg::Ref<spg::Texture2D> m_Texture;
 	spg::Ref<spg::Texture2D> m_LogoTexture;
