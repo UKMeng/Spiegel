@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Renderer/Renderer.h"
 #include "KeyCodes.h"
+#include "Core.h"
 
 #include <GLFW/glfw3.h>
 
@@ -11,30 +12,12 @@ namespace spg {
 
 	Application* Application::s_Instance = nullptr;
 
-// 回调函数
-// 修改成Lambdas函数格式，原因：
-// https://cntransgroup.github.io/EffectiveModernCppChinese/6.LambdaExpressions/item34.html
-// 
-// std::placeholders::_1 是一个占位符
-// std::bind，允许您将成员函数绑定到特定对象，并可以将参数传递给该函数。
-//#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
-
 	Application::Application() {
 		SPG_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
-		m_Window->SetEventCallback([this](Event& e) {
-			EventDispatcher dispatcher(e);
-			dispatcher.Dispatch<WindowCloseEvent>([this](WindowCloseEvent& e) {
-				m_Running = false;
-				return true;
-				});
-			for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
-				(*--it)->OnEvent(e);
-				if (e.Handled) break;
-			}
-		});
+		m_Window->SetEventCallback(SPG_BIND_EVENT_FN(Application::OnEvent));
 		m_Window->SetVSync(false);
 
 		Renderer::Init();
@@ -53,10 +36,12 @@ namespace spg {
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
-			for (Layer* layer : m_LayerStack) {
-				layer->OnUpdate(timestep);
+			if (!m_Minimized) {
+				for (Layer* layer : m_LayerStack) {
+					layer->OnUpdate(timestep);
+				}
 			}
-
+			
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack) {
 				layer->OnImGuiRender();
@@ -76,22 +61,33 @@ namespace spg {
 		layer->OnAttach();
 	}
 
-	// Item 34: Prefer lambdas to std::bind
+	void Application::OnEvent(Event& e) {
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowCloseEvent>(SPG_BIND_EVENT_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(SPG_BIND_EVENT_FN(Application::OnWindowResize));
 
-	//void Application::OnEvent(Event& e) {
-	//	EventDispatcher dispatcher(e);
-	//	// Dispath(std::function<bool(T&)>)
-	//	// dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
-	//	dispatcher.Dispatch<WindowCloseEvent>([this](WindowCloseEvent& e) {
-	//		m_Running = false;
-	//		return true;
-	//	});
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
+			(*--it)->OnEvent(e);
+			if (e.Handled) break;
+		}
+	}
 
-	//	SPG_CORE_TRACE("{0}", e.ToString());
-	//}
+	bool Application::OnWindowClose(WindowCloseEvent& e) {
+		m_Running = false;
+		return true;
+	}
 
-	//bool Application::OnWindowClose(WindowCloseEvent& e) {
-	//	m_Running = false;
-	//	return true;
-	//}
+	bool Application::OnWindowResize(WindowResizeEvent& e) {
+		
+		// When the window is minimized, the width and height are set to 0
+		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
+			m_Minimized = true;
+			return false;
+		}
+		m_Minimized = false;
+
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+
+		return false;
+	}
 }

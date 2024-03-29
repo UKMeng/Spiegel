@@ -5,11 +5,11 @@
 namespace spg {
 	class SPG_API WindowResizeEvent : public Event {
 	public:
-		WindowResizeEvent(unsigned int width, unsigned int height)
+		WindowResizeEvent(uint32_t width, uint32_t height)
 			: m_Width(width), m_Height(height) {}
 
-		inline unsigned int GetWidth() const { return m_Width; }
-		inline unsigned int GetHeight() const { return m_Height; }
+		inline uint32_t GetWidth() const { return m_Width; }
+		inline uint32_t GetHeight() const { return m_Height; }
 
 		std::string ToString() const override {
 			std::stringstream ss;
@@ -21,7 +21,7 @@ namespace spg {
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 
 	private:
-		unsigned int m_Width, m_Height;
+		uint32_t m_Width, m_Height;
 	};
 
 	class SPG_API WindowCloseEvent : public Event {
