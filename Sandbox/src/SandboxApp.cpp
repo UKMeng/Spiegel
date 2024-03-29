@@ -8,7 +8,7 @@
 
 class ExampleLayer : public spg::Layer {
 public:
-	ExampleLayer() : Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f), m_SquarePosition(0.0f) {
+	ExampleLayer() : Layer("Example"), m_CameraController(1280.0f / 720.0f, true) {
 		m_VertexArray.reset(spg::VertexArray::Create());
 
 		float vertices[3 * 7] = {
@@ -139,27 +139,7 @@ public:
 	void OnUpdate(spg::Timestep timestep) override {
 		// SPG_TRACE("Delta time: {0}s ({1}ms)", timestep.GetSeconds(), timestep.GetMilliseconds());
 
-		// every single update shoule move the camera
-		if (spg::Input::IsKeyPressed(SPG_KEY_W)) {
-			m_CameraPosition.y += m_CameraMoveSpeed * timestep;
-		}
-		else if (spg::Input::IsKeyPressed(SPG_KEY_S)) {
-			m_CameraPosition.y -= m_CameraMoveSpeed * timestep;
-		}
-
-		if (spg::Input::IsKeyPressed(SPG_KEY_A)) {
-			m_CameraPosition.x -= m_CameraMoveSpeed * timestep;
-		}
-		else if (spg::Input::IsKeyPressed(SPG_KEY_D)) {
-			m_CameraPosition.x += m_CameraMoveSpeed * timestep;
-		}
-
-		if (spg::Input::IsKeyPressed(SPG_KEY_Q)) {
-			m_CameraRotation += m_CameraRotationSpeed;
-		}
-		else if (spg::Input::IsKeyPressed(SPG_KEY_E)) {
-			m_CameraRotation -= m_CameraRotationSpeed;
-		}
+		m_CameraController.OnUpdate(timestep);
 
 		if (spg::Input::IsKeyPressed(SPG_KEY_J)) {
 			m_SquarePosition.x -= m_SquareMoveSpeed * timestep;
@@ -178,10 +158,9 @@ public:
 		spg::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		spg::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
 
-		spg::Renderer::BeginScene(m_Camera);
+
+		spg::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
@@ -216,8 +195,8 @@ public:
 		ImGui::End();
 	}
 
-	void OnEvent(spg::Event& event) override {
-
+	void OnEvent(spg::Event& e) override {
+		m_CameraController.OnEvent(e);
 	}
 private:
 	spg::ShaderLibrary m_ShaderLibrary;
@@ -229,13 +208,9 @@ private:
 	spg::Ref<spg::Texture2D> m_Texture;
 	spg::Ref<spg::Texture2D> m_LogoTexture;
 
-	spg::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition;
-	float m_CameraMoveSpeed = 0.05f;
-	float m_CameraRotation = 0.0f;
-	float m_CameraRotationSpeed = 1.0f;
+	spg::OrthographicCameraController m_CameraController;
 
-	glm::vec3 m_SquarePosition;
+	glm::vec3 m_SquarePosition = { 0.0f, 0.0f, 0.0f };
 	float m_SquareMoveSpeed = 1.0f;
 
 	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
