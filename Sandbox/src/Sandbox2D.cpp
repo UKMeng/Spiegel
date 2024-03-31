@@ -50,14 +50,10 @@ void Sandbox2D::OnUpdate(spg::Timestep ts)
 	spg::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 	spg::RenderCommand::Clear();
 
-	spg::Renderer::BeginScene(m_CameraController.GetCamera());
-
-	std::dynamic_pointer_cast<spg::OpenGLShader>(m_FlatColorShader)->Bind();
-	std::dynamic_pointer_cast<spg::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat4("u_Color", m_SquareColor);
-
-	spg::Renderer::Submit(m_FlatColorShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-		
-	spg::Renderer::EndScene();
+	spg::Renderer2D::BeginScene(m_CameraController.GetCamera());
+	spg::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+	spg::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+	spg::Renderer2D::EndScene();
 }
 
 void Sandbox2D::OnEvent(spg::Event& e)
