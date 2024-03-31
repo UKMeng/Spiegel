@@ -19,5 +19,7 @@ private:
 	spg::Ref<spg::VertexArray> m_SquareVA;
 	spg::OrthographicCameraController m_CameraController;
 
+	spg::Ref<spg::Texture2D> m_CheckerboardTexture;
+
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 };

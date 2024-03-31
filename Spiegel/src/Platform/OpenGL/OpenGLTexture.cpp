@@ -36,6 +36,10 @@ namespace spg {
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		// 设置放大过滤器，使用最近邻过滤器放大
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		
 		// 将图像数据上传到纹理对象中，第一个0表示要更新的mipmap级别
 		// 后面两个0，0表示图像数据在纹理中的起始位置
 		// GL_RGB表示图像数据使用RGB格式，GL_UNSIGNED_BYTE表示图像数据的数据类型，这里使用的是无符号字节类型
