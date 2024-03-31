@@ -1,6 +1,6 @@
 #include "spgpch.h"
 #include "WindowsInput.h"
-#include "Spiegel/Application.h"
+#include "Spiegel/Core/Application.h"
 
 #include <GLFW/glfw3.h>
 

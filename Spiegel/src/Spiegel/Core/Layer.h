@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Core.h"
-#include "Events/Event.h"
-#include "Core/Timestep.h"
+#include "Spiegel/Core/Core.h"
+#include "Spiegel/Events/Event.h"
+#include "Spiegel/Core/Timestep.h"
 
 namespace spg {
 	class SPG_API Layer {

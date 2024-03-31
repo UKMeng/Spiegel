@@ -2,7 +2,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include "ImGuiLayer.h"
-#include "Spiegel/Application.h"
+#include "Spiegel/Core/Application.h"
 
 #include <imgui.h>
 #include <imgui_impl_glfw.h>

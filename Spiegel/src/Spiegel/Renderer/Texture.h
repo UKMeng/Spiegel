@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Spiegel/Core.h"
+#include "Spiegel/Core/Core.h"
 
 #include <string>
 

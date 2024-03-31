@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Spiegel/Core.h"
-#include "Spiegel/Log.h"
+#include "Spiegel/Core/Core.h"
+#include "Spiegel/Core/Log.h"
 
 namespace spg {
 	enum class EventType {

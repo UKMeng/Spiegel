@@ -1,8 +1,8 @@
 #include "spgpch.h"
 #include "OrthographicCameraController.h"
 
-#include "Spiegel/Input.h"
-#include "Spiegel/KeyCodes.h"
+#include "Spiegel/Core/Input.h"
+#include "Spiegel/Core/KeyCodes.h"
 
 namespace spg {
 	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)

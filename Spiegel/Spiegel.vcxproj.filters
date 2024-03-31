@@ -15,19 +15,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Spiegel\Core.h">
+    <ClInclude Include="src\Spiegel\Core\Core.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Spiegel\Application.h">
+    <ClInclude Include="src\Spiegel\Core\Application.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Spiegel.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Spiegel\EntryPoint.h">
+    <ClInclude Include="src\Spiegel\Core\EntryPoint.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Spiegel\Log.h">
+    <ClInclude Include="src\Spiegel\Core\Log.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Spiegel\Events\Event.h">
@@ -45,31 +45,31 @@
     <ClInclude Include="src\spgpch.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Spiegel\Window.h">
+    <ClInclude Include="src\Spiegel\Core\Window.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Spiegel\Layer.h">
+    <ClInclude Include="src\Spiegel\Core\Layer.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Spiegel\LayerStack.h">
+    <ClInclude Include="src\Spiegel\Core\LayerStack.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Spiegel\ImGui\ImGuiLayer.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Spiegel\Input.h">
+    <ClInclude Include="src\Spiegel\Core\Input.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsInput.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Spiegel\KeyCodes.h">
+    <ClInclude Include="src\Spiegel\Core\KeyCodes.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Spiegel\MouseButtonCodes.h">
+    <ClInclude Include="src\Spiegel\Core\MouseButtonCodes.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Spiegel\Renderer\GraphicsContext.h">
@@ -120,15 +120,15 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Spiegel\OrthographicCameraController.h">
+    <ClInclude Include="src\Spiegel\Renderer\OrthographicCameraController.h">
       <Filter>Header File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Spiegel\Application.cpp">
+    <ClCompile Include="src\Spiegel\Core\Application.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="src\Spiegel\Log.cpp">
+    <ClCompile Include="src\Spiegel\Core\Log.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\spgpch.cpp">
@@ -137,10 +137,10 @@
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="src\Spiegel\Layer.cpp">
+    <ClCompile Include="src\Spiegel\Core\Layer.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="src\Spiegel\LayerStack.cpp">
+    <ClCompile Include="src\Spiegel\Core\LayerStack.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\ImGui\ImGuiLayer.cpp">
@@ -191,7 +191,7 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="src\Spiegel\OrthographicCameraController.cpp">
+    <ClCompile Include="src\Spiegel\Renderer\OrthographicCameraController.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
   </ItemGroup>

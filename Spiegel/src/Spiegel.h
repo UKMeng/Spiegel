@@ -3,13 +3,12 @@
 // For use by Spiegel applications
 
 #include <stdio.h>
-#include "Spiegel/Application.h"
-#include "Spiegel/Layer.h"
-#include "Spiegel/Log.h"
-#include "Spiegel/Input.h"
-#include "Spiegel/MouseButtonCodes.h"
-#include "Spiegel/KeyCodes.h"
-#include "Spiegel/OrthographicCameraController.h"
+#include "Spiegel/Core/Application.h"
+#include "Spiegel/Core/Layer.h"
+#include "Spiegel/Core/Log.h"
+#include "Spiegel/Core/Input.h"
+#include "Spiegel/Core/MouseButtonCodes.h"
+#include "Spiegel/Core/KeyCodes.h"
 #include "Spiegel/Core/Timestep.h"
 
 #include "Spiegel/ImGui/ImGuiLayer.h"
@@ -22,7 +21,8 @@
 #include "Spiegel/Renderer/Texture.h"
 #include "Spiegel/Renderer/VertexArray.h"
 #include "Spiegel/Renderer/OrthographicCamera.h"
+#include "Spiegel/Renderer/OrthographicCameraController.h"
 
 // --Entry Point
-#include "Spiegel/EntryPoint.h"
+#include "Spiegel/Core/EntryPoint.h"
 // ----------

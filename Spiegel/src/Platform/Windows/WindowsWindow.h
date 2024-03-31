@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Spiegel/Window.h"
+#include "Spiegel/Core/Window.h"
 #include "Spiegel/Renderer/GraphicsContext.h"
 
 #include <glad/glad.h>

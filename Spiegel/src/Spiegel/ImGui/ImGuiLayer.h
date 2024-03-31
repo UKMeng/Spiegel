@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Spiegel/Layer.h"
+#include "Spiegel/Core/Layer.h"
 #include "Spiegel/Events/ApplicationEvent.h"
 #include "Spiegel/Events/KeyEvent.h"
 #include "Spiegel/Events/MouseEvent.h"

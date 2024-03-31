@@ -2,9 +2,10 @@
 #include "Application.h"
 #include "Log.h"
 #include "Input.h"
-#include "Renderer/Renderer.h"
 #include "KeyCodes.h"
 #include "Core.h"
+
+#include "Spiegel/Renderer/Renderer.h"
 
 #include <GLFW/glfw3.h>
 

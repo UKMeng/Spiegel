@@ -26,17 +26,17 @@
     <ClInclude Include="src\Spiegel\Events\KeyEvent.h" />
     <ClInclude Include="src\Spiegel\Events\MouseEvent.h" />
     <ClInclude Include="src\Spiegel\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\Spiegel\Input.h" />
-    <ClInclude Include="src\Spiegel\KeyCodes.h" />
-    <ClInclude Include="src\Spiegel\Layer.h" />
-    <ClInclude Include="src\Spiegel\LayerStack.h" />
-    <ClInclude Include="src\Spiegel\Log.h" />
+    <ClInclude Include="src\Spiegel\Core\Input.h" />
+    <ClInclude Include="src\Spiegel\Core\KeyCodes.h" />
+    <ClInclude Include="src\Spiegel\Core\Layer.h" />
+    <ClInclude Include="src\Spiegel\Core\LayerStack.h" />
+    <ClInclude Include="src\Spiegel\Core\Log.h" />
     <ClInclude Include="src\Spiegel.h" />
-    <ClInclude Include="src\Spiegel\Application.h" />
-    <ClInclude Include="src\Spiegel\Core.h" />
-    <ClInclude Include="src\Spiegel\EntryPoint.h" />
-    <ClInclude Include="src\Spiegel\MouseButtonCodes.h" />
-    <ClInclude Include="src\Spiegel\OrthographicCameraController.h" />
+    <ClInclude Include="src\Spiegel\Core\Application.h" />
+    <ClInclude Include="src\Spiegel\Core\Core.h" />
+    <ClInclude Include="src\Spiegel\Core\EntryPoint.h" />
+    <ClInclude Include="src\Spiegel\Core\MouseButtonCodes.h" />
+    <ClInclude Include="src\Spiegel\Renderer\OrthographicCameraController.h" />
     <ClInclude Include="src\Spiegel\Renderer\Buffer.h" />
     <ClInclude Include="src\Spiegel\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Spiegel\Renderer\OrthographicCamera.h" />
@@ -46,7 +46,7 @@
     <ClInclude Include="src\Spiegel\Renderer\Shader.h" />
     <ClInclude Include="src\Spiegel\Renderer\Texture.h" />
     <ClInclude Include="src\Spiegel\Renderer\VertexArray.h" />
-    <ClInclude Include="src\Spiegel\Window.h" />
+    <ClInclude Include="src\Spiegel\Core\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
@@ -62,11 +62,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Spiegel\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Spiegel\Layer.cpp" />
-    <ClCompile Include="src\Spiegel\LayerStack.cpp" />
-    <ClCompile Include="src\Spiegel\Log.cpp" />
-    <ClCompile Include="src\Spiegel\Application.cpp" />
-    <ClCompile Include="src\Spiegel\OrthographicCameraController.cpp" />
+    <ClCompile Include="src\Spiegel\Core\Layer.cpp" />
+    <ClCompile Include="src\Spiegel\Core\LayerStack.cpp" />
+    <ClCompile Include="src\Spiegel\Core\Log.cpp" />
+    <ClCompile Include="src\Spiegel\Core\Application.cpp" />
+    <ClCompile Include="src\Spiegel\Renderer\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Renderer.cpp" />

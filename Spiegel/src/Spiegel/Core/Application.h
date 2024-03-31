@@ -3,15 +3,15 @@
 #include "Core.h"
 #include "Window.h"
 #include "LayerStack.h"
-#include "Events/Event.h"
-#include "Events/ApplicationEvent.h"
-#include "Core/Timestep.h"
-#include "ImGui/ImGuiLayer.h"
+#include "Spiegel/Events/Event.h"
+#include "Spiegel/Events/ApplicationEvent.h"
+#include "Spiegel/Core/Timestep.h"
+#include "Spiegel/ImGui/ImGuiLayer.h"
 
-#include "Renderer/Shader.h"
-#include "Renderer/Buffer.h"
-#include "Renderer/VertexArray.h"
-#include "Renderer/OrthographicCamera.h"
+#include "Spiegel/Renderer/Shader.h"
+#include "Spiegel/Renderer/Buffer.h"
+#include "Spiegel/Renderer/VertexArray.h"
+#include "Spiegel/Renderer/OrthographicCamera.h"
 
 namespace spg {
 	class SPG_API Application

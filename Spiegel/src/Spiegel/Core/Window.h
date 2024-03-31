@@ -3,7 +3,8 @@
 #include "spgpch.h"
 
 #include "Core.h"
-#include "Events/Event.h"
+
+#include "Spiegel/Events/Event.h"
 
 namespace spg {
 	struct WindowProps {

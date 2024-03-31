@@ -18,4 +18,4 @@
 	#include <Windows.h>
 #endif
 
-#include "Spiegel/Log.h"
+#include "Spiegel/Core/Log.h"

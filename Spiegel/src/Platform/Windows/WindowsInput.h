@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Spiegel/Input.h"
+#include "Spiegel/Core/Input.h"
 
 namespace spg {
 	class WindowsInput : public Input {
