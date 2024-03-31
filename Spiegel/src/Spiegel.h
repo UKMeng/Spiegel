@@ -22,7 +22,3 @@
 #include "Spiegel/Renderer/VertexArray.h"
 #include "Spiegel/Renderer/OrthographicCamera.h"
 #include "Spiegel/Renderer/OrthographicCameraController.h"
-
-// --Entry Point
-#include "Spiegel/Core/EntryPoint.h"
-// ----------
