@@ -126,6 +126,9 @@
     <ClInclude Include="src\Spiegel\Renderer\Renderer2D.h">
       <Filter>Header File</Filter>
     </ClInclude>
+    <ClInclude Include="src\Spiegel\Debug\Instrumentation.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Spiegel\Core\Application.cpp">

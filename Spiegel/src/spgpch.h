@@ -19,3 +19,4 @@
 #endif
 
 #include "Spiegel/Core/Log.h"
+#include "Spiegel/Debug/Instrumentation.h"

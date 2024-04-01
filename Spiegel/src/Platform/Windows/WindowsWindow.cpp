@@ -7,7 +7,7 @@
 #include "Platform/OpenGL/OpenGLContext.h"
 
 namespace spg {
-	static bool s_GLFWInitialized = false;
+	static int s_GLFWWindowCount = 0;
 
 	static void GLFWErrorCallback(int error, const char* description) {
 		SPG_CORE_ERROR("GLFW Error {{0}}: {1}", error, description);
@@ -18,28 +18,39 @@ namespace spg {
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props) {
+		SPG_PROFILE_FUNCTION();
+
 		Init(props);
 	}
 
 	WindowsWindow::~WindowsWindow() {
+		SPG_PROFILE_FUNCTION();
+
 		Shutdown();
 	}
 
 	void WindowsWindow::Init(const WindowProps& props) {
+		SPG_PROFILE_FUNCTION();
+
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 
 		SPG_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
-		if (!s_GLFWInitialized) {
+		if (s_GLFWWindowCount == 0) {
+			SPG_PROFILE_SCOPE("glfwInit");
 			int success = glfwInit();
 			SPG_CORE_ASSERT(success, "Could not intialize GLFW");
 			glfwSetErrorCallback(GLFWErrorCallback);
-			s_GLFWInitialized = true;
 		}
 
-		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		{
+			SPG_PROFILE_SCOPE("glfwCreateWindow");
+
+			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+			s_GLFWWindowCount++;
+		}
 		
 		m_Context = new OpenGLContext(m_Window);
 		m_Context->Init();
@@ -140,15 +151,26 @@ namespace spg {
 	}
 
 	void WindowsWindow::Shutdown() {
+		SPG_PROFILE_FUNCTION();
+
 		glfwDestroyWindow(m_Window);
+		s_GLFWWindowCount--;
+
+		if (s_GLFWWindowCount == 0) {
+			glfwTerminate();
+		}
 	}
 
 	void WindowsWindow::OnUpdate() {
+		SPG_PROFILE_FUNCTION();
+
 		glfwPollEvents(); // 检查有没有触发什么事件（比如键盘输入、鼠标移动等），然后调用对应的回调函数（可以通过回调方法手动设置）。
 		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled) {
+		SPG_PROFILE_FUNCTION();
+
 		//glfwSwapInterval(x);
 		//if x = 0 >> FPS would've no limit.
 		//if x = 1 >> FPS would be set to the monitor's current refreshrate
