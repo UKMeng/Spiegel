@@ -34,4 +34,7 @@ private:
 	// Particle
 	ParticleProps m_Particle;
 	ParticleSystem m_ParticleSystem;
+
+	size_t m_MapWidth, m_MapHeight;
+	std::unordered_map<char, spg::Ref<spg::SubTexture2D>> m_TextureMap;
 };

@@ -6,6 +6,14 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+static const uint32_t s_MapWidth = 12;
+static const char* s_MapTiles = 
+"wwwwwwwwwwww"
+"wwwDDDDDDwww"
+"wDDDDDDDDDww"
+"wwwDDDDDDwww"
+"wwwwwwwwwwww";
+
 Sandbox2D::Sandbox2D()
 	: Layer("Sandbox2D"), m_CameraController(1280.0f / 720.0f)
 {
@@ -22,6 +30,11 @@ void Sandbox2D::OnAttach()
 	m_TextureStairs = spg::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 7, 6 }, { 128, 128 });
 	m_TextureTree = spg::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 2, 1 }, { 128, 128 }, { 1, 2 });
 
+	m_MapWidth = s_MapWidth;
+	m_MapHeight = strlen(s_MapTiles) / s_MapWidth;
+	m_TextureMap['D'] = spg::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 1, 11 }, { 128, 128 }); // grass
+	m_TextureMap['w'] = spg::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 11, 11 }, { 128, 128 }); // water
+
 	// Init Particle System
 	m_Particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	m_Particle.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
@@ -30,6 +43,8 @@ void Sandbox2D::OnAttach()
 	m_Particle.Velocity = { 0.0f, 0.0f };
 	m_Particle.VelocityVariation = { 3.0f, 1.0f };
 	m_Particle.Position = { 0.0f, 0.0f };
+
+	m_CameraController.SetZoomLevel(5.0f);
 }
 
 void Sandbox2D::OnDetach()
@@ -54,28 +69,28 @@ void Sandbox2D::OnUpdate(spg::Timestep ts)
 	}
 	
 
-	{
-		static float rotation = 0.0f;
-		rotation += ts * 20.0f;
+	//{
+	//	static float rotation = 0.0f;
+	//	rotation += ts * 20.0f;
 
-		SPG_PROFILE_SCOPE("Renderer Draw");
-		spg::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		spg::Renderer2D::DrawRotatedQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(rotation), { 0.8f, 0.2f, 0.3f, 1.0f });
-		spg::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-		spg::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
-		spg::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f}, {20.0f, 20.0f}, m_CheckerboardTexture, 10.0f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
-		spg::Renderer2D::DrawRotatedQuad({ -0.5f, -0.5f, 0.0f }, { 1.0f, 1.0f }, glm::radians(45.0f), m_CheckerboardTexture, 20.0f);
-		spg::Renderer2D::EndScene();
+	//	SPG_PROFILE_SCOPE("Renderer Draw");
+	//	spg::Renderer2D::BeginScene(m_CameraController.GetCamera());
+	//	spg::Renderer2D::DrawRotatedQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(rotation), { 0.8f, 0.2f, 0.3f, 1.0f });
+	//	spg::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+	//	spg::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+	//	spg::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f}, {20.0f, 20.0f}, m_CheckerboardTexture, 10.0f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
+	//	spg::Renderer2D::DrawRotatedQuad({ -0.5f, -0.5f, 0.0f }, { 1.0f, 1.0f }, glm::radians(45.0f), m_CheckerboardTexture, 20.0f);
+	//	spg::Renderer2D::EndScene();
 
-		spg::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		for (float y = -5.0f; y < 5.0f; y += 0.5f) {
-			for (float x = -5.0f; x < 5.0f; x += 0.5f) {
-				glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f };
-				spg::Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.45f }, color);
-			}
-		}
-		spg::Renderer2D::EndScene();
-	}
+	//	spg::Renderer2D::BeginScene(m_CameraController.GetCamera());
+	//	for (float y = -5.0f; y < 5.0f; y += 0.5f) {
+	//		for (float x = -5.0f; x < 5.0f; x += 0.5f) {
+	//			glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f };
+	//			spg::Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.45f }, color);
+	//		}
+	//	}
+	//	spg::Renderer2D::EndScene();
+	//}
 
 	if (spg::Input::IsMouseButtonPressed(SPG_MOUSE_BUTTON_LEFT))
 	{
@@ -94,8 +109,22 @@ void Sandbox2D::OnUpdate(spg::Timestep ts)
 
 	// Test Sprite Sheet
 	spg::Renderer2D::BeginScene(m_CameraController.GetCamera());
-	spg::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.3f }, { 1.0f, 1.0f }, m_TextureStairs);
-	spg::Renderer2D::DrawQuad({ 2.0f, 0.0f, 0.3f }, { 1.0f, 2.0f }, m_TextureTree);
+
+for (uint32_t y = 0; y < m_MapHeight; y++)
+	{
+		for (uint32_t x = 0; x < m_MapWidth; x++)
+		{
+			char tileType = s_MapTiles[x + y * m_MapWidth];
+			spg::Ref<spg::SubTexture2D> texture;
+			if (m_TextureMap.find(tileType) != m_TextureMap.end())
+				texture = m_TextureMap[tileType];
+			if (texture)
+				spg::Renderer2D::DrawQuad({ x - m_MapWidth / 2.0f, y - m_MapHeight / 2.0f, 0.5f }, { 1.0f, 1.0f }, texture);
+		}
+	}
+
+	//spg::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.3f }, { 1.0f, 1.0f }, m_TextureStairs);
+	//spg::Renderer2D::DrawQuad({ 2.0f, 0.0f, 0.3f }, { 1.0f, 2.0f }, m_TextureTree);
 	spg::Renderer2D::EndScene();
 
 
