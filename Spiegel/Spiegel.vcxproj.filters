@@ -129,6 +129,9 @@
     <ClInclude Include="src\Spiegel\Debug\Instrumentation.h">
       <Filter>Header File</Filter>
     </ClInclude>
+    <ClInclude Include="src\Spiegel\Renderer\SubTexture2D.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Spiegel\Core\Application.cpp">
@@ -201,6 +204,9 @@
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Renderer\Renderer2D.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spiegel\Renderer\SubTexture2D.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
   </ItemGroup>

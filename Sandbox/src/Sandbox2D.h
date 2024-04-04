@@ -16,18 +16,17 @@ public:
 	virtual void OnImGuiRender() override;
 
 private:
-	spg::Ref<spg::Shader> m_FlatColorShader;
-	spg::Ref<spg::Texture2D> m_Texture;
-	spg::Ref<spg::VertexArray> m_SquareVA;
 	spg::OrthographicCameraController m_CameraController;
 
 	spg::Ref<spg::Texture2D> m_CheckerboardTexture;
+
+	spg::Ref<spg::Texture2D> m_SpriteSheet;
+	spg::Ref<spg::SubTexture2D> m_TextureStairs, m_TextureTree;
 
 	struct ProfileResult {
 		const char* Name;
 		float Time;
 	};
-
 	std::vector<ProfileResult> m_ProfileResults;
 
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
