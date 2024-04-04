@@ -3,7 +3,6 @@
 #include "Log.h"
 #include "Input.h"
 #include "KeyCodes.h"
-#include "Core.h"
 
 #include "Spiegel/Renderer/Renderer.h"
 

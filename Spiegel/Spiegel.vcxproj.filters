@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Spiegel\Core\Core.h">
+    <ClInclude Include="src\Spiegel\Core\Base.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Spiegel\Core\Application.h">

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Spiegel/Core/Core.h"
+#include "Spiegel/Core/Base.h"
 #include "Spiegel/Core/Log.h"
 
 namespace spg {

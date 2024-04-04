@@ -2,7 +2,7 @@
 
 #include "spgpch.h"
 
-#include "Core.h"
+#include "Base.h"
 
 #include "Spiegel/Events/Event.h"
 
