@@ -67,6 +67,11 @@ namespace spg {
 		}
 	}
 
+	void Application::Close()
+	{
+		m_Running = false;
+	}
+
 	void Application::PushLayer(Layer* layer) {
 		SPG_PROFILE_FUNCTION();
 

@@ -21,6 +21,7 @@ namespace spg {
 		virtual ~Application();
 
 		void Run();
+		void Close();
 
 		void OnEvent(Event& e);
 
