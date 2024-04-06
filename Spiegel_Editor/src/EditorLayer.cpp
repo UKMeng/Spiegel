@@ -192,8 +192,8 @@ namespace spg {
 			ImGui::EndMenuBar();
 		}
 
+		// Settings Window Begin
 		ImGui::Begin("Settings");
-
 		// Renderer2D Stats
 		auto stats = Renderer2D::GetStats();
 		ImGui::Text("Renderer2D Stats:");
@@ -202,11 +202,23 @@ namespace spg {
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
-
-		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
-		ImGui::Image((void*)textureID, ImVec2{ 1280.0f, 720.0f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
 		ImGui::End();
+		// Settings Window End
+
+		// Viewport window Begin
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+		ImGui::Begin("Viewport");
+		ImVec2 viewportWindowSize = ImGui::GetContentRegionAvail();
+		if (m_ViewportSize != *((glm::vec2*)&viewportWindowSize)) {
+			m_Framebuffer->Resize((uint32_t)viewportWindowSize.x, (uint32_t)viewportWindowSize.y);
+			m_ViewportSize = { viewportWindowSize.x, viewportWindowSize.y };
+			m_CameraController.OnResize(viewportWindowSize.x, viewportWindowSize.y);
+		}
+		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::End();
+		ImGui::PopStyleVar();
+		// Viewport window End
 
 		ImGui::End();
 	}

@@ -28,5 +28,7 @@ namespace spg {
 		std::unordered_map<char, Ref<SubTexture2D>> m_TextureMap;
 
 		Ref<Framebuffer> m_Framebuffer;
+
+		glm::vec2 m_ViewportSize;
 	};
 }

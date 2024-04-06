@@ -53,6 +53,14 @@ namespace spg {
 		dispather.Dispatch<WindowResizeEvent>(SPG_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
 	}
 
+	void OrthographicCameraController::OnResize(float width, float height)
+	{
+		SPG_PROFILE_FUNCTION();
+
+		m_AspectRatio = width / height;
+		CalculateView();
+	}
+
 	void OrthographicCameraController::CalculateView()
 	{
 		SPG_PROFILE_FUNCTION();
@@ -75,8 +83,7 @@ namespace spg {
 	{
 		SPG_PROFILE_FUNCTION();
 
-		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		CalculateView();
+		OnResize((float)e.GetWidth(), (float)e.GetHeight());
 		return false;
 	}
 \
