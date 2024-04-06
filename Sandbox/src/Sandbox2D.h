@@ -31,6 +31,4 @@ private:
 
 	size_t m_MapWidth, m_MapHeight;
 	std::unordered_map<char, spg::Ref<spg::SubTexture2D>> m_TextureMap;
-
-	spg::Ref<spg::Framebuffer> m_Framebuffer;
 };

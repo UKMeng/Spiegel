@@ -17,7 +17,7 @@ namespace spg {
 	class SPG_API Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "Spiegel App");
 		virtual ~Application();
 
 		void Run();

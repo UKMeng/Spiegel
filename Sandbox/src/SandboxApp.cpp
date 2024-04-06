@@ -6,7 +6,6 @@
 class Sandbox : public spg::Application {
 public:
 	Sandbox() {
-		// PushLayer(new ExampleLayer());
 		PushLayer(new Sandbox2D());
 	}
 
