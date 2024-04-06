@@ -45,6 +45,12 @@ void Sandbox2D::OnAttach()
 	m_Particle.Position = { 0.0f, 0.0f };
 
 	m_CameraController.SetZoomLevel(5.0f);
+
+	// Framebuffer
+	spg::FramebufferSpecification fbSpec;
+	fbSpec.Width = 1280;
+	fbSpec.Height = 720;
+	m_Framebuffer = spg::Framebuffer::Create(fbSpec);
 }
 
 void Sandbox2D::OnDetach()
@@ -64,6 +70,9 @@ void Sandbox2D::OnUpdate(spg::Timestep ts)
 
 	{
 		SPG_PROFILE_SCOPE("Renderer Preperation");
+
+		m_Framebuffer->Bind();
+
 		spg::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		spg::RenderCommand::Clear();
 	}
@@ -128,6 +137,8 @@ void Sandbox2D::OnUpdate(spg::Timestep ts)
 
 	m_ParticleSystem.OnUpdate(ts);
 	m_ParticleSystem.OnRender(m_CameraController.GetCamera());
+
+	m_Framebuffer->Unbind();
 }
 
 void Sandbox2D::OnEvent(spg::Event& e)
@@ -193,7 +204,8 @@ void Sandbox2D::OnImGuiRender()
 	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 
-	ImGui::Image((void*)m_CheckerboardTexture->GetRendererID(), ImVec2(128.0f, 128.0f));
+	uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+	ImGui::Image((void*)textureID, ImVec2(320.0f, 180.0f));
 
 	ImGui::End();
 

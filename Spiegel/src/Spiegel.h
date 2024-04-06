@@ -17,6 +17,7 @@
 #include "Spiegel/Renderer/Renderer2D.h"
 #include "Spiegel/Renderer/RenderCommand.h"
 #include "Spiegel/Renderer/Buffer.h"
+#include "Spiegel/Renderer/Framebuffer.h"
 #include "Spiegel/Renderer/RendererAPI.h"
 #include "Spiegel/Renderer/Shader.h"
 #include "Spiegel/Renderer/Texture.h"
