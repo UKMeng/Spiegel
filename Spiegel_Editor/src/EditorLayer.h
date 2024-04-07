@@ -31,6 +31,6 @@ namespace spg {
 
 		glm::vec2 m_ViewportSize;
 
-		bool m_ViewportFocused = false;
+		bool m_ViewportFocused = false, m_ViewportHovered = false;
 	};
 }
