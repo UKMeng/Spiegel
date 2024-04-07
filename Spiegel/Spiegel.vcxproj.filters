@@ -63,9 +63,6 @@
     <ClInclude Include="src\Spiegel\Core\Input.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\Windows\WindowsInput.h">
-      <Filter>Header File</Filter>
-    </ClInclude>
     <ClInclude Include="src\Spiegel\Core\KeyCodes.h">
       <Filter>Header File</Filter>
     </ClInclude>
