@@ -30,5 +30,7 @@ namespace spg {
 		Ref<Framebuffer> m_Framebuffer;
 
 		glm::vec2 m_ViewportSize;
+
+		bool m_ViewportFocused = false;
 	};
 }

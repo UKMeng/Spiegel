@@ -142,7 +142,8 @@ namespace spg {
 
 	void EditorLayer::OnEvent(Event& e)
 	{
-		m_CameraController.OnEvent(e);
+		// Only forward events if the viewport is focused
+		if(m_ViewportFocused) m_CameraController.OnEvent(e);
 	}
 
 
@@ -208,6 +209,7 @@ namespace spg {
 		// Viewport window Begin
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
+		m_ViewportFocused = ImGui::IsWindowFocused();
 		ImVec2 viewportWindowSize = ImGui::GetContentRegionAvail();
 		if (m_ViewportSize != *((glm::vec2*)&viewportWindowSize)) {
 			m_Framebuffer->Resize((uint32_t)viewportWindowSize.x, (uint32_t)viewportWindowSize.y);
