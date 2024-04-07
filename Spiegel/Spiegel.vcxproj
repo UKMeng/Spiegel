@@ -51,6 +51,9 @@
     <ClInclude Include="src\Spiegel\Renderer\Texture.h" />
     <ClInclude Include="src\Spiegel\Renderer\VertexArray.h" />
     <ClInclude Include="src\Spiegel\Core\Window.h" />
+    <ClInclude Include="src\Spiegel\Scene\Components.h" />
+    <ClInclude Include="src\Spiegel\Scene\Entity.h" />
+    <ClInclude Include="src\Spiegel\Scene\Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp" />
@@ -83,6 +86,7 @@
     <ClCompile Include="src\Spiegel\Renderer\SubTexture2D.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Texture.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\Spiegel\Scene\Scene.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

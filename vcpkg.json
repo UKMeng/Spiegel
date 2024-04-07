@@ -17,6 +17,7 @@
       ]
     },
     "spdlog",
-    "stb"
+    "stb",
+    "entt"
   ]
 }

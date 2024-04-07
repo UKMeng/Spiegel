@@ -135,6 +135,15 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h">
       <Filter>Header File</Filter>
     </ClInclude>
+    <ClInclude Include="src\Spiegel\Scene\Scene.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spiegel\Scene\Components.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spiegel\Scene\Entity.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Spiegel\Core\Application.cpp">
@@ -216,6 +225,9 @@
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spiegel\Scene\Scene.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
   </ItemGroup>

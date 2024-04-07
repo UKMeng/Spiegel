@@ -21,6 +21,7 @@ namespace spg {
 
 		Ref<Texture2D> m_SpriteSheet;
 		Ref<SubTexture2D> m_TextureStairs, m_TextureTree;
+		Ref<Scene> m_ActiveScene;
 
 		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 
@@ -32,5 +33,7 @@ namespace spg {
 		glm::vec2 m_ViewportSize;
 
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
+
+		Entity m_SquareEntity;
 	};
 }

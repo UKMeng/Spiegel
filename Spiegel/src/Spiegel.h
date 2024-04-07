@@ -13,6 +13,10 @@
 
 #include "Spiegel/ImGui/ImGuiLayer.h"
 
+#include "Spiegel/Scene/Scene.h"
+#include "Spiegel/Scene/Components.h"
+#include "Spiegel/Scene/Entity.h"
+
 #include "Spiegel/Renderer/Renderer.h"
 #include "Spiegel/Renderer/Renderer2D.h"
 #include "Spiegel/Renderer/RenderCommand.h"
