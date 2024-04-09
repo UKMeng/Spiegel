@@ -88,6 +88,7 @@ namespace spg {
 
 		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 
 	void EditorLayer::OnDetach()
@@ -178,6 +179,8 @@ namespace spg {
 			}
 			ImGui::EndMenuBar();
 		}
+
+		m_SceneHierarchyPanel.OnImGuiRender();
 
 		// Settings Window Begin
 		ImGui::Begin("Settings");

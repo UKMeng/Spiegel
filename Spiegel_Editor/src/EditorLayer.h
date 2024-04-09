@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Spiegel.h"
+#include "Panels/SceneHierarchyPanel.h"
 
 namespace spg {
 	class EditorLayer : public Layer {
@@ -39,5 +40,8 @@ namespace spg {
 		Entity m_SecondCameraEntity;
 
 		bool m_PrimaryCamera = true;
+
+		// Panels
+		SceneHierarchyPanel m_SceneHierarchyPanel;
 	};
 }

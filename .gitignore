@@ -3,6 +3,5 @@ bin/
 bin-int/
 vcpkg_installed/
 
-imgui.ini
 SpiegelProfile-*.json
 *.user
