@@ -44,6 +44,7 @@ namespace spg {
 	
 	private:
 		entt::entity m_EntityHandle = entt::null;
+		// maybe weak_ptr?
 		Scene* m_Scene = nullptr;
 	};
 }

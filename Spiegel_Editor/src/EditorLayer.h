@@ -35,5 +35,9 @@ namespace spg {
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 
 		Entity m_SquareEntity;
+		Entity m_CameraEntity;
+		Entity m_SecondCameraEntity;
+
+		bool m_PrimaryCamera = true;
 	};
 }

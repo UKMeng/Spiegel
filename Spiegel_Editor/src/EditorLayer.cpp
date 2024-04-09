@@ -47,6 +47,14 @@ namespace spg {
 		square.AddComponent<SpriteRendererComponent>(m_SquareColor);
 
 		m_SquareEntity = square;
+
+		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
+		m_CameraEntity.AddComponent<CameraComponent>();
+	
+		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Second Camera");
+		auto& cc = m_SecondCameraEntity.AddComponent<CameraComponent>();
+		cc.Primary = false;
+		cc.FixedAspectRatio = true;
 	}
 
 	void EditorLayer::OnDetach()
@@ -57,32 +65,31 @@ namespace spg {
 	void EditorLayer::OnUpdate(Timestep ts)
 	{
 		SPG_PROFILE_FUNCTION();
+
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+
+		// Resize
+		if (FramebufferSpecification spec = m_Framebuffer->GetSpecification();
+			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
+			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
+		{
+			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+		}
+
 		// Camera
 		m_CameraController.OnUpdate(ts);
 
-		
 		// Renderer
 		Renderer2D::ResetStats();
 
-		{
-			SPG_PROFILE_SCOPE("Renderer Preperation");
+		m_Framebuffer->Bind();
 
-			m_Framebuffer->Bind();
+		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		RenderCommand::Clear();
 
-			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-			RenderCommand::Clear();
-		}
-
-	
-
-		{
-			SPG_PROFILE_SCOPE("Renderer Draw");
-			Renderer2D::BeginScene(m_CameraController.GetCamera());
-			// Scene
-			m_ActiveScene->OnUpdate(ts);
-			Renderer2D::EndScene();
-
-		}
+		// Scene
+		m_ActiveScene->OnUpdate(ts);
 
 		m_Framebuffer->Unbind();
 	}
@@ -156,7 +163,23 @@ namespace spg {
 			ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 			ImGui::Separator();
 		}
+
+		ImGui::DragFloat3("Camera Position", 
+			glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]), 0.1f);
 		
+		if (ImGui::Checkbox("Camera Main", &m_PrimaryCamera)) {
+			m_CameraEntity.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
+			m_SecondCameraEntity.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
+		}
+
+		{
+			auto& camera = m_SecondCameraEntity.GetComponent<CameraComponent>().Camera;
+			float orthoSize = camera.GetOrthographicSize();
+			if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize)) {
+				camera.SetOrthographicSize(orthoSize);
+			}
+		}
+
 		ImGui::End();
 		// Settings Window End
 

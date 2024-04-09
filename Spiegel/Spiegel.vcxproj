@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h" />
     <ClInclude Include="src\Spiegel\Debug\Instrumentation.h" />
+    <ClInclude Include="src\Spiegel\Renderer\Camera.h" />
     <ClInclude Include="src\Spiegel\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Spiegel\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
@@ -54,6 +55,7 @@
     <ClInclude Include="src\Spiegel\Scene\Components.h" />
     <ClInclude Include="src\Spiegel\Scene\Entity.h" />
     <ClInclude Include="src\Spiegel\Scene\Scene.h" />
+    <ClInclude Include="src\Spiegel\Scene\SceneCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp" />
@@ -87,6 +89,7 @@
     <ClCompile Include="src\Spiegel\Renderer\Texture.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Spiegel\Scene\Scene.cpp" />
+    <ClCompile Include="src\Spiegel\Scene\SceneCamera.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
