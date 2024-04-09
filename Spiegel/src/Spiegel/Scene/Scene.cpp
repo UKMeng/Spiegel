@@ -30,6 +30,21 @@ namespace spg {
 
 	void Scene::OnUpdate(Timestep ts)
 	{
+		// Update Scripts
+		{
+			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+				{
+					if (!nsc.Instance) {
+						nsc.Instance = nsc.InstantiateScript();
+						nsc.Instance->m_Entity = Entity{ entity, this };
+						nsc.Instance->OnCreate();
+					}
+
+					nsc.Instance->OnUpdate(ts);
+				});
+		}
+
+
 		Camera* mainCamera = nullptr;
 		glm::mat4* cameraTransform = nullptr;
 		{

@@ -150,6 +150,9 @@
     <ClInclude Include="src\Spiegel\Scene\SceneCamera.h">
       <Filter>Header File</Filter>
     </ClInclude>
+    <ClInclude Include="src\Spiegel\Scene\ScriptableEntity.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Spiegel\Core\Application.cpp">

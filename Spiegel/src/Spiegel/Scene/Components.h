@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "SceneCamera.h"
+#include "ScriptableEntity.h"
 
 namespace spg {
 
@@ -47,5 +48,28 @@ namespace spg {
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
+	};
+
+	struct NativeScriptComponent
+	{
+		ScriptableEntity* Instance = nullptr;
+
+		ScriptableEntity*(*InstantiateScript)();
+		void (*DestroyScript)(NativeScriptComponent*);
+
+		/*std::function<void(ScriptableEntity*)> OnCreateFunction;
+		std::function<void(ScriptableEntity*)> OnDestroyFunction;
+		std::function<void(ScriptableEntity*, Timestep)> OnUpdateFunction;*/
+
+		template<typename T>
+		void Bind()
+		{
+			InstantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+			DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
+			
+			/*OnCreateFunction = [](ScriptableEntity* instance) { ((T*)instance)->OnCreate(); };
+			OnDestroyFunction = [](ScriptableEntity* instance) { ((T*)instance)->OnDestroy(); };
+			OnUpdateFunction = [](ScriptableEntity* instance, Timestep ts) { ((T*)instance)->OnUpdate(ts); };*/
+		}
 	};
 }

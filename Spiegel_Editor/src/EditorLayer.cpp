@@ -55,6 +55,39 @@ namespace spg {
 		auto& cc = m_SecondCameraEntity.AddComponent<CameraComponent>();
 		cc.Primary = false;
 		cc.FixedAspectRatio = true;
+
+		
+		// Native Script Example
+		class CameraController : public ScriptableEntity
+		{
+		public:
+			/*void OnCreate()
+			{
+				
+			}
+
+			void OnDestroy()
+			{
+			}*/
+
+			void OnUpdate(Timestep ts)
+			{
+				auto& transform = GetComponent<TransformComponent>().Transform;
+				float speed = 5.0f;
+
+				if (Input::IsKeyPressed(SPG_KEY_A))
+					transform[3][0] -= speed * ts;
+				if (Input::IsKeyPressed(SPG_KEY_D))
+					transform[3][0] += speed * ts;
+				if (Input::IsKeyPressed(SPG_KEY_W))
+					transform[3][1] += speed * ts;
+				if (Input::IsKeyPressed(SPG_KEY_S))
+					transform[3][1] -= speed * ts;
+			}
+		};
+
+		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
 	}
 
 	void EditorLayer::OnDetach()

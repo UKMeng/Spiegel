@@ -16,6 +16,7 @@
 #include "Spiegel/Scene/Scene.h"
 #include "Spiegel/Scene/Components.h"
 #include "Spiegel/Scene/Entity.h"
+#include "Spiegel/Scene/ScriptableEntity.h"
 
 #include "Spiegel/Renderer/Renderer.h"
 #include "Spiegel/Renderer/Renderer2D.h"
