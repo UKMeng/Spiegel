@@ -53,8 +53,7 @@ namespace spg {
 
 	void SceneHierarchyPanel::DrawComponents(Entity entity)
 	{
-		if (entity.CheckComponent<TagComponent>())
-		{
+		if (entity.CheckComponent<TagComponent>()) {
 			auto& tag = entity.GetComponent<TagComponent>().Tag;
 
 			char buffer[256];
@@ -66,14 +65,74 @@ namespace spg {
 			}
 		}
 
-		if (entity.CheckComponent<TransformComponent>())
-		{
+		if (entity.CheckComponent<TransformComponent>()) {
 			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
 			{
 				auto& tc = entity.GetComponent<TransformComponent>();
 				ImGui::DragFloat3("Position", glm::value_ptr(tc.Transform[3]), 0.1f);
 				/*ImGui::DragFloat3("Rotation", glm::value_ptr(tc.Rotation));
 				ImGui::DragFloat3("Scale", glm::value_ptr(tc.Scale))*/;
+				ImGui::TreePop();
+			}
+		}
+
+		if (entity.CheckComponent<CameraComponent>()) {
+			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
+			{
+				auto& cc = entity.GetComponent<CameraComponent>();
+				auto& camera = cc.Camera;
+
+
+				// TODO: Fix two cameras being primary bug
+				ImGui::Checkbox("Primary", &cc.Primary);
+				
+				
+				if (ImGui::BeginCombo("Projection", camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic ? "Orthographic" : "Perspective")) {
+					if (ImGui::Selectable("Orthographic", camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic)) {
+						camera.SetProjectionType(SceneCamera::ProjectionType::Orthographic);
+					}
+					if (ImGui::Selectable("Perspective", camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)) {
+						camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
+					}
+					ImGui::EndCombo();
+				}
+
+				if (camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic) {
+					float orthoSize = camera.GetOrthographicSize();
+					if (ImGui::DragFloat("size", &orthoSize)) {
+						camera.SetOrthographicSize(orthoSize);
+					}
+
+					float orthoNear = camera.GetNearClip();
+					if (ImGui::DragFloat("Near", &orthoNear)) {
+						camera.SetNearClip(orthoNear);
+					}
+
+					float orthoFar = camera.GetFarClip();
+					if (ImGui::DragFloat("Far", &orthoFar)) {
+						camera.SetFarClip(orthoFar);
+					}
+
+					ImGui::Checkbox("Fixed Aspect Ratio", &cc.FixedAspectRatio);
+				}
+
+				if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective) {
+					float persFov = camera.GetPerspectiveFOV();
+					if (ImGui::DragFloat("FOV", &persFov)) {
+						camera.SetPerspectiveFOV(persFov);
+					}
+					
+					float orthoNear = camera.GetNearClip();
+					if (ImGui::DragFloat("Near", &orthoNear)) {
+						camera.SetNearClip(orthoNear);
+					}
+
+					float orthoFar = camera.GetFarClip();
+					if (ImGui::DragFloat("Far", &orthoFar)) {
+						camera.SetFarClip(orthoFar);
+					}
+				}
+
 				ImGui::TreePop();
 			}
 		}

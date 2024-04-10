@@ -14,6 +14,7 @@
 #include "Spiegel/ImGui/ImGuiLayer.h"
 
 #include "Spiegel/Scene/Scene.h"
+#include "Spiegel/Scene/SceneCamera.h"
 #include "Spiegel/Scene/Components.h"
 #include "Spiegel/Scene/Entity.h"
 #include "Spiegel/Scene/ScriptableEntity.h"
