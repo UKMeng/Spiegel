@@ -24,8 +24,6 @@ namespace spg {
 		Ref<SubTexture2D> m_TextureStairs, m_TextureTree;
 		Ref<Scene> m_ActiveScene;
 
-		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
-
 		size_t m_MapWidth, m_MapHeight;
 		std::unordered_map<char, Ref<SubTexture2D>> m_TextureMap;
 
@@ -35,7 +33,6 @@ namespace spg {
 
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 
-		Entity m_SquareEntity;
 		Entity m_CameraEntity;
 		Entity m_SecondCameraEntity;
 
