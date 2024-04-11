@@ -119,7 +119,7 @@ namespace spg {
 
 		m_Framebuffer->Bind();
 
-		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RenderCommand::Clear();
 
 		// Scene
@@ -183,7 +183,7 @@ namespace spg {
 		m_SceneHierarchyPanel.OnImGuiRender();
 
 		// Settings Window Begin
-		ImGui::Begin("Satas");
+		ImGui::Begin("Stats");
 		// Renderer2D Stats
 		auto stats = Renderer2D::GetStats();
 		ImGui::Text("Renderer2D Stats:");

@@ -28,14 +28,35 @@ namespace spg {
 
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) m_SelectionContext = {};
 
+		if (ImGui::BeginPopupContextWindow(0, 1 | ImGuiPopupFlags_NoOpenOverItems)) {
+			if (ImGui::MenuItem("Create Empty Entity")) {
+				m_Context->CreateEntity("Empty Entity");
+			}
+			ImGui::EndPopup();
+		}
+
 		ImGui::End();
 
-		
-
 		ImGui::Begin("Properties");
-		if (m_SelectionContext)
-		{
+		if (m_SelectionContext) {
 			DrawComponents(m_SelectionContext);
+
+			if (ImGui::Button("Add Component")) ImGui::OpenPopup("AddComponent");
+			if (ImGui::BeginPopup("AddComponent")) {
+				if (ImGui::MenuItem("Camera")) {
+					if (!m_SelectionContext.CheckComponent<CameraComponent>()) {
+						m_SelectionContext.AddComponent<CameraComponent>();
+					}
+					ImGui::CloseCurrentPopup();
+				}
+				if (ImGui::MenuItem("Sprite Renderer")) {
+					if (!m_SelectionContext.CheckComponent<SpriteRendererComponent>()) {
+						m_SelectionContext.AddComponent<SpriteRendererComponent>();
+					}
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+			}
 		}
 		ImGui::End();
 	}
@@ -49,7 +70,21 @@ namespace spg {
 		if (ImGui::IsItemClicked())
 			m_SelectionContext = entity;
 
+		bool entityDeleted = false;
+
+		if (ImGui::BeginPopupContextItem()) {
+			if (ImGui::MenuItem("Delete Entity")) {
+				entityDeleted = true;
+			}
+			ImGui::EndPopup();
+		}
+
 		if (opened) ImGui::TreePop();
+
+		if (entityDeleted) {
+			m_Context->DestroyEntity(entity);
+			if (m_SelectionContext == entity) m_SelectionContext = {};
+		}
 	}
 
 	static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
@@ -116,24 +151,24 @@ namespace spg {
 			}
 		}
 
+		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_FramePadding;
+
 		if (entity.CheckComponent<TransformComponent>()) {
-			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
-			{
+			bool open = ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), treeNodeFlags, "Transform");
+			
+			if (open) {
 				auto& tc = entity.GetComponent<TransformComponent>();
 				DrawVec3Control("Position", tc.Translation);
 				//glm::vec3 rotation = glm::degrees(tc.Rotation);
 				DrawVec3Control("Rotation", tc.Rotation);
 				//tc.Rotation = glm::radians(rotation);
 				DrawVec3Control("Scale", tc.Scale, 1.0f);
-				//ImGui::DragFloat3("Position", glm::value_ptr(tc.Translation), 0.1f);
-				//ImGui::DragFloat3("Rotation", glm::value_ptr(tc.Rotation));
-				//ImGui::DragFloat3("Scale", glm::value_ptr(tc.Scale));
 				ImGui::TreePop();
 			}
 		}
 
 		if (entity.CheckComponent<CameraComponent>()) {
-			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
+			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), treeNodeFlags, "Camera"))
 			{
 				auto& cc = entity.GetComponent<CameraComponent>();
 				auto& camera = cc.Camera;
@@ -196,12 +231,27 @@ namespace spg {
 		// TODO: DrawComponent<CameraComponent>("Camera")[]() {... }
 
 		if (entity.CheckComponent<SpriteRendererComponent>()) {
-			if (ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Sprite Renderer"))
-			{
+			bool open = ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), treeNodeFlags, "Sprite Renderer");
+
+			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
+			
+			if (ImGui::Button("+", ImVec2{ 20, 20 })) ImGui::OpenPopup("ComponentSettings");
+
+			bool removeComponent = false;
+			if (ImGui::BeginPopup("ComponentSettings")) {
+				if (ImGui::MenuItem("Remove Component")) {
+					removeComponent = true;
+				}
+				ImGui::EndPopup();
+			}
+			
+			if (open) {
 				auto& src = entity.GetComponent<SpriteRendererComponent>();
 				ImGui::ColorEdit4("Color", glm::value_ptr(src.Color));
 				ImGui::TreePop();
 			}
+
+			if (removeComponent) entity.RemoveComponent<SpriteRendererComponent>();
 		}
 	}
 }
