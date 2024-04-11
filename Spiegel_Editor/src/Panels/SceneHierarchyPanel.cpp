@@ -40,23 +40,6 @@ namespace spg {
 		ImGui::Begin("Properties");
 		if (m_SelectionContext) {
 			DrawComponents(m_SelectionContext);
-
-			if (ImGui::Button("Add Component")) ImGui::OpenPopup("AddComponent");
-			if (ImGui::BeginPopup("AddComponent")) {
-				if (ImGui::MenuItem("Camera")) {
-					if (!m_SelectionContext.CheckComponent<CameraComponent>()) {
-						m_SelectionContext.AddComponent<CameraComponent>();
-					}
-					ImGui::CloseCurrentPopup();
-				}
-				if (ImGui::MenuItem("Sprite Renderer")) {
-					if (!m_SelectionContext.CheckComponent<SpriteRendererComponent>()) {
-						m_SelectionContext.AddComponent<SpriteRendererComponent>();
-					}
-					ImGui::CloseCurrentPopup();
-				}
-				ImGui::EndPopup();
-			}
 		}
 		ImGui::End();
 	}
@@ -164,12 +147,15 @@ namespace spg {
 
 		if (entity.CheckComponent<T>()) {
 			auto& component = entity.GetComponent<T>();
-
+			ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+			ImGui::Separator();
 			bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name.c_str());
+			ImGui::PopStyleVar();
+			ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
 
-			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
-
-			if (ImGui::Button("+", ImVec2{ 20, 20 })) ImGui::OpenPopup("ComponentSettings");
+			if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight })) ImGui::OpenPopup("ComponentSettings");
 
 			bool removeComponent = false;
 			if (ImGui::BeginPopup("ComponentSettings")) {
@@ -196,11 +182,34 @@ namespace spg {
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
 			strcpy_s(buffer, sizeof(buffer), tag.c_str());
-			if (ImGui::InputText("Tag", buffer, sizeof(buffer)))
+			if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
 			{
 				tag = std::string(buffer);
 			}
 		}
+
+		ImGui::SameLine();
+		ImGui::PushItemWidth(-1);
+
+		// TODO: FIX CAN ADD MULTIPLE SAME COMPONENTS
+		if (ImGui::Button("Add Component")) ImGui::OpenPopup("AddComponent");
+		if (ImGui::BeginPopup("AddComponent")) {
+			if (ImGui::MenuItem("Camera")) {
+				if (!m_SelectionContext.CheckComponent<CameraComponent>()) {
+					m_SelectionContext.AddComponent<CameraComponent>();
+				}
+				ImGui::CloseCurrentPopup();
+			}
+			if (ImGui::MenuItem("Sprite Renderer")) {
+				if (!m_SelectionContext.CheckComponent<SpriteRendererComponent>()) {
+					m_SelectionContext.AddComponent<SpriteRendererComponent>();
+				}
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
+
+		ImGui::PopItemWidth();
 
 		DrawComponent<TransformComponent>("Transform", entity, [](auto& component) {
 				DrawVec3Control("Position", component.Translation);
