@@ -31,6 +31,9 @@ namespace spg {
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
+		io.Fonts->AddFontFromFileTTF("assets/fonts/Noto_Sans/NotoSansSC-Bold.ttf", 18.0f);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/Noto_Sans/NotoSansSC-Regular.ttf", 18.0f);
+
 		// Setup ImGui style
 		ImGui::StyleColorsDark();
 		ImGuiStyle& style = ImGui::GetStyle();

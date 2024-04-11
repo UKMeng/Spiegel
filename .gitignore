@@ -3,5 +3,6 @@ bin/
 bin-int/
 vcpkg_installed/
 
+Spiegel_Editor/assets/fonts/
 SpiegelProfile-*.json
 *.user
