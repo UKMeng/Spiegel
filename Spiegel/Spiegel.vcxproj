@@ -58,9 +58,11 @@
     <ClInclude Include="src\Spiegel\Scene\SceneCamera.h" />
     <ClInclude Include="src\Spiegel\Scene\SceneSerializer.h" />
     <ClInclude Include="src\Spiegel\Scene\ScriptableEntity.h" />
+    <ClInclude Include="src\Spiegel\Utils\PlatformUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />

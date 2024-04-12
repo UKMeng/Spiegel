@@ -1,6 +1,7 @@
 #include "EditorLayer.h"
 
 #include "Spiegel/Scene/SceneSerializer.h"
+#include "Spiegel/Utils/PlatformUtils.h"
 
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -140,6 +141,9 @@ namespace spg {
 	void EditorLayer::OnEvent(Event& e)
 	{
 		if(m_ViewportFocused) m_CameraController.OnEvent(e);
+
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(SPG_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 	}
 
 
@@ -190,14 +194,16 @@ namespace spg {
 			if (ImGui::BeginMenu("File")) {
 
 				// TODO: HOTKEYS
-				if (ImGui::MenuItem("Serialize Scene")) {
-					SceneSerializer serializer(m_ActiveScene);
-					serializer.Serialize("assets/scenes/ExampleScene.yaml");
+				if (ImGui::MenuItem("New", "Ctrl+N")) {
+					NewScene();
 				}
 
-				if (ImGui::MenuItem("Deserialize Scene")) {
-					SceneSerializer serializer(m_ActiveScene);
-					serializer.Deserialize("assets/scenes/ExampleScene.yaml");
+				if (ImGui::MenuItem("Open...", "Ctrl+O")) {
+					OpenScene();
+				}
+
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S")) {
+					SaveSceneAs();
 				}
 
 				if (ImGui::MenuItem("Exit")) Application::Get().Close();
@@ -242,6 +248,70 @@ namespace spg {
 		// Viewport window End
 
 		ImGui::End();
+	}
+
+	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
+	{
+		// Shortcuts
+		if (e.GetRepeatCount() > 0) return false;
+
+		bool controlPressed = Input::IsKeyPressed(SPG_KEY_LEFT_CONTROL) || Input::IsKeyPressed(SPG_KEY_RIGHT_CONTROL);
+		bool shiftPressed = Input::IsKeyPressed(SPG_KEY_LEFT_SHIFT) || Input::IsKeyPressed(SPG_KEY_RIGHT_SHIFT);
+		switch (e.GetKeyCode())
+		{
+			
+			case SPG_KEY_N:
+			{
+				if (controlPressed) {
+					NewScene();
+				}
+				break;
+			}
+			case SPG_KEY_O:
+			{
+				if (controlPressed) {
+					OpenScene();
+				}
+				break;
+			}
+			case SPG_KEY_S:
+			{
+				if (controlPressed && shiftPressed) {
+					SaveSceneAs();
+				}
+				break;
+			}
+			break;
+		}
+		return false;
+	}
+
+	void EditorLayer::NewScene()
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+	}
+
+	void EditorLayer::OpenScene()
+	{
+		std::string filepath = FileDialogs::OpenFile("Scene (*.yaml)\0*.yaml\0");
+		if (!filepath.empty()) {
+			m_ActiveScene = CreateRef<Scene>();
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Deserialize(filepath);
+		}
+	}
+
+	void EditorLayer::SaveSceneAs()
+	{
+		std::string filepath = FileDialogs::SaveFile("Scene (*.yaml)\0*.yaml\0");
+		if (!filepath.empty()) {
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Serialize(filepath);
+		}
 	}
 
 }
