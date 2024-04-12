@@ -153,6 +153,9 @@
     <ClInclude Include="src\Spiegel\Scene\ScriptableEntity.h">
       <Filter>Header File</Filter>
     </ClInclude>
+    <ClInclude Include="src\Spiegel\Scene\SceneSerializer.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Spiegel\Core\Application.cpp">
@@ -240,6 +243,9 @@
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Scene\SceneCamera.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spiegel\Scene\SceneSerializer.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
   </ItemGroup>

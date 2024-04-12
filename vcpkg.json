@@ -1,5 +1,6 @@
 {
   "dependencies": [
+    "entt",
     {
       "name": "glad",
       "features": [
@@ -18,6 +19,6 @@
     },
     "spdlog",
     "stb",
-    "entt"
+    "yaml-cpp"
   ]
 }

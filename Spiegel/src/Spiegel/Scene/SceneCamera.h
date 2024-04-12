@@ -24,12 +24,18 @@ namespace spg {
 
 		float GetPerspectiveFOV() const { return m_PerspectiveFOV; }
 		void SetPerspectiveFOV(float verticalFOV) { m_PerspectiveFOV = verticalFOV; RecalculateProjection(); }
-		
-		float GetNearClip() const { return m_ProjectionType == ProjectionType::Perspective ? m_PerspectiveNear : m_OrthographicNear; }
-		void SetNearClip(float nearCilp) { m_ProjectionType == ProjectionType::Perspective ? m_PerspectiveNear = nearCilp : m_OrthographicNear = nearCilp; RecalculateProjection(); }
 
-		float GetFarClip() const { return m_ProjectionType == ProjectionType::Perspective ? m_PerspectiveFar : m_OrthographicFar; }
-		void SetFarClip(float farClip) { m_ProjectionType == ProjectionType::Perspective ? m_PerspectiveFar = farClip : m_OrthographicFar = farClip; RecalculateProjection(); }
+		float GetPerspectiveNearClip() const { return m_PerspectiveNear; }
+		void SetPerspectiveNearClip(float nearClip) { m_PerspectiveNear = nearClip; RecalculateProjection(); }
+
+		float GetPerspectiveFarClip() const { return m_PerspectiveFar; }
+		void SetPerspectiveFarClip(float farClip) { m_PerspectiveFar = farClip; RecalculateProjection(); }
+
+		float GetOrthographicNearClip() const { return m_OrthographicNear; }
+		void SetOrthographicNearClip(float nearClip) { m_OrthographicNear = nearClip; RecalculateProjection(); }
+		
+		float GetOrthographicFarClip() const { return m_OrthographicFar; }
+		void SetOrthographicFarClip(float farClip) { m_OrthographicFar = farClip; RecalculateProjection(); }
 
 		ProjectionType GetProjectionType() const { return m_ProjectionType; }
 		void SetProjectionType(ProjectionType type);

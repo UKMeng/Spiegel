@@ -1,5 +1,7 @@
 #include "EditorLayer.h"
 
+#include "Spiegel/Scene/SceneSerializer.h"
+
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -43,6 +45,8 @@ namespace spg {
 		m_Framebuffer = Framebuffer::Create(fbSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
+
+#if 0
 		auto blueSquare = m_ActiveScene->CreateEntity("Blue Square");
 		blueSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 0.0f, 1.0f, 1.0f });
 
@@ -87,8 +91,13 @@ namespace spg {
 		};
 
 		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+#endif
 
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+		// SceneSerializer serializer(m_ActiveScene);
+		// serializer.Serialize("assets/scenes/ExampleScene.yaml");
+		// serializer.Deserialize("assets/scenes/ExampleScene.yaml");
 	}
 
 	void EditorLayer::OnDetach()
@@ -179,6 +188,18 @@ namespace spg {
 
 		if (ImGui::BeginMenuBar()) {
 			if (ImGui::BeginMenu("File")) {
+
+				// TODO: HOTKEYS
+				if (ImGui::MenuItem("Serialize Scene")) {
+					SceneSerializer serializer(m_ActiveScene);
+					serializer.Serialize("assets/scenes/ExampleScene.yaml");
+				}
+
+				if (ImGui::MenuItem("Deserialize Scene")) {
+					SceneSerializer serializer(m_ActiveScene);
+					serializer.Deserialize("assets/scenes/ExampleScene.yaml");
+				}
+
 				if (ImGui::MenuItem("Exit")) Application::Get().Close();
 				ImGui::EndMenu();
 			}

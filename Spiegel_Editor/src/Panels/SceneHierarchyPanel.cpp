@@ -239,14 +239,14 @@ namespace spg {
 						camera.SetOrthographicSize(orthoSize);
 					}
 
-					float orthoNear = camera.GetNearClip();
+					float orthoNear = camera.GetOrthographicNearClip();
 					if (ImGui::DragFloat("Near", &orthoNear)) {
-						camera.SetNearClip(orthoNear);
+						camera.SetOrthographicNearClip(orthoNear);
 					}
 
-					float orthoFar = camera.GetFarClip();
+					float orthoFar = camera.GetOrthographicFarClip();
 					if (ImGui::DragFloat("Far", &orthoFar)) {
-						camera.SetFarClip(orthoFar);
+						camera.SetOrthographicFarClip(orthoFar);
 					}
 
 					ImGui::Checkbox("Fixed Aspect Ratio", &component.FixedAspectRatio);
@@ -258,14 +258,14 @@ namespace spg {
 						camera.SetPerspectiveFOV(persFov);
 					}
 
-					float orthoNear = camera.GetNearClip();
-					if (ImGui::DragFloat("Near", &orthoNear)) {
-						camera.SetNearClip(orthoNear);
+					float persNear = camera.GetPerspectiveNearClip();
+					if (ImGui::DragFloat("Near", &persNear)) {
+						camera.SetPerspectiveNearClip(persNear);
 					}
 
-					float orthoFar = camera.GetFarClip();
-					if (ImGui::DragFloat("Far", &orthoFar)) {
-						camera.SetFarClip(orthoFar);
+					float persFar = camera.GetPerspectiveFarClip();
+					if (ImGui::DragFloat("Far", &persFar)) {
+						camera.SetPerspectiveFarClip(persFar);
 					}
 				}
 			});

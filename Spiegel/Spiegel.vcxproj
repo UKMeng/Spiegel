@@ -56,6 +56,7 @@
     <ClInclude Include="src\Spiegel\Scene\Entity.h" />
     <ClInclude Include="src\Spiegel\Scene\Scene.h" />
     <ClInclude Include="src\Spiegel\Scene\SceneCamera.h" />
+    <ClInclude Include="src\Spiegel\Scene\SceneSerializer.h" />
     <ClInclude Include="src\Spiegel\Scene\ScriptableEntity.h" />
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +92,7 @@
     <ClCompile Include="src\Spiegel\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Spiegel\Scene\Scene.cpp" />
     <ClCompile Include="src\Spiegel\Scene\SceneCamera.cpp" />
+    <ClCompile Include="src\Spiegel\Scene\SceneSerializer.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
