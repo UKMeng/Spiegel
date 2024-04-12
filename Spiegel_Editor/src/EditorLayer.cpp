@@ -2,8 +2,10 @@
 
 #include "Spiegel/Scene/SceneSerializer.h"
 #include "Spiegel/Utils/PlatformUtils.h"
+#include "Spiegel/Math/Math.h"
 
 #include <imgui.h>
+#include <ImGuizmo.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -192,8 +194,6 @@ namespace spg {
 
 		if (ImGui::BeginMenuBar()) {
 			if (ImGui::BeginMenu("File")) {
-
-				// TODO: HOTKEYS
 				if (ImGui::MenuItem("New", "Ctrl+N")) {
 					NewScene();
 				}
@@ -233,7 +233,10 @@ namespace spg {
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
-		Application::Get().GetImGuiLayer()->BlockEvents(!(m_ViewportFocused && m_ViewportHovered));
+		if (!ImGui::IsAnyItemActive())
+			Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
+		else
+			Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
 
 		ImVec2 viewportWindowSize = ImGui::GetContentRegionAvail();
 		if (m_ViewportSize != *((glm::vec2*)&viewportWindowSize)) {
@@ -243,6 +246,51 @@ namespace spg {
 		}
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		
+		// ImGuizmo
+		// TODO: Mouse Picking
+		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+		if (selectedEntity && m_GizmoType != -1) {
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, m_ViewportSize.x, m_ViewportSize.y);
+
+			// Get Primary Camera
+			auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+			const auto& camera = cameraEntity.GetComponent<CameraComponent>();
+			const glm::mat4& cameraProjection = camera.Camera.GetProjection();
+			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+			
+			// Entity Transform
+			auto& tc = selectedEntity.GetComponent<TransformComponent>();
+			glm::mat4 transform = tc.GetTransform();
+
+			// Snapping
+			bool snap = Input::IsKeyPressed(SPG_KEY_LEFT_CONTROL);
+			float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+			if (m_GizmoType == ImGuizmo::OPERATION::ROTATE) 
+				snapValue = 45.0f; // Snap to 45 degrees for rotation
+			float snapValues[3] = { snapValue, snapValue, snapValue };
+
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+								(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform),
+								nullptr, snap ? snapValues : nullptr);
+		
+			if (ImGuizmo::IsUsing()) {
+				
+				glm::vec3 translation, rotation, scale;
+				Math::DecomposeTransform(transform, translation, rotation, scale);
+				tc.Translation = translation;
+				
+				// to avoid gimbal lock
+				// but why?
+				glm::vec3 deltaRotation = glm::degrees(rotation) - tc.Rotation;
+				tc.Rotation += deltaRotation;
+				
+				tc.Scale = scale;
+			}
+		}
+		
 		ImGui::End();
 		ImGui::PopStyleVar();
 		// Viewport window End
@@ -281,8 +329,33 @@ namespace spg {
 				}
 				break;
 			}
+			// Gizmos Type
+			case SPG_KEY_Q:
+			{
+				m_GizmoType = -1;
+				break;
+			}
+			case SPG_KEY_W:
+			{
+				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+				break;
+			}
+			case SPG_KEY_E:
+			{
+				m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+				break;
+			}
+			case SPG_KEY_R:
+			{
+				m_GizmoType = ImGuizmo::OPERATION::SCALE;
+				break;
+			}
+				
+
 			break;
 		}
+
+		
 		return false;
 	}
 

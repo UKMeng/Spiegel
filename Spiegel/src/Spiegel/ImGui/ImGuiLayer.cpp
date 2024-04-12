@@ -11,6 +11,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <ImGuizmo.h>
+
 namespace spg {
 	ImGuiLayer::ImGuiLayer()
 		: Layer("ImGuiLayer") { }
@@ -75,6 +77,7 @@ namespace spg {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 	}
 
 	void ImGuiLayer::End() {

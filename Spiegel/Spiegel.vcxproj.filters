@@ -159,6 +159,9 @@
     <ClInclude Include="src\Spiegel\Utils\PlatformUtils.h">
       <Filter>Header File</Filter>
     </ClInclude>
+    <ClInclude Include="src\Spiegel\Math\Math.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Spiegel\Core\Application.cpp">
@@ -252,6 +255,9 @@
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spiegel\Math\Math.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
   </ItemGroup>
