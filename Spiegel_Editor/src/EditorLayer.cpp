@@ -43,6 +43,7 @@ namespace spg {
 
 		// Framebuffer
 		FramebufferSpecification fbSpec;
+		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_Framebuffer = Framebuffer::Create(fbSpec);
@@ -142,11 +143,27 @@ namespace spg {
 
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RenderCommand::Clear();
+		// Clear Attachment to -1
+		m_Framebuffer->ClearAttachment(1, (void*)-1);
 
 		// Scene
 		// m_ActiveScene->OnUpdateRuntime(ts);
 		m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
 
+		// Mouse Picking
+		auto [mx, my] = ImGui::GetMousePos();
+		mx -= m_ViewportBounds[0].x;
+		my -= m_ViewportBounds[0].y;
+		glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+		my = viewportSize.y - my; // make left bottom corner the origin
+		int mouseX = (int)mx;
+		int mouseY = (int)my;
+
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y) {
+			int pixelData = m_Framebuffer->ReadPixel(1, mouseX, mouseY);
+			m_HoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, m_ActiveScene.get());
+		}
+		
 		m_Framebuffer->Unbind();
 	}
 
@@ -228,6 +245,13 @@ namespace spg {
 
 		// Settings Window Begin
 		ImGui::Begin("Stats");
+		
+		std::string name = "None";
+		if (m_HoveredEntity) {
+			name = m_HoveredEntity.GetComponent<TagComponent>().Tag;
+		}
+		ImGui::Text("Hovered Entity: %s", name.c_str());
+
 		// Renderer2D Stats
 		auto stats = Renderer2D::GetStats();
 		ImGui::Text("Renderer2D Stats:");
@@ -242,6 +266,7 @@ namespace spg {
 		// Viewport window Begin
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
+		auto viewportOffset = ImGui::GetCursorPos(); // includes tab bar
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
@@ -257,9 +282,18 @@ namespace spg {
 			m_CameraController.OnResize(viewportWindowSize.x, viewportWindowSize.y);
 			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 		}
-		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID(0);
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		
+		// Get Viewport Bounds
+		auto WindowSize = ImGui::GetWindowSize();
+		ImVec2 minBound = ImGui::GetWindowPos();
+		minBound.x += viewportOffset.x;
+		minBound.y += viewportOffset.y;
+		ImVec2 maxBound = { minBound.x + WindowSize.x, minBound.y + WindowSize.y };
+		m_ViewportBounds[0] = { minBound.x, minBound.y };
+		m_ViewportBounds[1] = { maxBound.x, maxBound.y };
+
 		// ImGuizmo
 		// TODO: Mouse Picking
 		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
@@ -405,4 +439,3 @@ namespace spg {
 	}
 
 }
-
