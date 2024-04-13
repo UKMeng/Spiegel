@@ -43,6 +43,9 @@ namespace spg {
 
 		bool m_PrimaryCamera = true;
 
+		// Editor Camera
+		EditorCamera m_EditorCamera;
+
 		// Panels
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 

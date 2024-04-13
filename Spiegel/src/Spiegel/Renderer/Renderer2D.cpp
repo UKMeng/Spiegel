@@ -124,6 +124,19 @@ namespace spg {
 		s_Data.TextureSlotIndex = 1;
 	}
 
+	void Renderer2D::BeginScene(const EditorCamera& camera)
+	{
+		SPG_PROFILE_FUNCTION();
+
+		s_Data.TextureShader->Bind();
+		s_Data.TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjection());
+
+		s_Data.QuadIndexCount = 0;
+		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.TextureSlotIndex = 1;
+	}
+
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
 		SPG_PROFILE_FUNCTION();

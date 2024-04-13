@@ -7,13 +7,13 @@ namespace spg {
 
 	SceneCamera::SceneCamera()
 	{
-		RecalculateProjection();	
+		UpdateProjection();	
 	}
 
 	void SceneCamera::SetProjectionType(ProjectionType type)
 	{
 		m_ProjectionType = type;
-		RecalculateProjection();
+		UpdateProjection();
 	}
 
 	void SceneCamera::SetPerspective(float verticalFOV, float nearClip, float farClip)
@@ -22,7 +22,7 @@ namespace spg {
 		m_PerspectiveFOV = verticalFOV;
 		m_PerspectiveNear = nearClip;
 		m_PerspectiveFar = farClip;
-		RecalculateProjection();
+		UpdateProjection();
 	}
 
 	void SceneCamera::SetOrthographic(float size, float nearClip, float farClip)
@@ -31,16 +31,16 @@ namespace spg {
 		m_OrthographicSize = size;
 		m_OrthographicNear = nearClip;
 		m_OrthographicFar = farClip;
-		RecalculateProjection();
+		UpdateProjection();
 	}
 
 	void SceneCamera::SetViewportSize(uint32_t width, uint32_t height)
 	{
 		m_AspectRatio = (float)width / (float)height;
-		RecalculateProjection();
+		UpdateProjection();
 	}
 
-	void SceneCamera::RecalculateProjection()
+	void SceneCamera::UpdateProjection()
 	{
 		if (m_ProjectionType == ProjectionType::Perspective) {
 			// Perspective

@@ -49,6 +49,8 @@ namespace spg {
 
 		m_ActiveScene = CreateRef<Scene>();
 
+		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f); // 1.778f is the aspect ratio of 16:9
+
 #if 0
 		auto blueSquare = m_ActiveScene->CreateEntity("Blue Square");
 		blueSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 0.0f, 1.0f, 1.0f });
@@ -121,10 +123,17 @@ namespace spg {
 		{
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
 		// Camera
-		m_CameraController.OnUpdate(ts);
+		if (m_ViewportFocused) {
+			m_CameraController.OnUpdate(ts);
+		}
+
+		m_EditorCamera.OnUpdate(ts);
+		
 
 		// Renderer
 		Renderer2D::ResetStats();
@@ -135,7 +144,8 @@ namespace spg {
 		RenderCommand::Clear();
 
 		// Scene
-		m_ActiveScene->OnUpdate(ts);
+		// m_ActiveScene->OnUpdateRuntime(ts);
+		m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
 
 		m_Framebuffer->Unbind();
 	}
@@ -143,6 +153,8 @@ namespace spg {
 	void EditorLayer::OnEvent(Event& e)
 	{
 		if(m_ViewportFocused) m_CameraController.OnEvent(e);
+
+		m_EditorCamera.OnEvent(e);
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(SPG_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
@@ -243,6 +255,7 @@ namespace spg {
 			m_Framebuffer->Resize((uint32_t)viewportWindowSize.x, (uint32_t)viewportWindowSize.y);
 			m_ViewportSize = { viewportWindowSize.x, viewportWindowSize.y };
 			m_CameraController.OnResize(viewportWindowSize.x, viewportWindowSize.y);
+			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 		}
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
@@ -255,12 +268,16 @@ namespace spg {
 			ImGuizmo::SetDrawlist();
 			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, m_ViewportSize.x, m_ViewportSize.y);
 
-			// Get Primary Camera
-			auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
-			const auto& camera = cameraEntity.GetComponent<CameraComponent>();
-			const glm::mat4& cameraProjection = camera.Camera.GetProjection();
-			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+			// Get Primary Camera Runtime
+			// auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+			// const auto& camera = cameraEntity.GetComponent<CameraComponent>();
+			// const glm::mat4& cameraProjection = camera.Camera.GetProjection();
+			// glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
 			
+			// Editor Camera
+			const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
+			glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
+
 			// Entity Transform
 			auto& tc = selectedEntity.GetComponent<TransformComponent>();
 			glm::mat4 transform = tc.GetTransform();

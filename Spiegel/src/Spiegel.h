@@ -29,5 +29,6 @@
 #include "Spiegel/Renderer/Texture.h"
 #include "Spiegel/Renderer/SubTexture2D.h"
 #include "Spiegel/Renderer/VertexArray.h"
+#include "Spiegel/Renderer/EditorCamera.h"
 #include "Spiegel/Renderer/OrthographicCamera.h"
 #include "Spiegel/Renderer/OrthographicCameraController.h"

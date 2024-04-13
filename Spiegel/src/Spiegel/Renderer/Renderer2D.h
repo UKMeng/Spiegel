@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Camera.h"
+#include "EditorCamera.h"
 #include "OrthographicCamera.h"
 #include "Texture.h"
 #include "SubTexture2D.h"
@@ -13,6 +14,7 @@ namespace spg {
 		static void Shutdown();
 
 		static void BeginScene(const Camera& camera, const glm::mat4& transform);
+		static void BeginScene(const EditorCamera& camera);
 		static void BeginScene(const OrthographicCamera& camera);
 		static void EndScene();
 		static void Flush();
