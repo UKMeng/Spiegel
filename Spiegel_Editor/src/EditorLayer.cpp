@@ -100,10 +100,6 @@ namespace spg {
 #endif
 
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
-
-		// SceneSerializer serializer(m_ActiveScene);
-		// serializer.Serialize("assets/scenes/ExampleScene.yaml");
-		// serializer.Deserialize("assets/scenes/ExampleScene.yaml");
 	}
 
 	void EditorLayer::OnDetach()
@@ -266,7 +262,13 @@ namespace spg {
 		// Viewport window Begin
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
-		auto viewportOffset = ImGui::GetCursorPos(); // includes tab bar
+
+		// Get Viewport Bounds
+		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+		auto viewportOffset = ImGui::GetWindowPos();
+		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
@@ -284,15 +286,6 @@ namespace spg {
 		}
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID(0);
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-		
-		// Get Viewport Bounds
-		auto WindowSize = ImGui::GetWindowSize();
-		ImVec2 minBound = ImGui::GetWindowPos();
-		minBound.x += viewportOffset.x;
-		minBound.y += viewportOffset.y;
-		ImVec2 maxBound = { minBound.x + WindowSize.x, minBound.y + WindowSize.y };
-		m_ViewportBounds[0] = { minBound.x, minBound.y };
-		m_ViewportBounds[1] = { maxBound.x, maxBound.y };
 
 		// ImGuizmo
 		// TODO: Mouse Picking
@@ -300,7 +293,7 @@ namespace spg {
 		if (selectedEntity && m_GizmoType != -1) {
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
-			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, m_ViewportSize.x, m_ViewportSize.y);
+			ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, m_ViewportBounds[1].x - m_ViewportBounds[0].x, m_ViewportBounds[1].y - m_ViewportBounds[0].y);
 
 			// Get Primary Camera Runtime
 			// auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
