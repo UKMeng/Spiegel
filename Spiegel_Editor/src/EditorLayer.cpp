@@ -171,6 +171,7 @@ namespace spg {
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(SPG_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+		dispatcher.Dispatch<MouseButtonPressedEvent>(SPG_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
 	}
 
 
@@ -400,6 +401,17 @@ namespace spg {
 		}
 
 		
+		return false;
+	}
+
+	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
+	{
+		if (e.GetMouseButton() == Mouse::ButtonLeft) {
+			// When In
+			if (m_HoveredEntity && !ImGuizmo::IsOver() && !Input::IsKeyPressed(Key::LeftAlt)) {
+				m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
+			}
+		}
 		return false;
 	}
 
