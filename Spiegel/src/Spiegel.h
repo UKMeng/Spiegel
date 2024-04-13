@@ -7,7 +7,7 @@
 #include "Spiegel/Core/Layer.h"
 #include "Spiegel/Core/Log.h"
 #include "Spiegel/Core/Input.h"
-#include "Spiegel/Core/MouseButtonCodes.h"
+#include "Spiegel/Core/MouseCodes.h"
 #include "Spiegel/Core/KeyCodes.h"
 #include "Spiegel/Core/Timestep.h"
 

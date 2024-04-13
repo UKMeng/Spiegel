@@ -283,7 +283,7 @@ namespace spg {
 			glm::mat4 transform = tc.GetTransform();
 
 			// Snapping
-			bool snap = Input::IsKeyPressed(SPG_KEY_LEFT_CONTROL);
+			bool snap = Input::IsKeyPressed(Key::LeftControl);
 			float snapValue = 0.5f; // Snap to 0.5m for translation/scale
 			if (m_GizmoType == ImGuizmo::OPERATION::ROTATE) 
 				snapValue = 45.0f; // Snap to 45 degrees for rotation
@@ -320,26 +320,26 @@ namespace spg {
 		// Shortcuts
 		if (e.GetRepeatCount() > 0) return false;
 
-		bool controlPressed = Input::IsKeyPressed(SPG_KEY_LEFT_CONTROL) || Input::IsKeyPressed(SPG_KEY_RIGHT_CONTROL);
-		bool shiftPressed = Input::IsKeyPressed(SPG_KEY_LEFT_SHIFT) || Input::IsKeyPressed(SPG_KEY_RIGHT_SHIFT);
+		bool controlPressed = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
+		bool shiftPressed = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
 		switch (e.GetKeyCode())
 		{
 			
-			case SPG_KEY_N:
+			case Key::N:
 			{
 				if (controlPressed) {
 					NewScene();
 				}
 				break;
 			}
-			case SPG_KEY_O:
+			case Key::O:
 			{
 				if (controlPressed) {
 					OpenScene();
 				}
 				break;
 			}
-			case SPG_KEY_S:
+			case Key::S:
 			{
 				if (controlPressed && shiftPressed) {
 					SaveSceneAs();
@@ -347,22 +347,22 @@ namespace spg {
 				break;
 			}
 			// Gizmos Type
-			case SPG_KEY_Q:
+			case Key::Q:
 			{
 				m_GizmoType = -1;
 				break;
 			}
-			case SPG_KEY_W:
+			case Key::W:
 			{
 				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
 				break;
 			}
-			case SPG_KEY_E:
+			case Key::E:
 			{
 				m_GizmoType = ImGuizmo::OPERATION::ROTATE;
 				break;
 			}
-			case SPG_KEY_R:
+			case Key::R:
 			{
 				m_GizmoType = ImGuizmo::OPERATION::SCALE;
 				break;

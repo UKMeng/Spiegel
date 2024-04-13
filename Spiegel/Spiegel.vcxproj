@@ -41,7 +41,7 @@
     <ClInclude Include="src\Spiegel\Core\Application.h" />
     <ClInclude Include="src\Spiegel\Core\Base.h" />
     <ClInclude Include="src\Spiegel\Core\EntryPoint.h" />
-    <ClInclude Include="src\Spiegel\Core\MouseButtonCodes.h" />
+    <ClInclude Include="src\Spiegel\Core\MouseCodes.h" />
     <ClInclude Include="src\Spiegel\Renderer\OrthographicCameraController.h" />
     <ClInclude Include="src\Spiegel\Renderer\Buffer.h" />
     <ClInclude Include="src\Spiegel\Renderer\GraphicsContext.h" />

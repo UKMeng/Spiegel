@@ -3,7 +3,7 @@
 
 #include "Spiegel/Core/Input.h"
 #include "Spiegel/Core/KeyCodes.h"
-#include "Spiegel/Core/MouseButtonCodes.h"
+#include "Spiegel/Core/MouseCodes.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
@@ -19,19 +19,19 @@ namespace spg {
 
 	void EditorCamera::OnUpdate(Timestep ts)
 	{
-		if (Input::IsKeyPressed(SPG_KEY_LEFT_ALT)) {
+		if (Input::IsKeyPressed(Key::LeftAlt)) {
 			auto [mouseX, mouseY] = Input::GetMousePosition();
 			const glm::vec2& mouse = { mouseX, mouseY };
 			glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;
 			m_InitialMousePosition = mouse;
 
-			if (Input::IsMouseButtonPressed(SPG_MOUSE_BUTTON_MIDDLE)) {
+			if (Input::IsMouseButtonPressed(Mouse::ButtonMiddle)) {
 				MousePan(delta);
 			}
-			else if (Input::IsMouseButtonPressed(SPG_MOUSE_BUTTON_LEFT)) {
+			else if (Input::IsMouseButtonPressed(Mouse::ButtonLeft)) {
 				MouseRotate(delta);
 			}
-			else if (Input::IsMouseButtonPressed(SPG_MOUSE_BUTTON_RIGHT)) {
+			else if (Input::IsMouseButtonPressed(Mouse::ButtonRight)) {
 				MouseZoom(delta.y);
 			}
 		}
@@ -103,6 +103,7 @@ namespace spg {
 
 	void EditorCamera::MouseZoom(float delta)
 	{
+		// TODO: Stop Zoom in when the focal point is too close
 		m_Distance -= delta * ZoomSpeed();
 		if (m_Distance < 1.0f) {
 			m_FocalPoint += GetForwardDirection();
