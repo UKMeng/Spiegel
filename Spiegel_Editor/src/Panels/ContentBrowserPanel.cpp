@@ -14,6 +14,11 @@ namespace spg {
 	void ContentBrowserPanel::OnImGuiRender()
 	{
 		ImGui::Begin("Content Browser");
+
+		ImGui::PushStyleColor(ImGuiCol_Button, { 0.0f, 0.0f, 0.0f, 0.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.0f, 0.0f, 0.0f, 0.2f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.0f, 0.0f, 0.0f, 0.0f });
+
 		if (m_CurrentDirectory != m_BaseDirectory) {
 			if (ImGui::Button("Back")) {
 				m_CurrentDirectory = m_CurrentDirectory.parent_path();
@@ -33,14 +38,10 @@ namespace spg {
 		{
 			auto path = directory.path();
 			auto filename = path.filename().string();
-
-			ImGui::PushStyleColor(ImGuiCol_Button, { 0.0f, 0.0f, 0.0f, 0.0f });
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.0f, 0.0f, 0.0f, 0.2f });
-			ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.0f, 0.0f, 0.0f, 0.0f });
+			ImGui::PushID(filename.c_str());
 			
 			if (directory.is_directory()) {
 				ImGui::ImageButton((ImTextureID)m_FolderIcon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
-				ImGui::PopStyleColor(3);
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
 					m_CurrentDirectory = path;
 				}
@@ -48,12 +49,18 @@ namespace spg {
 			}
 			else {
 				ImGui::ImageButton((ImTextureID)m_FileIcon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+				if (ImGui::BeginDragDropSource()) {
+					const wchar_t* itemPath = path.c_str();
+					ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+					ImGui::EndDragDropSource();
+				}
 			}
-			ImGui::PopStyleColor(3);
+			
 			ImGui::TextWrapped(filename.c_str());
 			ImGui::NextColumn();
+			ImGui::PopID();
 		}
-		
+		ImGui::PopStyleColor(3);
 		ImGui::Columns(1);
 		ImGui::End();
 	}
