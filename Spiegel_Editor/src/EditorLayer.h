@@ -2,6 +2,7 @@
 
 #include "Spiegel.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "Panels/ContentBrowserPanel.h"
 
 namespace spg {
 	class EditorLayer : public Layer {
@@ -51,6 +52,7 @@ namespace spg {
 
 		// Panels
 		SceneHierarchyPanel m_SceneHierarchyPanel;
+		ContentBrowserPanel m_ContentBrowserPanel;
 
 		// Gizmos
 		int m_GizmoType = -1;

@@ -239,6 +239,7 @@ namespace spg {
 		}
 
 		m_SceneHierarchyPanel.OnImGuiRender();
+		m_ContentBrowserPanel.OnImGuiRender();
 
 		// Settings Window Begin
 		ImGui::Begin("Stats");
@@ -407,7 +408,7 @@ namespace spg {
 	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
 	{
 		if (e.GetMouseButton() == Mouse::ButtonLeft) {
-			// When In
+			// TODO: abstract this condition -- when you can select entities
 			if (m_HoveredEntity && !ImGuizmo::IsOver() && !Input::IsKeyPressed(Key::LeftAlt)) {
 				m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
 			}

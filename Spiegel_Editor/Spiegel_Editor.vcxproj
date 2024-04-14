@@ -143,11 +143,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
+    <ClCompile Include="src\Panels\ContentBrowserPanel.cpp" />
     <ClCompile Include="src\Panels\SceneHierarchyPanel.cpp" />
     <ClCompile Include="src\SpiegelEditorApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\EditorLayer.h" />
+    <ClInclude Include="src\Panels\ContentBrowserPanel.h" />
     <ClInclude Include="src\Panels\SceneHierarchyPanel.h" />
   </ItemGroup>
   <ItemGroup>
