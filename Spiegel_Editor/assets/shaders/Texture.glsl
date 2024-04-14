@@ -40,6 +40,6 @@ in flat int v_EntityID;
 uniform sampler2D u_Texture[32];
 
 void main() {
-	color = texture(u_Texture[int(v_TexIndex)], v_TexCoord * v_TilingFactor) * v_Color;
+	color =  v_Color * texture(u_Texture[int(v_TexIndex)], v_TexCoord * v_TilingFactor);
 	color2 = v_EntityID;
 }

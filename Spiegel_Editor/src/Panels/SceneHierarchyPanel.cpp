@@ -279,6 +279,17 @@ namespace spg {
 
 		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component) {
 				ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
+
+				ImGui::Button("Texture", {128.0f, 128.0f});
+				if (ImGui::BeginDragDropTarget()) {
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						component.Texture = Texture2D::Create(path);
+					}
+					ImGui::EndDragDropSource();
+				}
+
+				ImGui::DragFloat("Tiling Factor", &component.TilingFactor, 0.1f, 0.0f, 100.0f, "%.2f");
 			});
 	}
 }
