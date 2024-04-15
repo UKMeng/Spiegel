@@ -157,11 +157,11 @@ namespace spg {
         fout << out.c_str();
     }
 
-    void SceneSerializer::SerializeRuntime(const std::string& filepath)
-    {
-        // Not implemented
-        SPG_CORE_ASSERT(false);
-    }
+    //void SceneSerializer::SerializeRuntime(const std::string& filepath)
+    //{
+    //    // Not implemented
+    //    // SPG_CORE_ASSERT(false);
+    //}
 
     bool SceneSerializer::Deserialize(const std::string& filepath)
     {
@@ -224,10 +224,10 @@ namespace spg {
         return true;
     }
 
-    bool SceneSerializer::DeserializeRuntime(const std::string& filepath)
-    {
-        // Not implemented
-        SPG_CORE_ASSERT(false);
-        return false;
-    }
+    //bool SceneSerializer::DeserializeRuntime(const std::string& filepath)
+    //{
+    //    // Not implemented
+    //    // SPG_CORE_ASSERT(false);
+    //    return false;
+    //}
 }

@@ -211,12 +211,11 @@ namespace spg {
 		// Dock Space
 		ImGuiIO& io = ImGui::GetIO();
 		ImGuiStyle& style = ImGui::GetStyle();
-		style.WindowMinSize.x = 380.0f;
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 		}
-		style.WindowMinSize.x = 0.0f;
+		
 
 		if (ImGui::BeginMenuBar()) {
 			if (ImGui::BeginMenu("File")) {
@@ -294,11 +293,10 @@ namespace spg {
 				const wchar_t* path = (const wchar_t*)payload->Data;
 				OpenScene(path);
 			}
-			ImGui::EndDragDropSource();
+			ImGui::EndDragDropTarget();
 		}
 
 		// ImGuizmo
-		// TODO: Mouse Picking
 		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
 		if (selectedEntity && m_GizmoType != -1) {
 			ImGuizmo::SetOrthographic(false);
