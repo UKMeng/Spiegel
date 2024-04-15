@@ -298,7 +298,7 @@ namespace spg {
 						const wchar_t* path = (const wchar_t*)payload->Data;
 						component.Texture = Texture2D::Create(path);
 					}
-					ImGui::EndDragDropSource();
+					ImGui::EndDragDropTarget();
 				}
 
 				ImGui::DragFloat("Tiling Factor", &component.TilingFactor, 0.1f, 0.0f, 100.0f, "%.2f");

@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h" />
     <ClInclude Include="src\Spiegel\Debug\Instrumentation.h" />
     <ClInclude Include="src\Spiegel\Math\Math.h" />
     <ClInclude Include="src\Spiegel\Renderer\Camera.h" />
@@ -53,6 +54,7 @@
     <ClInclude Include="src\Spiegel\Renderer\Shader.h" />
     <ClInclude Include="src\Spiegel\Renderer\SubTexture2D.h" />
     <ClInclude Include="src\Spiegel\Renderer\Texture.h" />
+    <ClInclude Include="src\Spiegel\Renderer\UniformBuffer.h" />
     <ClInclude Include="src\Spiegel\Renderer\VertexArray.h" />
     <ClInclude Include="src\Spiegel\Core\Window.h" />
     <ClInclude Include="src\Spiegel\Scene\Components.h" />
@@ -65,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp" />
     <ClCompile Include="src\Spiegel\Math\Math.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\EditorCamera.cpp" />
@@ -97,6 +100,7 @@
     <ClCompile Include="src\Spiegel\Renderer\Shader.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\SubTexture2D.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Texture.cpp" />
+    <ClCompile Include="src\Spiegel\Renderer\UniformBuffer.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Spiegel\Scene\Scene.cpp" />
     <ClCompile Include="src\Spiegel\Scene\SceneCamera.cpp" />

@@ -39,7 +39,7 @@ namespace spg {
 		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<SubTexture2D>& subtexture, float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f));
 
 		static void DrawSprite(const glm::mat4& transform, SpriteRendererComponent& src, int entityID = -1);
-
+		// static void DrawText(Ref<Shader> shader, const glm::mat4& transform, TextComponent& tc, int entityID = -1);
 
 		struct Statistics {
 			uint32_t DrawCalls = 0;
@@ -52,6 +52,7 @@ namespace spg {
 		static Statistics GetStats();
 		static void ResetStats();
 	private:
-		static void FlushAndReset();
+		static void StartBatch();
+		static void NextBatch();
 	};
 }
