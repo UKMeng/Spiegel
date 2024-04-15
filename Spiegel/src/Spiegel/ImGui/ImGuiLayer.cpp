@@ -34,7 +34,7 @@ namespace spg {
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
 		io.Fonts->AddFontFromFileTTF("assets/fonts/Noto_Sans/NotoSansSC-Bold.ttf", 18.0f);
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/Noto_Sans/NotoSansSC-Regular.ttf", 18.0f);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/Noto_Sans/NotoSansSC-Regular.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
 
 		// Setup ImGui style
 		ImGui::StyleColorsDark();

@@ -16,9 +16,10 @@ namespace spg {
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		SPG_CORE_ASSERT(status, "Failed to initialize GLAD");
 
+		// TODO: Show this on stats panel
 		SPG_CORE_INFO("OpenGL Info:");
 		SPG_CORE_INFO(" Vendor: {0}", (const char*)glGetString(GL_VENDOR));
-		SPG_CORE_INFO(" Vendor: {0}", (const char*)glGetString(GL_RENDERER));
+		SPG_CORE_INFO(" Renderer: {0}", (const char*)glGetString(GL_RENDERER));
 		SPG_CORE_INFO(" Version: {0}", (const char*)glGetString(GL_VERSION));
 	}
 

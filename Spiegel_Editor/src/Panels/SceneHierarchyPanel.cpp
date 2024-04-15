@@ -147,6 +147,12 @@ namespace spg {
 		ImGui::PopID();
 	}
 
+	/// @brief Template of drawing components with a diy funciton
+	/// @tparam T type of component
+	/// @tparam UIFunction 
+	/// @param name - name of the component show in the tree node
+	/// @param entity - entity that contains the component
+	/// @param uiFunction - function defined by user to show the component's properties
 	template<typename T, typename UIFunction>
 	static void DrawComponent(const std::string& name, Entity entity, UIFunction uiFunction)
 	{
@@ -210,6 +216,12 @@ namespace spg {
 			if (ImGui::MenuItem("Sprite Renderer")) {
 				if (!m_SelectionContext.CheckComponent<SpriteRendererComponent>()) {
 					m_SelectionContext.AddComponent<SpriteRendererComponent>();
+				}
+				ImGui::CloseCurrentPopup();
+			}
+			if (ImGui::MenuItem("Text")) {
+				if (!m_SelectionContext.CheckComponent<TextComponent>()) {
+					m_SelectionContext.AddComponent<TextComponent>();
 				}
 				ImGui::CloseCurrentPopup();
 			}
@@ -290,6 +302,19 @@ namespace spg {
 				}
 
 				ImGui::DragFloat("Tiling Factor", &component.TilingFactor, 0.1f, 0.0f, 100.0f, "%.2f");
+			});
+
+		DrawComponent<TextComponent>("Text", entity, [](auto& component) {
+				auto& text = component.Text;
+
+				// TODO: buffer[256] is not enough for a long text, need to fix
+				char buffer[256];
+				memset(buffer, 0, sizeof(buffer));
+				strcpy_s(buffer, sizeof(buffer), text.c_str());
+				if (ImGui::InputText("##Text", buffer, sizeof(buffer)))
+				{
+					text = std::string(buffer);
+				}
 			});
 	}
 }

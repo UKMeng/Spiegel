@@ -157,4 +157,10 @@ namespace spg {
 	{
 
 	}
+
+	template<>
+	void Scene::OnComponentAdded<TextComponent>(Entity entity, TextComponent& component)
+	{
+
+	}
 }

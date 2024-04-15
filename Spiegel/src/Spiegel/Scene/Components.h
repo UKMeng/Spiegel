@@ -62,6 +62,17 @@ namespace spg {
 		CameraComponent(const CameraComponent&) = default;
 	};
 
+	struct TextComponent
+	{
+		std::string Text;
+		// Ref<Font> Font;
+
+		TextComponent() = default;
+		TextComponent(const TextComponent&) = default;
+		TextComponent(const std::string& text)
+			: Text(text) {}
+	};
+
 	struct NativeScriptComponent
 	{
 		ScriptableEntity* Instance = nullptr;

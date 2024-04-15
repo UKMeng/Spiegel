@@ -1,0 +1,32 @@
+#pragma once
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+namespace spg {
+
+	// 中文汉字的字体如果要实时渲染每个字相当消耗性能，
+	// 未来的计划应该是提前获取游戏所需要的所有文本，然后一次性渲染到一个大的纹理上
+	// 然后在游戏中直接使用纹理以及定位来渲染字体
+
+	// TODO：MSDF also need to be implemented
+	// https://github.com/Chlumsky/msdf-atlas-gen
+	// https://www.youtube.com/watch?v=J26hm7r-k6A
+	
+	// FreeType Font
+	// https://learnopengl.com/In-Practice/Text-Rendering
+	
+	class Font
+	{
+	public:
+		Font() = default;
+		Font(const std::filesystem::path& fontPath, uint32_t fontSize);
+		~Font() = default;
+	private:
+		std::filesystem::path m_fontPath;
+		uint32_t m_fontSize;
+		FT_Library m_ftLibrary;
+	};
+
+
+}
