@@ -1,6 +1,7 @@
 {
   "dependencies": [
     "entt",
+    "freetype",
     {
       "name": "glad",
       "features": [
@@ -21,6 +22,6 @@
     "spdlog",
     "stb",
     "yaml-cpp",
-    "freetype"
+    "box2d"
   ]
 }

@@ -10,6 +10,26 @@
 namespace YAML {
 
     template<>
+    struct convert<glm::vec2>
+    {
+        static Node encode(const glm::vec2& rhs)
+        {
+            Node node;
+            node.push_back(rhs.x);
+            node.push_back(rhs.y);
+            return node;
+        }
+
+        static bool decode(const Node& node, glm::vec2& rhs)
+        {
+            if (!node.IsSequence() || node.size() != 2) return false;
+            rhs.x = node[0].as<float>();
+            rhs.y = node[1].as<float>();
+            return true;
+        }
+    };
+
+    template<>
     struct convert<glm::vec3>
     {
 		static Node encode(const glm::vec3& rhs)
@@ -58,6 +78,13 @@ namespace YAML {
 
 
 namespace spg {
+
+    YAML::Emitter& operator <<(YAML::Emitter& out, const glm::vec2& vec)
+    {
+        out << YAML::Flow;
+        out << YAML::BeginSeq << vec.x << vec.y << YAML::EndSeq;
+        return out;
+    }
 
     YAML::Emitter& operator <<(YAML::Emitter& out, const glm::vec3& vec)
     {
@@ -129,6 +156,28 @@ namespace spg {
             out << YAML::Key << "Color" << YAML::Value << src.Color;
             out << YAML::EndMap; // SpriteRendererComponent
         }
+
+        if (entity.CheckComponent<Rigidbody2DComponent>()) {
+            out << YAML::Key << "Rigidbody2DComponent";
+            out << YAML::BeginMap; // Rigidbody2DComponent
+            auto& r2d = entity.GetComponent<Rigidbody2DComponent>();
+            out << YAML::Key << "Type" << YAML::Value << (int)r2d.Type;
+            out << YAML::Key << "FixedRotation" << YAML::Value << r2d.FixedRotation;
+            out << YAML::EndMap; // Rigidbody2DComponent
+        }
+
+        if (entity.CheckComponent<BoxCollider2DComponent>()) {
+			out << YAML::Key << "BoxCollider2DComponent";
+			out << YAML::BeginMap; // BoxCollider2DComponent
+			auto& b2d = entity.GetComponent<BoxCollider2DComponent>();
+            out << YAML::Key << "Size" << YAML::Value << b2d.Size;
+			out << YAML::Key << "Offset" << YAML::Value << b2d.Offset;
+            out << YAML::Key << "Density" << YAML::Value << b2d.Density;
+            out << YAML::Key << "Friction" << YAML::Value << b2d.Friction;
+            out << YAML::Key << "Restitution" << YAML::Value << b2d.Restitution;
+            out << YAML::Key << "RestitutionThreshold" << YAML::Value << b2d.RestitutionThreshold;
+			out << YAML::EndMap; // BoxCollider2DComponent
+		}   
 
         // TODO: TextComponent
 
@@ -219,6 +268,24 @@ namespace spg {
 				if (spriteRendererComponent) {
 					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>();
 					src.Color = spriteRendererComponent["Color"].as<glm::vec4>();
+				}
+
+                auto rigidbody2DComponent = entity["Rigidbody2DComponent"];
+                if (rigidbody2DComponent) {
+                    auto& r2d = deserializedEntity.AddComponent<Rigidbody2DComponent>();
+                    r2d.Type = (Rigidbody2DComponent::BodyType)rigidbody2DComponent["Type"].as<int>();
+                    r2d.FixedRotation = rigidbody2DComponent["FixedRotation"].as<bool>();
+                }
+
+                auto boxCollider2DComponent = entity["BoxCollider2DComponent"];
+                if (boxCollider2DComponent) {
+					auto& b2d = deserializedEntity.AddComponent<BoxCollider2DComponent>();
+					b2d.Size = boxCollider2DComponent["Size"].as<glm::vec2>();
+					b2d.Offset = boxCollider2DComponent["Offset"].as<glm::vec2>();
+					b2d.Density = boxCollider2DComponent["Density"].as<float>();
+					b2d.Friction = boxCollider2DComponent["Friction"].as<float>();
+					b2d.Restitution = boxCollider2DComponent["Restitution"].as<float>();
+					b2d.RestitutionThreshold = boxCollider2DComponent["RestitutionThreshold"].as<float>();
 				}
 			}
 		}
