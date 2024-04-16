@@ -77,6 +77,7 @@ namespace spg {
 			case FramebufferTextureFormat::RGBA8: return GL_RGBA8;
 			case FramebufferTextureFormat::RGBA16F: return GL_RGBA16F;
 			case FramebufferTextureFormat::RGBA32F: return GL_RGBA32F;
+			case FramebufferTextureFormat::RED: return GL_RED;
 			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
 			case FramebufferTextureFormat::DEPTH24STENCIL8: return GL_DEPTH24_STENCIL8;
 			}
@@ -92,6 +93,7 @@ namespace spg {
 			case FramebufferTextureFormat::RGBA8: return GL_UNSIGNED_BYTE;
 			case FramebufferTextureFormat::RGBA16F: return GL_FLOAT;
 			case FramebufferTextureFormat::RGBA32F: return GL_FLOAT;
+			case FramebufferTextureFormat::RED: return GL_UNSIGNED_BYTE;
 			case FramebufferTextureFormat::RED_INTEGER: return GL_INT;
 			case FramebufferTextureFormat::DEPTH24STENCIL8: return GL_UNSIGNED_INT_24_8;
 			}
@@ -150,6 +152,9 @@ namespace spg {
 					case FramebufferTextureFormat::RGBA8:
 						Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_RGBA8, GL_RGBA, m_Specification.Width, m_Specification.Height, (int)i);
 						break;
+					case FramebufferTextureFormat::RED:
+						Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_RED, GL_RED, m_Specification.Width, m_Specification.Height, (int)i);
+						break;
 					case FramebufferTextureFormat::RED_INTEGER:
 						Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_R32I, GL_RED_INTEGER, m_Specification.Width, m_Specification.Height, (int)i);
 						break;
@@ -186,7 +191,6 @@ namespace spg {
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 		glViewport(0, 0, m_Specification.Width, m_Specification.Height);
-
 		int value = -1;
 		ClearAttachment(1, &value);
 	}

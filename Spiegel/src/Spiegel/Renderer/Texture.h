@@ -3,6 +3,8 @@
 #include "Spiegel/Core/Base.h"
 
 #include <string>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 namespace spg {
 	class Texture {
@@ -27,5 +29,6 @@ namespace spg {
 	public:
 		static Ref<Texture2D> Create(uint32_t width, uint32_t height);
 		static Ref<Texture2D> Create(const std::filesystem::path& path);
+		static Ref<Texture2D> Create(const FT_Face& face);
 	};
 }

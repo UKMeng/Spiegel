@@ -130,6 +130,8 @@ namespace spg {
             out << YAML::EndMap; // SpriteRendererComponent
         }
 
+        // TODO: TextComponent
+
         out << YAML::EndMap; // Entity
     }
 

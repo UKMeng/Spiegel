@@ -2,9 +2,11 @@
 #include "Renderer2D.h"
 
 #include "Shader.h"
+#include "Font.h"
 #include "VertexArray.h"
 #include "RenderCommand.h"
 #include "UniformBuffer.h"
+#include "Spiegel/Utils/PlatformUtils.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -27,6 +29,7 @@ namespace spg {
 		glm::vec3 Position;
 		glm::vec4 Color;
 		glm::vec2 TexCoord;
+		float TexIndex;
 
 		// Editor Only
 		int EntityID;
@@ -130,18 +133,19 @@ namespace spg {
 		// -------------Quad-----------------
 
 		// -------------Text-----------------
-		//s_Data.TextVertexArray = VertexArray::Create();
-		//s_Data.TextVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(TextVertex));
-		//s_Data.TextVertexBuffer->SetLayout({
-		//	{ ShaderDataType::Float3, "a_Position" },
-		//	{ ShaderDataType::Float4, "a_Color" },
-		//	{ ShaderDataType::Float2, "a_TexCoord" },
-		//	{ ShaderDataType::Int, "a_EntityID" }
-		//	});
-		//s_Data.TextVertexArray->AddVertexBuffer(s_Data.TextVertexBuffer);
-		//s_Data.TextVertexArray->SetIndexBuffer(quadIB);
-		//s_Data.TextVertexBufferBase = new TextVertex[s_Data.MaxVertices];
-		//s_Data.TextShader = Shader::Create("assets/shaders/Text.glsl");
+		s_Data.TextVertexArray = VertexArray::Create();
+		s_Data.TextVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(TextVertex));
+		s_Data.TextVertexBuffer->SetLayout({
+			{ ShaderDataType::Float3, "a_Position" },
+			{ ShaderDataType::Float4, "a_Color" },
+			{ ShaderDataType::Float2, "a_TexCoord" },
+			{ ShaderDataType::Float, "a_TexIndex" },
+			{ ShaderDataType::Int, "a_EntityID" }
+			});
+		s_Data.TextVertexArray->AddVertexBuffer(s_Data.TextVertexBuffer);
+		s_Data.TextVertexArray->SetIndexBuffer(quadIB);
+		s_Data.TextVertexBufferBase = new TextVertex[s_Data.MaxVertices];
+		s_Data.TextShader = Shader::Create("assets/shaders/Text.glsl");
 		// -------------Text-----------------
 
 		s_Data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
@@ -204,12 +208,30 @@ namespace spg {
 			RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
 			s_Data.Stats.DrawCalls++;
 		}
+
+		if (s_Data.TextIndexCount) {
+			uint32_t dataSize = (uint8_t*)s_Data.TextVertexBufferPtr - (uint8_t*)s_Data.TextVertexBufferBase;
+			s_Data.TextVertexBuffer->SetData(s_Data.TextVertexBufferBase, dataSize);
+
+
+			// TODO: 32 is too small, should refactor
+			for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++) {
+				s_Data.TextureSlots[i]->Bind(i);
+			}
+			s_Data.TextShader->Bind();
+			RenderCommand::DrawIndexed(s_Data.TextVertexArray, s_Data.TextIndexCount);
+			s_Data.Stats.DrawCalls++;
+		}
 	}
 
 	void Renderer2D::StartBatch()
 	{
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.TextIndexCount = 0;
+		s_Data.TextVertexBufferPtr = s_Data.TextVertexBufferBase;
+
 		s_Data.TextureSlotIndex = 1;
 	}
 	
@@ -526,6 +548,126 @@ namespace spg {
 		else {
 			DrawQuad(transform, src.Color, entityID);
 		}
+	}
+
+	void Renderer2D::DrawText(const glm::mat4& transform, TextComponent& tc, int entityID)
+	{
+		SPG_PROFILE_FUNCTION();
+
+		constexpr size_t textVertexCount = 4;
+		constexpr glm::vec2 textureCoords[] = { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} };
+
+		const std::wstring wtext = PlatformUtils::string2Wstring(tc.Text);
+		Ref<Font> font = tc.Font;
+
+		if (s_Data.TextIndexCount + wtext.length() * 6 >= Renderer2DData::MaxIndices) {
+			NextBatch();
+		}
+
+		// Check character is loaded in the font
+		font->CharacterLoader(wtext);
+
+		glm::vec4 textVertexPositions[4];
+		
+
+		float x = 0.0f, y = 0.0f;
+
+		std::wstring::const_iterator c;
+		for (c = wtext.begin(); c != wtext.end(); c++) {
+			const wchar_t ch = *c;
+			const Character& character = font->GetCharacter(ch);
+			Ref<Texture2D> texture = character.Texture;
+			if (ch == ' ') {
+				// TODO: position change when space and enter
+				continue;
+			}
+
+			float xpos = x + character.Bearing.x;
+			float ypos = y - (character.Size.y - character.Bearing.y);
+			float w = character.Size.x;
+			float h = character.Size.y;
+
+			textVertexPositions[0] = { xpos,	 ypos + h, 0.0f, 1.0f };
+			textVertexPositions[1] = { xpos,     ypos,	   0.0f, 1.0f };
+			textVertexPositions[2] = { xpos + w, ypos,	   0.0f, 1.0f };
+			textVertexPositions[3] = { xpos + w, ypos + h, 0.0f, 1.0f };
+
+			float textureIndex = 0.0f;
+
+			for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
+				if (*s_Data.TextureSlots[i] == *texture) {
+					// texture is already submitted
+					textureIndex = (float)i;
+					break;
+				}
+			}
+
+			if (textureIndex == 0.0f) {
+				textureIndex = (float)s_Data.TextureSlotIndex;
+				s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
+				s_Data.TextureSlotIndex++;
+			}
+
+			for (size_t i = 0; i < textVertexCount; i++) {
+				s_Data.TextVertexBufferPtr->Position = transform * textVertexPositions[i];
+				s_Data.TextVertexBufferPtr->Color = { 0.5f, 0.8f, 0.2f, 1.0f };
+				s_Data.TextVertexBufferPtr->TexCoord = textureCoords[i];
+				s_Data.TextVertexBufferPtr->TexIndex = textureIndex;
+				s_Data.TextVertexBufferPtr->EntityID = entityID;
+				s_Data.TextVertexBufferPtr++;
+			}
+
+			x += (character.Advance >> 6);
+
+			s_Data.TextIndexCount += 6;
+
+			s_Data.Stats.TextCount++;
+		}
+
+
+			//if (character == ' ') {
+			//	transform = glm::translate(transform, { fontCharacter.Advance, 0.0f, 0.0f });
+			//	continue;
+			//}
+
+			//const float x = fontCharacter.Bearing.x;
+			//const float y = fontCharacter.Bearing.y;
+			//const float w = fontCharacter.Size.x;
+			//const float h = fontCharacter.Size.y;
+
+			//const glm::vec2 position = { transform[3][0] + x, transform[3][1] - y };
+			//const glm::vec2 size = { w, h };
+
+			//const glm::vec2 texCoordTopLeft = { fontCharacter.TexCoordTopLeft.x, fontCharacter.TexCoordTopLeft.y };
+			//const glm::vec2 texCoordBottomRight = { fontCharacter.TexCoordBottomRight.x, fontCharacter.TexCoordBottomRight.y };
+
+			//const glm::vec2 texCoord[] = {
+			//	{ texCoordTopLeft.x, texCoordBottomRight.y },
+			//	{ texCoordBottomRight.x, texCoordBottomRight.y },
+			//	{ texCoordBottomRight.x, texCoordTopLeft.y },
+			//	{ texCoordTopLeft.x, texCoordTopLeft.y }
+			//};
+
+			//float textureIndex = 0.0f;
+
+			//for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
+			//	if (*s_Data.TextureSlots[i] == *tc.Font->GetTexture()) {
+			//		// texture is already submitted
+			//		textureIndex = (float)i;
+			//		break;
+			//	}
+			//}
+
+			//if (textureIndex == 0.0f) {
+			//	textureIndex = (float)s_Data.TextureSlotIndex;
+			//	s_Data.TextureSlots[s_Data.TextureSlotIndex] = tc.Font->GetTexture();
+			//	s_Data.TextureSlotIndex++;
+			//}
+
+			//for (size_t i = 0; i < textVertexCount; i++) {
+			//	s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(position.x + size.x * textureCoords[i].x, position.y + size.y * textureCoords[i].y, 0.0f, 1.0f);
+			//	s_Data.TextVertexBufferPtr->Color = tc;
+			//}
 	}
 
 	Renderer2D::Statistics Renderer2D::GetStats()

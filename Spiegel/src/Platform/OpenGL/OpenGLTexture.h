@@ -3,12 +3,15 @@
 #include "Spiegel/Renderer/Texture.h"
 
 #include <glad/glad.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 namespace spg {
 	class OpenGLTexture2D : public Texture2D {
 	public:
 		OpenGLTexture2D(uint32_t width, uint32_t height);
 		OpenGLTexture2D(const std::string& path);
+		OpenGLTexture2D(const FT_Face& face);
 		virtual ~OpenGLTexture2D();
 
 		virtual uint32_t GetWidth() const override { return m_Width; }

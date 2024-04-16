@@ -44,6 +44,12 @@ namespace spg {
 			Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 		}
 
+		auto textView = m_Registry.view<TransformComponent, TextComponent>();
+		for (auto entity : textView) {
+			auto [transform, text] = textView.get<TransformComponent, TextComponent>(entity);
+			Renderer2D::DrawText(transform.GetTransform(), text, (int)entity);
+		}
+
 		Renderer2D::EndScene();
 	}
 

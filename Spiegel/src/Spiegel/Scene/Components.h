@@ -8,6 +8,7 @@
 #include "SceneCamera.h"
 #include "ScriptableEntity.h"
 #include "Spiegel/Renderer/Texture.h"
+#include "Spiegel/Renderer/Font.h"
 
 namespace spg {
 
@@ -65,7 +66,7 @@ namespace spg {
 	struct TextComponent
 	{
 		std::string Text;
-		// Ref<Font> Font;
+		Ref<Font> Font = Font::GetDefaultFont();
 
 		TextComponent() = default;
 		TextComponent(const TextComponent&) = default;

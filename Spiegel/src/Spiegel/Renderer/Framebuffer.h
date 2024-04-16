@@ -10,6 +10,7 @@ namespace spg {
 		RGBA8,
 		RGBA16F,
 		RGBA32F,
+		RED,
 		RED_INTEGER,
 		// Depth/stencil attachment
 		DEPTH24STENCIL8,
