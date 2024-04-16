@@ -31,6 +31,9 @@ namespace spg {
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard.png");
 		m_SpriteSheet = Texture2D::Create("assets/game/textures/RPGpack_sheet_2X.png");
 
+		m_IconPlay = Texture2D::Create("assets/icons/Play.png");
+		m_IconStop = Texture2D::Create("assets/icons/Stop.png");
+
 		m_TextureStairs = SubTexture2D::CreateFromCoords(m_SpriteSheet, { 7, 6 }, { 128, 128 });
 		m_TextureTree = SubTexture2D::CreateFromCoords(m_SpriteSheet, { 2, 1 }, { 128, 128 }, { 1, 2 });
 
@@ -124,14 +127,6 @@ namespace spg {
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
-		// Camera
-		if (m_ViewportFocused) {
-			m_CameraController.OnUpdate(ts);
-		}
-
-		m_EditorCamera.OnUpdate(ts);
-		
-
 		// Renderer
 		Renderer2D::ResetStats();
 
@@ -142,9 +137,16 @@ namespace spg {
 		// Clear Attachment to -1
 		m_Framebuffer->ClearAttachment(1, (void*)-1);
 
-		// Scene
-		// m_ActiveScene->OnUpdateRuntime(ts);
-		m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
+		switch (m_SceneState)
+		{
+			case SceneState::Edit:
+				m_EditorCamera.OnUpdate(ts);
+				m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
+				break;
+			case SceneState::Play:
+				m_ActiveScene->OnUpdateRuntime(ts);
+				break;
+		}
 
 		// Mouse Picking
 		auto [mx, my] = ImGui::GetMousePos();
@@ -347,6 +349,8 @@ namespace spg {
 		ImGui::PopStyleVar();
 		// Viewport window End
 
+		UI_Toolbar();
+
 		ImGui::End();
 	}
 
@@ -451,6 +455,51 @@ namespace spg {
 			SceneSerializer serializer(m_ActiveScene);
 			serializer.Serialize(filepath);
 		}
+	}
+
+	void EditorLayer::OnScenePlay()
+	{
+		m_SceneState = SceneState::Play;
+		/*m_RuntimeScene = m_ActiveScene;
+		m_ActiveScene = m_RuntimeScene->Copy();
+		m_ActiveScene->OnRuntimeStart();
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);*/
+	}
+
+	void EditorLayer::OnSceneStop()
+	{
+		m_SceneState = SceneState::Edit;
+		/*m_ActiveScene = m_RuntimeScene;
+		m_RuntimeScene = nullptr;
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);*/
+	}
+
+	void EditorLayer::UI_Toolbar()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0, 2 });
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, { 0, 0 });
+		ImGui::PushStyleColor(ImGuiCol_Button, { 0.0f, 0.0f, 0.0f, 0.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.0f, 0.0f, 0.0f, 0.5f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.0f, 0.0f, 0.0f, 0.0f });
+		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+		float size = ImGui::GetWindowHeight() - 4.0f;
+
+		Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_IconPlay : m_IconStop;
+		
+		ImGui::SetCursorPosX(size * 0.5f);
+		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { size, size }, { 0, 0 }, { 1, 1 }, 0)) {
+			if (m_SceneState == SceneState::Edit) {
+				OnScenePlay();
+			}
+			else if (m_SceneState == SceneState::Play) {
+				OnSceneStop();
+			}
+		}
+		
+		ImGui::End();
+		ImGui::PopStyleColor(3);
+		ImGui::PopStyleVar(2);
 	}
 
 }

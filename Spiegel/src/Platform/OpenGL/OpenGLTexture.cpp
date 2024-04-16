@@ -18,10 +18,8 @@ namespace spg {
 		// 分配内存，1之mipmap级别，8位RGB格式
 		glTextureStorage2D(m_TextureID, 1, m_InternalFormat, m_Width, m_Height);
 
-		// 设置缩小过滤器，使用线性过滤器缩小
 		glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		// 设置放大过滤器，使用最近邻过滤器放大
-		glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -64,7 +62,7 @@ namespace spg {
 		// 设置缩小过滤器，使用线性过滤器缩小
 		glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		// 设置放大过滤器，使用最近邻过滤器放大
-		glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		
 		glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, GL_REPEAT);
