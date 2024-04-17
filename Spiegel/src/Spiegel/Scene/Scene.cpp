@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Entity.h"
 #include "Components.h"
+#include "ScriptableEntity.h"
 
 #include "Spiegel/Renderer/Renderer2D.h"
 
@@ -37,11 +38,17 @@ namespace spg {
 
 	Entity Scene::CreateEntity(const std::string& name)
 	{
+		return CreateEntityWithID(UUID(), name);
+	}
+
+	Entity Scene::CreateEntityWithID(UUID uuid, const std::string& name)
+	{
 		Entity entity = { m_Registry.create(), this };
+		entity.AddComponent<IDComponent>(uuid);
 		entity.AddComponent<TransformComponent>();
 		auto& tag = entity.AddComponent<TagComponent>();
 		tag.Tag = name.empty() ? "Entity" : name;
-			
+
 		return entity;
 	}
 
@@ -224,6 +231,12 @@ namespace spg {
 	void Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
 	{
 		component.Camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
+	}
+
+	template<>
+	void Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component)
+	{
+
 	}
 
 	template<>

@@ -108,8 +108,10 @@ namespace spg {
 
     static void SerializeEntity(YAML::Emitter& out, Entity entity)
     {
+        SPG_CORE_ASSERT(entity.CheckComponent<IDComponent>(), "Entity must have an IDComponent")
+
         out << YAML::BeginMap; // Entity
-        out << YAML::Key << "Entity" << YAML::Value << 1000001; // TODO£ºEntity id should use uuid
+        out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID();
 
         if (entity.CheckComponent<TagComponent>()) {
             out << YAML::Key << "TagComponent"; 
@@ -229,7 +231,7 @@ namespace spg {
         auto entities = data["Entities"];
         if (entities) {
 			for (auto entity : entities) {
-				uint64_t uuid = entity["Entity"].as<uint64_t>(); // TODO: Entity id should use uuid
+				uint64_t uuid = entity["Entity"].as<uint64_t>();
 
                 std::string name;
                 auto tagComponent = entity["TagComponent"];
@@ -239,7 +241,7 @@ namespace spg {
 
                 SPG_CORE_TRACE("Deserialized entity with ID = {0}, name = {1}", uuid, name);
 				
-                Entity deserializedEntity = m_Scene->CreateEntity(name);
+                Entity deserializedEntity = m_Scene->CreateEntityWithID(uuid, name);
 
                 auto transformComponent = entity["TransformComponent"];
                 if (transformComponent) {

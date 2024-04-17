@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Scene.h"
+#include "Components.h"
+#include "Spiegel/Core/UUID.h"
 
 #include <entt/entt.hpp>
 
@@ -41,6 +43,8 @@ namespace spg {
 		{
 			return m_Scene->m_Registry.any_of<T>(m_EntityHandle);
 		}
+
+		UUID GetUUID() { return GetComponent<IDComponent>().ID; }
 
 		operator bool() const { return m_EntityHandle != entt::null; }
 		operator entt::entity() const { return m_EntityHandle; }

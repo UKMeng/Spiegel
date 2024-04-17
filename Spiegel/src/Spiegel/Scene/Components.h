@@ -1,16 +1,26 @@
 #pragma once
 
+#include "SceneCamera.h"
+#include "Spiegel/Renderer/Texture.h"
+#include "Spiegel/Renderer/Font.h"
+#include "Spiegel/Core/UUID.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
-#include "SceneCamera.h"
-#include "ScriptableEntity.h"
-#include "Spiegel/Renderer/Texture.h"
-#include "Spiegel/Renderer/Font.h"
-
 namespace spg {
+
+	struct IDComponent
+	{
+		UUID ID;
+
+		IDComponent() = default;
+		IDComponent(const IDComponent&) = default;
+		IDComponent(UUID id)
+			: ID(id) {}
+	};
 
 	struct TagComponent
 	{
@@ -73,6 +83,9 @@ namespace spg {
 		TextComponent(const std::string& text)
 			: Text(text) {}
 	};
+
+	// Forward Declaration
+	class ScriptableEntity;
 
 	struct NativeScriptComponent
 	{

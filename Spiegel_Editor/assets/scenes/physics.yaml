@@ -1,43 +1,6 @@
 Scene: Scene Name
 Entities:
-  - Entity: 1000001
-    TagComponent:
-      Tag: Camera
-    TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    CameraComponent:
-      Camera:
-        ProjectionType: 1
-        PerspectiveFOV: 45
-        PerspectiveNear: 0.00999999978
-        PerspectiveFar: 1000
-        OrthographicSize: 10
-        OrthographicNear: -1
-        OrthographicFar: 1
-      Primary: true
-      FixedAspectRatio: false
-  - Entity: 1000001
-    TagComponent:
-      Tag: Square
-    TransformComponent:
-      Position: [-2.90071201, 3.55931306, -2.32830644e-10]
-      Rotation: [0, 0, -24.7354107]
-      Scale: [1.04999995, 1.04999971, 1.04999995]
-    SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
-    Rigidbody2DComponent:
-      Type: 1
-      FixedRotation: false
-    BoxCollider2DComponent:
-      Size: [0.5, 0.5]
-      Offset: [0, 0]
-      Density: 1
-      Friction: 0.230000004
-      Restitution: 0
-      RestitutionThreshold: 0.5
-  - Entity: 1000001
+  - Entity: 8628997617006970121
     TagComponent:
       Tag: Static Square
     TransformComponent:
@@ -56,3 +19,40 @@ Entities:
       Friction: 0.189999998
       Restitution: 0.379999995
       RestitutionThreshold: 0.5
+  - Entity: 17409891781014527609
+    TagComponent:
+      Tag: Square
+    TransformComponent:
+      Position: [-2.90071201, 3.55931306, -2.32830644e-10]
+      Rotation: [0, 0, -24.7354107]
+      Scale: [1.04999995, 1.04999971, 1.04999995]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+    Rigidbody2DComponent:
+      Type: 1
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Size: [0.5, 0.5]
+      Offset: [0, 0]
+      Density: 1
+      Friction: 0.230000004
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - Entity: 9993107691642536801
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PerspectiveFOV: 45
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false

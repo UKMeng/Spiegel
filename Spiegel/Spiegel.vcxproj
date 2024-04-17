@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h" />
+    <ClInclude Include="src\Spiegel\Core\UUID.h" />
     <ClInclude Include="src\Spiegel\Debug\Instrumentation.h" />
     <ClInclude Include="src\Spiegel\Math\Math.h" />
     <ClInclude Include="src\Spiegel\Renderer\Camera.h" />
@@ -69,6 +70,7 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp" />
+    <ClCompile Include="src\Spiegel\Core\UUID.cpp" />
     <ClCompile Include="src\Spiegel\Math\Math.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\EditorCamera.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Font.cpp" />

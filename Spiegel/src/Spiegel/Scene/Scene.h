@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Spiegel/Core/UUID.h"
 #include "Spiegel/Core/Timestep.h"
 #include "Spiegel/Renderer/EditorCamera.h"
 
@@ -19,6 +20,7 @@ namespace spg {
 		~Scene();
 
 		Entity CreateEntity(const std::string& name = std::string());
+		Entity CreateEntityWithID(UUID uuid, const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
 
 		void OnRuntimeStart();

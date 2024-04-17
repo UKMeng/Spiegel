@@ -10,6 +10,7 @@
 #include "Spiegel/Core/MouseCodes.h"
 #include "Spiegel/Core/KeyCodes.h"
 #include "Spiegel/Core/Timestep.h"
+#include "Spiegel/Core/UUID.h"
 
 #include "Spiegel/ImGui/ImGuiLayer.h"
 
