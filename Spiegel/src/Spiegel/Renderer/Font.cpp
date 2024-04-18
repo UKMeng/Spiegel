@@ -13,6 +13,7 @@ namespace spg {
 				SPG_CORE_ERROR("Failed to load character: {0}", char(c));
 			}
 		}
+		LoadCharacter(L'жа');
 		Detach();
 	}
 
@@ -42,10 +43,12 @@ namespace spg {
 	{
 		for (wchar_t c : text) {
 			if (m_characters.find(c) == m_characters.end()) {
+				Attach();
 				if (!LoadCharacter(c)) {
 					SPG_CORE_ERROR("Failed to load character: {0}", (char)c);
 					return false;
 				}
+				Detach();
 			}
 		}
 		return true;

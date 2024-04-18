@@ -84,10 +84,8 @@ namespace spg {
 		m_Width = face->glyph->bitmap.width;
 		m_Height = face->glyph->bitmap.rows;
 
-		m_InternalFormat = GL_RED;
+		m_InternalFormat = GL_R8;
 		m_DataFormat = GL_RED;
-		//m_InternalFormat = GL_RGBA8;
-		//m_DataFormat = GL_RGBA;
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureID);
 		glTextureStorage2D(m_TextureID, 1, m_InternalFormat, m_Width, m_Height);

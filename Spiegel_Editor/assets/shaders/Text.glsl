@@ -19,6 +19,7 @@ out flat int v_EntityID;
 void main() {
 	v_Color = a_Color;
 	v_TexCoord = a_TexCoord;
+	v_TexIndex = a_TexIndex;
 	v_EntityID = a_EntityID;
 	gl_Position = u_ViewProjection * vec4(a_Position.xy, 0.0, 1.0);
 }

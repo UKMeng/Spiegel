@@ -75,12 +75,12 @@ namespace spg {
 
 	struct TextComponent
 	{
-		std::string Text;
+		std::wstring Text;
 		Ref<Font> Font = Font::GetDefaultFont();
 
 		TextComponent() = default;
 		TextComponent(const TextComponent&) = default;
-		TextComponent(const std::string& text)
+		TextComponent(const std::wstring& text)
 			: Text(text) {}
 	};
 

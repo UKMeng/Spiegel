@@ -1,5 +1,6 @@
 #include "SceneHierarchyPanel.h"
 
+#include <windows.h>
 #include <imgui.h>
 #include <imgui_internal.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -351,14 +352,33 @@ namespace spg {
 		DrawComponent<TextComponent>("Text", entity, [](auto& component) {
 				auto& text = component.Text;
 
-				// TODO: buffer[256] is not enough for a long text, need to fix
+				int size_needed = WideCharToMultiByte(CP_UTF8, 0, text.c_str(), (int)text.size(), NULL, 0, NULL, NULL);
+				std::string str(size_needed, 0);
+				WideCharToMultiByte(CP_UTF8, 0, text.c_str(), (int)text.size(), &str[0], size_needed, NULL, NULL);
+
 				char buffer[256];
-				memset(buffer, 0, sizeof(buffer));
-				strcpy_s(buffer, sizeof(buffer), text.c_str());
-				if (ImGui::InputText("##Text", buffer, sizeof(buffer)))
-				{
-					text = std::string(buffer);
+				strncpy_s(buffer, str.c_str(), sizeof(buffer));
+				buffer[sizeof(buffer) - 1] = 0;
+				if (ImGui::InputText("##text", buffer, sizeof(buffer))) {
+					// If InputText returns true, the user has modified the string.
+					// You can convert it back to std::wstring if necessary.
+					str = buffer;
+					size_needed = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), NULL, 0);
+					text = std::wstring(size_needed, 0);
+					MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), &text[0], size_needed);
 				}
+				// wchar_t buffer[256];
+				// memset(buffer, 0, sizeof(buffer));
+				// strcpy_s(buffer, sizeof(buffer), text.c_str());
+
+				// TODO: buffer[256] is not enough for a long text, need to fix
+				// char buffer[256];
+				// memset(buffer, 0, sizeof(buffer));
+				// strcpy_s(buffer, sizeof(buffer), text.c_str());
+				// if (ImGui::InputText("##Text", buffer, sizeof(buffer)))
+				// {
+				// 	text = std::string(buffer);
+				// }
 			});
 	}
 }
