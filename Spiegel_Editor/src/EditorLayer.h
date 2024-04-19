@@ -27,18 +27,30 @@ namespace spg {
 		void OnScenePlay();
 		void OnSceneStop();
 
+		void OnDulicateEntity();
+
 		// UI Panels
 		void UI_Toolbar();
 	private:
 		OrthographicCameraController m_CameraController;
 
+		// Scene
+		enum class SceneState {
+			Edit = 0, Play = 1
+		};
+
+		Ref<Scene> m_ActiveScene;
+		Ref<Scene> m_RuntimeScene;
+		Ref<Scene> m_EditorScene;
+		SceneState m_SceneState = SceneState::Edit;
+
+
+		// Texture
 		Ref<Texture2D> m_CheckerboardTexture;
-
 		Ref<Texture2D> m_IconPlay, m_IconStop;
-
 		Ref<Texture2D> m_SpriteSheet;
 		Ref<SubTexture2D> m_TextureStairs, m_TextureTree;
-		Ref<Scene> m_ActiveScene;
+		
 
 		size_t m_MapWidth, m_MapHeight;
 		std::unordered_map<char, Ref<SubTexture2D>> m_TextureMap;
@@ -66,10 +78,5 @@ namespace spg {
 		// Gizmos
 		int m_GizmoType = -1;
 
-		enum class SceneState {
-			Edit = 0, Play = 1
-		};
-
-		SceneState m_SceneState = SceneState::Edit;
 	};
 }
