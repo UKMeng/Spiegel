@@ -31,6 +31,8 @@ namespace spg {
 
 		void OnDulicateEntity();
 
+		void OnOverlayRender();
+
 		// UI Panels
 		void UI_Toolbar();
 	private:
@@ -78,6 +80,8 @@ namespace spg {
 
 		// Gizmos
 		int m_GizmoType = -1;
+
+		bool m_ShowPhysicsColliders = false;
 
 	};
 }
