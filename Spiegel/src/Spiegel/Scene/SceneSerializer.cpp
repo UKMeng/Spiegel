@@ -156,6 +156,9 @@ namespace spg {
             out << YAML::BeginMap; // SpriteRendererComponent
             auto& src = entity.GetComponent<SpriteRendererComponent>();
             out << YAML::Key << "Color" << YAML::Value << src.Color;
+            if ( src.Texture && src.Texture->IsLoaded()) {
+                out << YAML::Key << "Texture" << YAML::Value << src.Texture->GetPath();
+            }
             out << YAML::EndMap; // SpriteRendererComponent
         }
 
@@ -292,7 +295,10 @@ namespace spg {
 				if (spriteRendererComponent) {
 					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>();
 					src.Color = spriteRendererComponent["Color"].as<glm::vec4>();
-                    // TODO: Add Texture deserialization
+                    if (spriteRendererComponent["Texture"]) {
+						std::string texturePath = spriteRendererComponent["Texture"].as<std::string>();
+						src.Texture = Texture2D::Create(texturePath);
+					}
 				}
 
                 auto circleRendererComponent = entity["CircleRendererComponent"];

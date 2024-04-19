@@ -24,12 +24,14 @@ namespace spg {
 
 		virtual bool IsLoaded() const override { return m_LoadStatus; }
 
+		virtual std::string GetPath() const override { return m_Path; }
+
 		virtual bool operator==(const Texture& other) const override {
 			return m_TextureID == ((OpenGLTexture2D&)other).m_TextureID;
 		}
 	private:
 		uint32_t m_TextureID;
-		std::string m_Path;
+		std::string m_Path = std::string();
 		uint32_t m_Width, m_Height;
 		GLenum m_InternalFormat, m_DataFormat;
 		bool m_LoadStatus = false;
