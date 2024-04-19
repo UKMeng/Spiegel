@@ -497,8 +497,7 @@ namespace spg {
 	void EditorLayer::OnScenePlay()
 	{
 		m_SceneState = SceneState::Play;
-		m_RuntimeScene = Scene::Copy(m_EditorScene);
-		m_ActiveScene = m_RuntimeScene;
+		m_ActiveScene = Scene::Copy(m_EditorScene);
 		m_ActiveScene->OnRuntimeStart();
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
@@ -508,7 +507,6 @@ namespace spg {
 		m_SceneState = SceneState::Edit;
 		m_ActiveScene->OnRuntimeStop();
 		m_ActiveScene = m_EditorScene;
-		m_RuntimeScene = nullptr;
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 

@@ -42,7 +42,6 @@ namespace spg {
 		};
 
 		Ref<Scene> m_ActiveScene;
-		Ref<Scene> m_RuntimeScene;
 		Ref<Scene> m_EditorScene;
 		SceneState m_SceneState = SceneState::Edit;
 		std::filesystem::path m_EditorScenePath;
