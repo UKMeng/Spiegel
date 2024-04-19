@@ -38,9 +38,11 @@ in flat int v_EntityID;
 
 void main() {
 	float fade = 0.01;
-	float distance = 1.0 - length(v_LocalPosition);
-	float circle = smoothstep(0.0, fade, distance);
-	circle *= smoothstep(v_Thickness + fade, v_Thickness, distance);
+
+	// circle is actually the alpha value of the color, and should be 0 if the pixel is outside the circle
+	float dis = 1.0 - length(v_LocalPosition);
+	float circle = smoothstep(0.0, fade, dis);
+	circle *= smoothstep(v_Thickness+fade, v_Thickness, dis);
 
 	if (circle == 0.0) {
 		discard;

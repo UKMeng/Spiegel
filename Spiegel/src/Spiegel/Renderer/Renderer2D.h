@@ -40,15 +40,25 @@ namespace spg {
 
 		static void DrawSprite(const glm::mat4& transform, SpriteRendererComponent& src, int entityID = -1);
 		static void DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness = 1.0f, int entityID = -1);
+		
 		static void DrawText(const glm::mat4& transform, TextComponent& tc, int entityID = -1);
+
+		static void DrawLine(const glm::vec3& startPoint, const glm::vec3& endPoint, const glm::vec4& color, int entityID = -1);
+		static void DrawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, int entityID = -1);
+		static void DrawRect(const glm::mat4& transform, const glm::vec4& color, int entityID = -1);
+
+
+		static float GetLineWidth();
+		static void SetLineWidth(float width);
 
 		struct Statistics {
 			uint32_t DrawCalls = 0;
 			uint32_t QuadCount = 0;
 			uint32_t CircleCount = 0;
+			uint32_t LineCount = 0;
 			uint32_t TextCount = 0;
 
-			uint32_t GetTotalVertexCount() { return (QuadCount + CircleCount + TextCount) * 4; }
+			uint32_t GetTotalVertexCount() { return (QuadCount + CircleCount + TextCount) * 4 + LineCount * 2; }
 			uint32_t GetTotalIndexCount() { return (QuadCount + CircleCount + TextCount) * 6; }
 		};
 

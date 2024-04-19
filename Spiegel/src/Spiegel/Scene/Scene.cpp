@@ -241,7 +241,8 @@ namespace spg {
 		for (auto entity : group)
 		{
 			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-			Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+			// Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+			Renderer2D::DrawRect(transform.GetTransform(), { 1.0f, 0.0f, 0.0f, 1.0f }, (int)entity);
 		}
 
 		auto circleView = m_Registry.view<TransformComponent, CircleRendererComponent>();
@@ -255,6 +256,9 @@ namespace spg {
 			auto [transform, text] = textView.get<TransformComponent, TextComponent>(entity);
 			Renderer2D::DrawText(transform.GetTransform(), text, (int)entity);
 		}
+
+		Renderer2D::DrawLine({ 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f });
+		Renderer2D::DrawRect({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f });
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
