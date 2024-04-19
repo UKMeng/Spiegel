@@ -320,7 +320,13 @@ namespace spg {
 		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component) {
 				ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
 
-				ImGui::Button("Texture", {128.0f, 128.0f});
+				if (component.Texture && component.Texture->IsLoaded()) {
+					ImGui::ImageButton((ImTextureID)component.Texture->GetTextureID(), { 128.0f, 128.0f }, { 0, 1 }, { 1, 0 });
+				}
+				else {
+					ImGui::Button("Texture", { 128.0f, 128.0f });
+				}
+				
 				if (ImGui::BeginDragDropTarget()) {
 					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
 						const wchar_t* path = (const wchar_t*)payload->Data;
