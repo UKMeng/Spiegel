@@ -22,7 +22,9 @@ namespace spg {
 		void NewScene();
 		void OpenScene();
 		void OpenScene(const std::filesystem::path& path);
+		void SaveScene();
 		void SaveSceneAs();
+		void SerializeScene(Ref<Scene> scene, const std::filesystem::path& filepath);
 
 		void OnScenePlay();
 		void OnSceneStop();
@@ -43,7 +45,7 @@ namespace spg {
 		Ref<Scene> m_RuntimeScene;
 		Ref<Scene> m_EditorScene;
 		SceneState m_SceneState = SceneState::Edit;
-
+		std::filesystem::path m_EditorScenePath;
 
 		// Texture
 		Ref<Texture2D> m_CheckerboardTexture;

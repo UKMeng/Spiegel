@@ -380,8 +380,11 @@ namespace spg {
 			}
 			case Key::S:
 			{
-				if (controlPressed && shiftPressed) {
-					SaveSceneAs();
+				if (controlPressed) {
+					if (shiftPressed)
+						SaveSceneAs();
+					else
+						SaveScene();
 				}
 				break;
 			}
@@ -440,11 +443,12 @@ namespace spg {
 		m_ActiveScene = CreateRef<Scene>();
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+		m_EditorScenePath = std::filesystem::path();
 	}
 
 	void EditorLayer::OpenScene()
 	{
-		std::string filepath = FileDialogs::OpenFile("Scene (*.yaml)\0*.yaml\0");
+		std::string filepath = FileDialogs::OpenFile("Scene (*.scene)\0*.scene\0");
 		if (!filepath.empty()) OpenScene(filepath);
 	}
 
@@ -460,16 +464,34 @@ namespace spg {
 			m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_SceneHierarchyPanel.SetContext(m_EditorScene);
 			m_ActiveScene = m_EditorScene;
+			m_EditorScenePath = path;
+		}
+	}
+
+	void EditorLayer::SaveScene()
+	{
+		if (m_EditorScenePath.empty()) {
+			SaveSceneAs();
+		}
+		else {
+			SerializeScene(m_EditorScene, m_EditorScenePath);
 		}
 	}
 
 	void EditorLayer::SaveSceneAs()
 	{
-		std::string filepath = FileDialogs::SaveFile("Scene (*.yaml)\0*.yaml\0");
+		std::string filepath = FileDialogs::SaveFile("Scene (*.scene)\0*.scene\0");
 		if (!filepath.empty()) {
-			SceneSerializer serializer(m_ActiveScene);
-			serializer.Serialize(filepath);
+			SerializeScene(m_EditorScene, filepath);
+			m_EditorScenePath = filepath;
 		}
+	}
+
+	void EditorLayer::SerializeScene(Ref<Scene> scene, const std::filesystem::path& filepath)
+	{
+		SceneSerializer serializer(scene);
+		serializer.Serialize(filepath.string());
+	
 	}
 
 	void EditorLayer::OnScenePlay()
