@@ -24,6 +24,17 @@ namespace spg {
 		int EntityID;
 	};
 
+	struct CircleVertex
+	{
+		glm::vec3 WorldPosition;
+		glm::vec3 LocalPosition;
+		glm::vec4 Color;
+		float Thickness;
+
+		// Editor Only
+		int EntityID;
+	};
+
 	struct TextVertex
 	{
 		glm::vec3 Position;
@@ -56,6 +67,16 @@ namespace spg {
 		uint32_t TextureSlotIndex = 1; // 0 = white texture
 		glm::vec4 QuadVertexPositions[4];
 		// -------------Quad-----------------
+
+		// -------------Circle---------------
+		Ref<VertexArray> CircleVertexArray;
+		Ref<VertexBuffer> CircleVertexBuffer;
+		Ref<Shader> CircleShader;
+
+		uint32_t CircleIndexCount = 0;
+		CircleVertex* CircleVertexBufferBase = nullptr;
+		CircleVertex* CircleVertexBufferPtr = nullptr;
+		// -------------Circle---------------
 
 		// -------------Text-----------------
 		Ref<VertexArray> TextVertexArray;
@@ -131,6 +152,22 @@ namespace spg {
 		s_Data.QuadVertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
 		s_Data.QuadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
 		// -------------Quad-----------------
+
+		// -------------Circle---------------
+		s_Data.CircleVertexArray = VertexArray::Create();
+		s_Data.CircleVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(CircleVertex));
+		s_Data.CircleVertexBuffer->SetLayout({
+			{ ShaderDataType::Float3, "a_WorldPosition" },
+			{ ShaderDataType::Float3, "a_LocalPosition" },
+			{ ShaderDataType::Float4, "a_Color" },
+			{ ShaderDataType::Float, "a_Thickness" },
+			{ ShaderDataType::Int, "a_EntityID" }
+			});
+		s_Data.CircleVertexArray->AddVertexBuffer(s_Data.CircleVertexBuffer);
+		s_Data.CircleVertexArray->SetIndexBuffer(quadIB);
+		s_Data.CircleVertexBufferBase = new CircleVertex[s_Data.MaxVertices];
+		s_Data.CircleShader = Shader::Create("assets/shaders/Circle.glsl");
+		// -------------Circle---------------
 
 		// -------------Text-----------------
 		s_Data.TextVertexArray = VertexArray::Create();
@@ -210,6 +247,18 @@ namespace spg {
 			s_Data.Stats.DrawCalls++;
 		}
 
+		if (s_Data.CircleIndexCount) {
+			uint32_t dataSize = (uint8_t*)s_Data.CircleVertexBufferPtr - (uint8_t*)s_Data.CircleVertexBufferBase;
+			s_Data.CircleVertexBuffer->SetData(s_Data.CircleVertexBufferBase, dataSize);
+
+			for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++) {
+				s_Data.TextureSlots[i]->Bind(i);
+			}
+			s_Data.CircleShader->Bind();
+			RenderCommand::DrawIndexed(s_Data.CircleVertexArray, s_Data.CircleIndexCount);
+			s_Data.Stats.DrawCalls++;
+		}
+
 		if (s_Data.TextIndexCount) {
 			uint32_t dataSize = (uint8_t*)s_Data.TextVertexBufferPtr - (uint8_t*)s_Data.TextVertexBufferBase;
 			s_Data.TextVertexBuffer->SetData(s_Data.TextVertexBufferBase, dataSize);
@@ -229,6 +278,9 @@ namespace spg {
 	{
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.CircleIndexCount = 0;
+		s_Data.CircleVertexBufferPtr = s_Data.CircleVertexBufferBase;
 
 		s_Data.TextIndexCount = 0;
 		s_Data.TextVertexBufferPtr = s_Data.TextVertexBufferBase;
@@ -551,6 +603,32 @@ namespace spg {
 		}
 	}
 
+	void Renderer2D::DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness, int entityID)
+	{
+		SPG_PROFILE_FUNCTION();
+
+		constexpr size_t circleVertexCount = 4;
+
+		// TODO: Optimize this, not just Circle Index Count
+		if (s_Data.CircleIndexCount >= Renderer2DData::MaxIndices) {
+			NextBatch();
+		}
+
+		for (size_t i = 0; i < circleVertexCount; i++) {
+			s_Data.CircleVertexBufferPtr->WorldPosition = transform * s_Data.QuadVertexPositions[i];
+			s_Data.CircleVertexBufferPtr->LocalPosition = s_Data.QuadVertexPositions[i] * 2.0f;
+			s_Data.CircleVertexBufferPtr->Color = color;
+			s_Data.CircleVertexBufferPtr->Thickness = thickness;
+			s_Data.CircleVertexBufferPtr->EntityID = entityID;
+			s_Data.CircleVertexBufferPtr++;
+		}
+
+		s_Data.CircleIndexCount += 6;
+
+		s_Data.Stats.CircleCount++;
+	
+	}
+
 	void Renderer2D::DrawText(const glm::mat4& transform, TextComponent& tc, int entityID)
 	{
 		SPG_PROFILE_FUNCTION();
@@ -563,6 +641,7 @@ namespace spg {
 		const std::wstring wtext = tc.Text;
 		Ref<Font> font = tc.Font;
 
+		// TODO: Optimize this
 		if (s_Data.TextIndexCount + wtext.length() * 6 >= Renderer2DData::MaxIndices) {
 			NextBatch();
 		}

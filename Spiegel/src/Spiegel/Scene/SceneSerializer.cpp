@@ -159,6 +159,15 @@ namespace spg {
             out << YAML::EndMap; // SpriteRendererComponent
         }
 
+        if (entity.CheckComponent<CircleRendererComponent>()) {
+			out << YAML::Key << "CircleRendererComponent";
+			out << YAML::BeginMap; // CircleRendererComponent
+			auto& crc = entity.GetComponent<CircleRendererComponent>();
+			out << YAML::Key << "Color" << YAML::Value << crc.Color;
+			out << YAML::Key << "Thickness" << YAML::Value << crc.Thickness;
+			out << YAML::EndMap; // CircleRendererComponent
+		}
+
         if (entity.CheckComponent<Rigidbody2DComponent>()) {
             out << YAML::Key << "Rigidbody2DComponent";
             out << YAML::BeginMap; // Rigidbody2DComponent
@@ -270,7 +279,15 @@ namespace spg {
 				if (spriteRendererComponent) {
 					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>();
 					src.Color = spriteRendererComponent["Color"].as<glm::vec4>();
+                    // TODO: Add Texture deserialization
 				}
+
+                auto circleRendererComponent = entity["CircleRendererComponent"];
+                if (circleRendererComponent) {
+                    auto& crc = deserializedEntity.AddComponent<CircleRendererComponent>();
+                    crc.Color = circleRendererComponent["Color"].as<glm::vec4>();
+                    crc.Thickness = circleRendererComponent["Thickness"].as<float>();
+                }
 
                 auto rigidbody2DComponent = entity["Rigidbody2DComponent"];
                 if (rigidbody2DComponent) {

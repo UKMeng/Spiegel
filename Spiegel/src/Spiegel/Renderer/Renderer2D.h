@@ -39,15 +39,17 @@ namespace spg {
 		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<SubTexture2D>& subtexture, float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f));
 
 		static void DrawSprite(const glm::mat4& transform, SpriteRendererComponent& src, int entityID = -1);
+		static void DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness = 1.0f, int entityID = -1);
 		static void DrawText(const glm::mat4& transform, TextComponent& tc, int entityID = -1);
 
 		struct Statistics {
 			uint32_t DrawCalls = 0;
 			uint32_t QuadCount = 0;
+			uint32_t CircleCount = 0;
 			uint32_t TextCount = 0;
 
-			uint32_t GetTotalVertexCount() { return (QuadCount + TextCount) * 4; }
-			uint32_t GetTotalIndexCount() { return (QuadCount + TextCount) * 6; }
+			uint32_t GetTotalVertexCount() { return (QuadCount + CircleCount + TextCount) * 4; }
+			uint32_t GetTotalIndexCount() { return (QuadCount + CircleCount + TextCount) * 6; }
 		};
 
 		static Statistics GetStats();

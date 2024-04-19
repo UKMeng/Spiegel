@@ -37,6 +37,7 @@ namespace spg {
 	private:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
+		void RenderScene();
 	private:
 		entt::registry m_Registry;
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
