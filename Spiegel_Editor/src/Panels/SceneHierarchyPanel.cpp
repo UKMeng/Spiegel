@@ -240,6 +240,12 @@ namespace spg {
 					ImGui::CloseCurrentPopup();
 				}
 			}
+			if (!m_SelectionContext.CheckComponent<CircleCollider2DComponent>()) {
+				if (ImGui::MenuItem("CircleCollider 2D")) {
+					m_SelectionContext.AddComponent<CircleCollider2DComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
 			if (!m_SelectionContext.CheckComponent<TextComponent>()) {
 				if (ImGui::MenuItem("Text")) {
 					m_SelectionContext.AddComponent<TextComponent>();
@@ -353,6 +359,15 @@ namespace spg {
 
 		DrawComponent<BoxCollider2DComponent>("Box Collider 2D", entity, [](auto& component) {
 			ImGui::DragFloat2("Size", glm::value_ptr(component.Size), 0.1f);
+			ImGui::DragFloat2("Offset", glm::value_ptr(component.Offset), 0.1f);
+			ImGui::DragFloat("Density", &component.Density, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Restitution", &component.Restitution, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Restitution Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
+			});
+
+		DrawComponent<CircleCollider2DComponent>("Circle Collider 2D", entity, [](auto& component) {
+			ImGui::DragFloat("Radius", &component.Radius, 0.1f);
 			ImGui::DragFloat2("Offset", glm::value_ptr(component.Offset), 0.1f);
 			ImGui::DragFloat("Density", &component.Density, 0.01f, 0.0f, 1.0f);
 			ImGui::DragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);

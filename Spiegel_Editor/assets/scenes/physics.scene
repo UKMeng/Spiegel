@@ -1,22 +1,12 @@
 Scene: Scene Name
 Entities:
-  - Entity: 16769109604581600452
-    TagComponent:
-      Tag: Circle
-    TransformComponent:
-      Position: [2.62423706, 3.41566372, 0]
-      Rotation: [0, 0, 0]
-      Scale: [3.25999999, 3.25999999, 3.25999999]
-    CircleRendererComponent:
-      Color: [0.0956769884, 0.0484339818, 0.66023165, 1]
-      Thickness: 0.159999996
-  - Entity: 13791921867380016240
+  - Entity: 13852713334590980718
     TagComponent:
       Tag: Static Square Duplicated
     TransformComponent:
-      Position: [7.27919912, -2.52043819, -0.00885389186]
-      Rotation: [5.35799265, -3.12174845, 47.5745392]
-      Scale: [8.20017433, 0.99999994, 1]
+      Position: [-0.189571843, -6.42662811, 0]
+      Rotation: [0, 0, -20.0281181]
+      Scale: [8.20017052, 1, 1]
     SpriteRendererComponent:
       Color: [0.810810804, 0.356881976, 0.356881976, 1]
     Rigidbody2DComponent:
@@ -28,43 +18,6 @@ Entities:
       Density: 1
       Friction: 0.189999998
       Restitution: 0.379999995
-      RestitutionThreshold: 0.5
-  - Entity: 9993107691642536801
-    TagComponent:
-      Tag: Camera
-    TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    CameraComponent:
-      Camera:
-        ProjectionType: 1
-        PerspectiveFOV: 45
-        PerspectiveNear: 0.00999999978
-        PerspectiveFar: 1000
-        OrthographicSize: 10
-        OrthographicNear: -1
-        OrthographicFar: 1
-      Primary: true
-      FixedAspectRatio: false
-  - Entity: 17409891781014527609
-    TagComponent:
-      Tag: Square
-    TransformComponent:
-      Position: [-2.90071201, 3.55931306, -2.32830644e-10]
-      Rotation: [0, 0, -24.7354107]
-      Scale: [1.04999995, 1.04999971, 1.04999995]
-    SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
-    Rigidbody2DComponent:
-      Type: 1
-      FixedRotation: false
-    BoxCollider2DComponent:
-      Size: [0.5, 0.5]
-      Offset: [0, 0]
-      Density: 1
-      Friction: 0.230000004
-      Restitution: 0
       RestitutionThreshold: 0.5
   - Entity: 8628997617006970121
     TagComponent:
@@ -85,13 +38,50 @@ Entities:
       Friction: 0.189999998
       Restitution: 0.379999995
       RestitutionThreshold: 0.5
-  - Entity: 13852713334590980718
+  - Entity: 17409891781014527609
+    TagComponent:
+      Tag: Square
+    TransformComponent:
+      Position: [-2.90071201, 3.55931306, -2.32830644e-10]
+      Rotation: [0, 0, -24.7354107]
+      Scale: [1.04999995, 1.04999971, 1.04999995]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+    Rigidbody2DComponent:
+      Type: 1
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Size: [0.5, 0.5]
+      Offset: [0, 0]
+      Density: 1
+      Friction: 0.230000004
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - Entity: 9993107691642536801
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PerspectiveFOV: 45
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false
+  - Entity: 13791921867380016240
     TagComponent:
       Tag: Static Square Duplicated
     TransformComponent:
-      Position: [-0.189571843, -6.42662811, 0]
-      Rotation: [0, 0, -20.0281181]
-      Scale: [8.20017052, 1, 1]
+      Position: [7.27919912, -2.52043819, -0.00885389186]
+      Rotation: [5.35799265, -3.12174845, 47.5745392]
+      Scale: [8.20017433, 0.99999994, 1]
     SpriteRendererComponent:
       Color: [0.810810804, 0.356881976, 0.356881976, 1]
     Rigidbody2DComponent:
@@ -103,4 +93,24 @@ Entities:
       Density: 1
       Friction: 0.189999998
       Restitution: 0.379999995
+      RestitutionThreshold: 0.5
+  - Entity: 16769109604581600452
+    TagComponent:
+      Tag: Circle
+    TransformComponent:
+      Position: [-4.35691071, 1.49795437, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CircleRendererComponent:
+      Color: [0.0956769884, 0.0484339818, 0.66023165, 1]
+      Thickness: 1
+    Rigidbody2DComponent:
+      Type: 1
+      FixedRotation: false
+    CircleCollider2DComponent:
+      Radius: 0.5
+      Offset: [0, 0]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
       RestitutionThreshold: 0.5
