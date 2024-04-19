@@ -38,13 +38,23 @@ namespace spg {
 		bool Detach();
 		bool CharacterLoader(std::wstring text);
 
+		std::string GetFontPath() const { return m_fontPath.string(); }
+
+		uint32_t GetFontSize() const { return m_fontSize; }
+		void SetFontSize(uint32_t fontSize) { m_fontSize = fontSize; ReloadFont(); }
+
 		Character GetCharacter(wchar_t c) { return m_characters[c]; }
+
+		bool IsDefault() const { return m_isDefault; }
 
 		static Ref<Font> GetDefaultFont();
 	private:
+		void ReloadFont();
+		bool LoadBasicAscii();
 		bool LoadCharacter(wchar_t c);
 	private:
 		std::filesystem::path m_fontPath;
+		bool m_isDefault = false;
 		uint32_t m_fontSize;
 		std::unordered_map<wchar_t, Character> m_characters;
 		FT_Library m_ftLibrary;

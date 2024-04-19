@@ -85,6 +85,7 @@ namespace spg {
 	struct TextComponent
 	{
 		std::wstring Text;
+		glm::vec4 Color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		Ref<Font> Font = Font::GetDefaultFont();
 
 		TextComponent() = default;

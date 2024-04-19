@@ -2,12 +2,38 @@
 #include "SceneSerializer.h"
 #include "Entity.h"
 #include "Components.h"
+#include "Spiegel/Renderer/Font.h"
 
 #include <yaml-cpp/yaml.h>
 #include <fstream>
 #include <filesystem>
+#include <Windows.h>
 
 namespace YAML {
+
+    template<>
+    struct convert<std::wstring>
+    {
+        static Node encode(const std::wstring& rhs)
+        {
+            int size_needed = WideCharToMultiByte(CP_UTF8, 0, &rhs[0], (int)rhs.size(), NULL, 0, NULL, NULL);
+            std::string str_to(size_needed, 0);
+            WideCharToMultiByte(CP_UTF8, 0, &rhs[0], (int)rhs.size(), &str_to[0], size_needed, NULL, NULL);
+            return Node(str_to);
+        }
+
+        static bool decode(const Node& node, std::wstring& rhs)
+        {
+            if (!node.IsScalar()) return false;
+
+            std::string str_to_convert = node.as<std::string>();
+            int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str_to_convert[0], (int)str_to_convert.size(), NULL, 0);
+            std::wstring wstr_to(size_needed, 0);
+            MultiByteToWideChar(CP_UTF8, 0, &str_to_convert[0], (int)str_to_convert.size(), &wstr_to[0], size_needed);
+            rhs = wstr_to;
+            return true;
+        }
+    };
 
     template<>
     struct convert<glm::vec2>
@@ -97,6 +123,15 @@ namespace spg {
     {
         out << YAML::Flow;
         out << YAML::BeginSeq << vec.x << vec.y << vec.z << vec.w << YAML::EndSeq;
+        return out;
+    }
+
+    YAML::Emitter& operator <<(YAML::Emitter& out, const std::wstring& wstr)
+    {
+        int size_needed = WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), NULL, 0, NULL, NULL);
+        std::string str_to(size_needed, 0);
+        WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), &str_to[0], size_needed, NULL, NULL);
+        out << str_to;
         return out;
     }
 
@@ -206,7 +241,22 @@ namespace spg {
             out << YAML::EndMap; // CircleCollider2DComponent
         }
 
-        // TODO: TextComponent
+        if (entity.CheckComponent<TextComponent>()) {
+            out << YAML::Key << "TextComponent";
+			out << YAML::BeginMap; // TextComponent
+			auto& tc = entity.GetComponent<TextComponent>();
+			out << YAML::Key << "Text" << YAML::Value << tc.Text;
+            out << YAML::Key << "Color" << YAML::Value << tc.Color;
+            if (tc.Font->IsDefault()) {
+                out << YAML::Key << "Default" << YAML::Value << true;
+            }
+            else {
+                out << YAML::Key << "Default" << YAML::Value << false;
+                out << YAML::Key << "Font" << YAML::Value << tc.Font->GetFontPath();
+                out << YAML::Key << "Size" << YAML::Value << tc.Font->GetFontSize();
+            }
+			out << YAML::EndMap; // TextComponent
+        }
 
         out << YAML::EndMap; // Entity
     }
@@ -306,6 +356,23 @@ namespace spg {
                     auto& crc = deserializedEntity.AddComponent<CircleRendererComponent>();
                     crc.Color = circleRendererComponent["Color"].as<glm::vec4>();
                     crc.Thickness = circleRendererComponent["Thickness"].as<float>();
+                }
+
+                auto textComponent = entity["TextComponent"];
+                if (textComponent) {
+                    auto& tc = deserializedEntity.AddComponent<TextComponent>();
+                    tc.Text = textComponent["Text"].as<std::wstring>();
+                    tc.Color = textComponent["Color"].as<glm::vec4>();
+                    
+                    bool isDefault = textComponent["Default"].as<bool>();
+                    if (isDefault) {
+						tc.Font = Font::GetDefaultFont();
+					}
+                    else {
+                        std::string fontPath = textComponent["Font"].as<std::string>();
+                        int fontSize = textComponent["Size"].as<int>();
+                        tc.Font = CreateRef<Font>(fontPath, fontSize);
+                    }
                 }
 
                 auto rigidbody2DComponent = entity["Rigidbody2DComponent"];

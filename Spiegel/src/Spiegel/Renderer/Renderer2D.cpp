@@ -739,7 +739,8 @@ namespace spg {
 
 		const std::wstring wtext = tc.Text;
 		Ref<Font> font = tc.Font;
-
+		float fontSize = (float)font->GetFontSize();
+		
 		// TODO: Optimize this
 		if (s_Data.TextIndexCount + wtext.length() * 6 >= Renderer2DData::MaxIndices) {
 			NextBatch();
@@ -763,10 +764,10 @@ namespace spg {
 				continue;
 			}
 
-			float xpos = x + character.Bearing.x / 48.0;
-			float ypos = y - (character.Size.y - character.Bearing.y) / 48.0;
-			float w = character.Size.x / 48.0;
-			float h = character.Size.y / 48.0;
+			float xpos = x + character.Bearing.x / fontSize;
+			float ypos = y - (character.Size.y - character.Bearing.y) / fontSize;
+			float w = character.Size.x / fontSize;
+			float h = character.Size.y / fontSize;
 
 			textVertexPositions[0] = { xpos,     ypos,	   0.0f, 1.0f };
 			textVertexPositions[1] = { xpos + w, ypos,	   0.0f, 1.0f };
@@ -791,14 +792,14 @@ namespace spg {
 
 			for (size_t i = 0; i < textVertexCount; i++) {
 				s_Data.TextVertexBufferPtr->Position = transform * textVertexPositions[i];
-				s_Data.TextVertexBufferPtr->Color = { 0.5f, 0.8f, 0.2f, 1.0f };
+				s_Data.TextVertexBufferPtr->Color = tc.Color;
 				s_Data.TextVertexBufferPtr->TexCoord = textureCoords[i];
 				s_Data.TextVertexBufferPtr->TexIndex = textureIndex;
 				s_Data.TextVertexBufferPtr->EntityID = entityID;
 				s_Data.TextVertexBufferPtr++;
 			}
 
-			x += (character.Advance >> 6) / 48.0;
+			x += (character.Advance >> 6) / fontSize;
 
 			s_Data.TextIndexCount += 6;
 

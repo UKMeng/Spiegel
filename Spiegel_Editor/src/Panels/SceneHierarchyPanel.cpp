@@ -392,25 +392,23 @@ namespace spg {
 				strncpy_s(buffer, str.c_str(), sizeof(buffer));
 				buffer[sizeof(buffer) - 1] = 0;
 				if (ImGui::InputText("##text", buffer, sizeof(buffer))) {
-					// If InputText returns true, the user has modified the string.
-					// You can convert it back to std::wstring if necessary.
 					str = buffer;
 					size_needed = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), NULL, 0);
 					text = std::wstring(size_needed, 0);
 					MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), &text[0], size_needed);
 				}
-				// wchar_t buffer[256];
-				// memset(buffer, 0, sizeof(buffer));
-				// strcpy_s(buffer, sizeof(buffer), text.c_str());
+				
+				ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
+				
+				ImGui::Button("Font", { 128.0f, 128.0f });
+				if (ImGui::BeginDragDropTarget()) {
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						component.Font = CreateRef<Font>(path, component.Font->GetFontSize());
+					}
+					ImGui::EndDragDropTarget();
+				}
 
-				// TODO: buffer[256] is not enough for a long text, need to fix
-				// char buffer[256];
-				// memset(buffer, 0, sizeof(buffer));
-				// strcpy_s(buffer, sizeof(buffer), text.c_str());
-				// if (ImGui::InputText("##Text", buffer, sizeof(buffer)))
-				// {
-				// 	text = std::string(buffer);
-				// }
 			});
 	}
 }

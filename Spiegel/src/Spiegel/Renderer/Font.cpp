@@ -6,15 +6,9 @@ namespace spg {
 	Font::Font(const std::filesystem::path& fontPath, uint32_t fontSize)
 		: m_fontPath(fontPath), m_fontSize(fontSize)
 	{
-		Attach();
-		for (int i = 0; i < 128; i++) {
-			wchar_t c = static_cast<wchar_t>(i);
-			if (!LoadCharacter(c)) {
-				SPG_CORE_ERROR("Failed to load character: {0}", char(c));
-			}
-		}
-		LoadCharacter(L'жа');
-		Detach();
+		// SPG_CORE_WARN("Font created: {0}, size: {1}", m_fontPath.string(), m_fontSize);
+		LoadBasicAscii();
+		m_isDefault = false;
 	}
 
 	bool Font::Attach()
@@ -58,9 +52,31 @@ namespace spg {
 	{
 		static Ref<Font> defaultFont;
 		if (!defaultFont) {
-			defaultFont = CreateRef<Font>("assets/fonts/Noto_Sans/NotoSansSC-Bold.ttf", 48);
+			defaultFont = CreateRef<Font>("assets/fonts/Noto_Sans/NotoSansSC-Bold.ttf", 200);
+			defaultFont->m_isDefault = true;
 		}
 		return defaultFont;
+	}
+
+	void Font::ReloadFont()
+	{
+		m_characters.clear();
+		LoadBasicAscii();
+		m_isDefault = false;
+	}
+
+	bool Font::LoadBasicAscii()
+	{
+		Attach();
+		for (int i = 0; i < 128; i++) {
+			wchar_t c = static_cast<wchar_t>(i);
+			if (!LoadCharacter(c)) {
+				SPG_CORE_ERROR("Failed to load character: {0}", char(c));
+				return false;
+			}
+		}
+		Detach();
+		return true;
 	}
 
 	bool Font::LoadCharacter(wchar_t c)
