@@ -72,6 +72,7 @@ namespace spg {
 		// GL_RGB表示图像数据使用RGB格式，GL_UNSIGNED_BYTE表示图像数据的数据类型，这里使用的是无符号字节类型
 		glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
 
+		m_LoadStatus = true;
 		stbi_image_free(data);
 	}
 
@@ -96,7 +97,8 @@ namespace spg {
 		glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 		glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
-	
+		
+		m_LoadStatus = true;
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	}
 

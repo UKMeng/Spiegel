@@ -301,7 +301,26 @@ namespace spg {
 		if (ImGui::BeginDragDropTarget()) {
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
 				const wchar_t* path = (const wchar_t*)payload->Data;
-				OpenScene(path);
+				std::filesystem::path filePath = std::filesystem::path(path);
+				std::string extension = filePath.extension().string();
+				if (extension == ".scene") {
+					OpenScene(path);
+				}
+				else if (extension == ".png" || extension == ".jpg") {
+					Ref<Texture2D> texture = Texture2D::Create(filePath.string());
+					if (texture->IsLoaded()) {
+						if (m_HoveredEntity && m_HoveredEntity.CheckComponent<SpriteRendererComponent>()) {
+							m_HoveredEntity.GetComponent<SpriteRendererComponent>().Texture = texture;
+						}
+					}
+					else {
+						SPG_CORE_WARN("Failed to load texture from path: {0}", filePath.string());
+					}
+				}
+				else {
+					SPG_CORE_WARN("Unsupported file format: {0}", extension);
+				}
+				
 			}
 			ImGui::EndDragDropTarget();
 		}
@@ -585,7 +604,7 @@ namespace spg {
 		Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_IconPlay : m_IconStop;
 		
 		ImGui::SetCursorPosX(size * 0.5f);
-		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { size, size }, { 0, 0 }, { 1, 1 }, 0)) {
+		if (ImGui::ImageButton((ImTextureID)icon->GetTextureID(), { size, size }, { 0, 0 }, { 1, 1 }, 0)) {
 			if (m_SceneState == SceneState::Edit) {
 				OnScenePlay();
 			}
