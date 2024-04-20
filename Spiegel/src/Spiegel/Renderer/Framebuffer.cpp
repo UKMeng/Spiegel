@@ -2,7 +2,7 @@
 #include "Framebuffer.h"
 #include "Renderer.h"
 
-#include "Platform/OpenGL/OpenGLFramebuffer.h"
+#include "Spiegel/Platform/OpenGL/OpenGLFramebuffer.h"
 
 namespace spg {
 	Ref<Framebuffer> Framebuffer::Create(const FramebufferSpecification& spec)

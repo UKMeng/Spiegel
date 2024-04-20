@@ -11,7 +11,6 @@
 #include "Spiegel/Renderer/Shader.h"
 #include "Spiegel/Renderer/Buffer.h"
 #include "Spiegel/Renderer/VertexArray.h"
-#include "Spiegel/Renderer/OrthographicCamera.h"
 
 namespace spg {
 	class SPG_API Application

@@ -3,7 +3,7 @@
 
 #include "Renderer.h"
 
-#include "Platform/OpenGL/OpenGLBuffer.h"
+#include "Spiegel/Platform/OpenGL/OpenGLBuffer.h"
 
 namespace spg {
 

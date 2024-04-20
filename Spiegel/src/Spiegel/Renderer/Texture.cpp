@@ -2,7 +2,7 @@
 #include "Texture.h"
 
 #include "Renderer.h"
-#include "Platform/OpenGL/OpenGLTexture.h"
+#include "Spiegel/Platform/OpenGL/OpenGLTexture.h"
 
 namespace spg {
 	Ref<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)

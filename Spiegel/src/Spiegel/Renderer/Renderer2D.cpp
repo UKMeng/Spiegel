@@ -249,16 +249,6 @@ namespace spg {
 		StartBatch();
 	}
 
-	// TODO: delete ?
-	void Renderer2D::BeginScene(const OrthographicCamera& camera)
-	{
-		SPG_PROFILE_FUNCTION();
-
-		s_Data.QuadShader->Bind();
-		s_Data.QuadShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
-
-		StartBatch();
-	}
 
 	void Renderer2D::EndScene()
 	{

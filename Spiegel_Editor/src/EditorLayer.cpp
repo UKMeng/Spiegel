@@ -19,7 +19,7 @@ namespace spg {
 		"wwwwwwwwwwww";
 
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f)
+		: Layer("EditorLayer")
 	{
 
 	}
@@ -120,7 +120,6 @@ namespace spg {
 			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 		{
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
 			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
@@ -167,8 +166,6 @@ namespace spg {
 
 	void EditorLayer::OnEvent(Event& e)
 	{
-		if(m_ViewportFocused) m_CameraController.OnEvent(e);
-
 		m_EditorCamera.OnEvent(e);
 
 		EventDispatcher dispatcher(e);
@@ -294,7 +291,6 @@ namespace spg {
 		if (m_ViewportSize != *((glm::vec2*)&viewportWindowSize)) {
 			m_Framebuffer->Resize((uint32_t)viewportWindowSize.x, (uint32_t)viewportWindowSize.y);
 			m_ViewportSize = { viewportWindowSize.x, viewportWindowSize.y };
-			m_CameraController.OnResize(viewportWindowSize.x, viewportWindowSize.y);
 			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 		}
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID(0);

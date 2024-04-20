@@ -2,7 +2,7 @@
 #include "Shader.h"
 #include "Renderer.h"
 
-#include "Platform/OpenGl/OpenGLShader.h"
+#include "Spiegel/Platform/OpenGl/OpenGLShader.h"
 
 namespace spg {
 	Ref<Shader> Shader::Create(const std::string& filepath) {

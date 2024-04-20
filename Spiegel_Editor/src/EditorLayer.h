@@ -36,8 +36,6 @@ namespace spg {
 		// UI Panels
 		void UI_Toolbar();
 	private:
-		OrthographicCameraController m_CameraController;
-
 		// Scene
 		enum class SceneState {
 			Edit = 0, Play = 1

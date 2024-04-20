@@ -48,7 +48,7 @@
     <ClInclude Include="src\Spiegel\Core\Window.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+    <ClInclude Include="src\Spiegel\Platform\Windows\WindowsWindow.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Spiegel\Core\Layer.h">
@@ -72,7 +72,7 @@
     <ClInclude Include="src\Spiegel\Renderer\GraphicsContext.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLContext.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Spiegel\Renderer\Shader.h">
@@ -81,7 +81,7 @@
     <ClInclude Include="src\Spiegel\Renderer\Buffer.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Spiegel\Renderer\Renderer.h">
@@ -90,7 +90,7 @@
     <ClInclude Include="src\Spiegel\Renderer\VertexArray.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLVertexArray.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Spiegel\Renderer\RendererAPI.h">
@@ -99,25 +99,19 @@
     <ClInclude Include="src\Spiegel\Renderer\RenderCommand.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
-      <Filter>Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Spiegel\Renderer\OrthographicCamera.h">
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLRendererAPI.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Spiegel\Core\Timestep.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLShader.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Spiegel\Renderer\Texture.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h">
-      <Filter>Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Spiegel\Renderer\OrthographicCameraController.h">
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLTexture.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Spiegel\Renderer\Renderer2D.h">
@@ -132,7 +126,7 @@
     <ClInclude Include="src\Spiegel\Renderer\Framebuffer.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h">
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLFramebuffer.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Spiegel\Scene\Scene.h">
@@ -171,7 +165,7 @@
     <ClInclude Include="src\Spiegel\Renderer\UniformBuffer.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h">
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLUniformBuffer.h">
       <Filter>Header File</Filter>
     </ClInclude>
     <ClInclude Include="src\Spiegel\Core\UUID.h">
@@ -188,7 +182,7 @@
     <ClCompile Include="src\spgpch.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+    <ClCompile Include="src\Spiegel\Platform\Windows\WindowsWindow.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Core\Layer.cpp">
@@ -200,10 +194,10 @@
     <ClCompile Include="src\Spiegel\ImGui\ImGuiLayer.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
+    <ClCompile Include="src\Spiegel\Platform\Windows\WindowsInput.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLContext.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Renderer\Shader.cpp">
@@ -212,7 +206,7 @@
     <ClCompile Include="src\Spiegel\Renderer\Buffer.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLBuffer.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Renderer\Renderer.cpp">
@@ -221,7 +215,7 @@
     <ClCompile Include="src\Spiegel\Renderer\VertexArray.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLVertexArray.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Renderer\RendererAPI.cpp">
@@ -230,22 +224,16 @@
     <ClCompile Include="src\Spiegel\Renderer\RenderCommand.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLRendererAPI.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="src\Spiegel\Renderer\OrthographicCamera.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLShader.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Renderer\Texture.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Spiegel\Renderer\OrthographicCameraController.cpp">
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLTexture.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Renderer\Renderer2D.cpp">
@@ -257,7 +245,7 @@
     <ClCompile Include="src\Spiegel\Renderer\Framebuffer.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp">
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLFramebuffer.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Scene\Scene.cpp">
@@ -269,7 +257,7 @@
     <ClCompile Include="src\Spiegel\Scene\SceneSerializer.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp">
+    <ClCompile Include="src\Spiegel\Platform\Windows\WindowsPlatformUtils.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Math\Math.cpp">
@@ -284,7 +272,7 @@
     <ClCompile Include="src\Spiegel\Renderer\UniformBuffer.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp">
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLUniformBuffer.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Core\UUID.cpp">

@@ -2,7 +2,7 @@
 #include "UniformBuffer.h"
 
 #include "Renderer.h"
-#include "Platform/OpenGL/OpenGLUniformBuffer.h"
+#include "Spiegel/Platform/OpenGL/OpenGLUniformBuffer.h"
 
 namespace spg {
 	Ref<UniformBuffer> UniformBuffer::Create(uint32_t size, uint32_t binding)

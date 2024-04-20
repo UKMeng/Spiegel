@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h" />
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLFramebuffer.h" />
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLUniformBuffer.h" />
     <ClInclude Include="src\Spiegel\Core\UUID.h" />
     <ClInclude Include="src\Spiegel\Debug\Instrumentation.h" />
     <ClInclude Include="src\Spiegel\Math\Math.h" />
@@ -21,13 +21,13 @@
     <ClInclude Include="src\Spiegel\Renderer\Font.h" />
     <ClInclude Include="src\Spiegel\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Spiegel\Renderer\Renderer2D.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
-    <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLBuffer.h" />
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLRendererAPI.h" />
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLShader.h" />
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLTexture.h" />
+    <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLVertexArray.h" />
+    <ClInclude Include="src\Spiegel\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\spgpch.h" />
     <ClInclude Include="src\Spiegel\Core\Timestep.h" />
     <ClInclude Include="src\Spiegel\Events\ApplicationEvent.h" />
@@ -45,10 +45,8 @@
     <ClInclude Include="src\Spiegel\Core\Base.h" />
     <ClInclude Include="src\Spiegel\Core\EntryPoint.h" />
     <ClInclude Include="src\Spiegel\Core\MouseCodes.h" />
-    <ClInclude Include="src\Spiegel\Renderer\OrthographicCameraController.h" />
     <ClInclude Include="src\Spiegel\Renderer\Buffer.h" />
     <ClInclude Include="src\Spiegel\Renderer\GraphicsContext.h" />
-    <ClInclude Include="src\Spiegel\Renderer\OrthographicCamera.h" />
     <ClInclude Include="src\Spiegel\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Spiegel\Renderer\Renderer.h" />
     <ClInclude Include="src\Spiegel\Renderer\RendererAPI.h" />
@@ -67,23 +65,23 @@
     <ClInclude Include="src\Spiegel\Utils\PlatformUtils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp" />
-    <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp" />
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLFramebuffer.cpp" />
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLUniformBuffer.cpp" />
+    <ClCompile Include="src\Spiegel\Platform\Windows\WindowsPlatformUtils.cpp" />
     <ClCompile Include="src\Spiegel\Core\UUID.cpp" />
     <ClCompile Include="src\Spiegel\Math\Math.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\EditorCamera.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Font.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Renderer2D.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
-    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
-    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLBuffer.cpp" />
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLRendererAPI.cpp" />
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLShader.cpp" />
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLTexture.cpp" />
+    <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLVertexArray.cpp" />
+    <ClCompile Include="src\Spiegel\Platform\Windows\WindowsInput.cpp" />
+    <ClCompile Include="src\Spiegel\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\spgpch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -93,9 +91,7 @@
     <ClCompile Include="src\Spiegel\Core\LayerStack.cpp" />
     <ClCompile Include="src\Spiegel\Core\Log.cpp" />
     <ClCompile Include="src\Spiegel\Core\Application.cpp" />
-    <ClCompile Include="src\Spiegel\Renderer\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Buffer.cpp" />
-    <ClCompile Include="src\Spiegel\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\RenderCommand.cpp" />
