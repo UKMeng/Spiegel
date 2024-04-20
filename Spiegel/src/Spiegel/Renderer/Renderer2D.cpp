@@ -757,12 +757,15 @@ namespace spg {
 		std::wstring::const_iterator c;
 		for (c = wtext.begin(); c != wtext.end(); c++) {
 			const wchar_t ch = *c;
-			const Character& character = font->GetCharacter(ch);
-			Ref<Texture2D> texture = character.Texture;
-			if (ch == ' ') {
-				// TODO: position change when space and enter
+
+			if (ch == '\n') {
+				x = 0.0f;
+				y -= 1.0f;
 				continue;
 			}
+
+			const Character& character = font->GetCharacter(ch);
+			Ref<Texture2D> texture = character.Texture;
 
 			float xpos = x + character.Bearing.x / fontSize;
 			float ypos = y - (character.Size.y - character.Bearing.y) / fontSize;

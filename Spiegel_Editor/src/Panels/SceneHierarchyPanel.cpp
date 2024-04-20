@@ -391,7 +391,7 @@ namespace spg {
 				char buffer[256];
 				strncpy_s(buffer, str.c_str(), sizeof(buffer));
 				buffer[sizeof(buffer) - 1] = 0;
-				if (ImGui::InputText("##text", buffer, sizeof(buffer))) {
+				if (ImGui::InputTextMultiline("##text", buffer, sizeof(buffer))) {
 					str = buffer;
 					size_needed = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), NULL, 0);
 					text = std::wstring(size_needed, 0);
@@ -408,7 +408,6 @@ namespace spg {
 					}
 					ImGui::EndDragDropTarget();
 				}
-
 			});
 	}
 }
