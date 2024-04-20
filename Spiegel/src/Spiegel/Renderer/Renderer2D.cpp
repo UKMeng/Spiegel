@@ -226,6 +226,8 @@ namespace spg {
 		SPG_PROFILE_FUNCTION();
 
 		delete[] s_Data.QuadVertexBufferBase;
+		delete[] s_Data.CircleVertexBufferBase;
+		delete[] s_Data.LineVertexBufferBase;
 		delete[] s_Data.TextVertexBufferBase;
 	}
 
@@ -258,13 +260,14 @@ namespace spg {
 
 	void Renderer2D::Flush()
 	{
+		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++) {
+			s_Data.TextureSlots[i]->Bind(i);
+		}
+
 		if (s_Data.QuadIndexCount) {
 			uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
 			s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 
-			for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++) {
-				s_Data.TextureSlots[i]->Bind(i);
-			}
 			s_Data.QuadShader->Bind();
 			RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
 			s_Data.Stats.DrawCalls++;
@@ -274,9 +277,6 @@ namespace spg {
 			uint32_t dataSize = (uint8_t*)s_Data.CircleVertexBufferPtr - (uint8_t*)s_Data.CircleVertexBufferBase;
 			s_Data.CircleVertexBuffer->SetData(s_Data.CircleVertexBufferBase, dataSize);
 
-			for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++) {
-				s_Data.TextureSlots[i]->Bind(i);
-			}
 			s_Data.CircleShader->Bind();
 			RenderCommand::DrawIndexed(s_Data.CircleVertexArray, s_Data.CircleIndexCount);
 			s_Data.Stats.DrawCalls++;
@@ -296,11 +296,7 @@ namespace spg {
 			uint32_t dataSize = (uint8_t*)s_Data.TextVertexBufferPtr - (uint8_t*)s_Data.TextVertexBufferBase;
 			s_Data.TextVertexBuffer->SetData(s_Data.TextVertexBufferBase, dataSize);
 
-
-			// TODO: 32 is too small, should refactor
-			for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++) {
-				s_Data.TextureSlots[i]->Bind(i);
-			}
+			// TODO: For Text Renderer, Texture slot 32 is too small, should refactor
 			s_Data.TextShader->Bind();
 			RenderCommand::DrawIndexed(s_Data.TextVertexArray, s_Data.TextIndexCount);
 			s_Data.Stats.DrawCalls++;

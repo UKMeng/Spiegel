@@ -171,6 +171,12 @@
     <ClInclude Include="src\Spiegel\Core\UUID.h">
       <Filter>Header File</Filter>
     </ClInclude>
+    <ClInclude Include="src\Spiegel\Renderer\OrthographicCameraController.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spiegel\Renderer\OrthographicCamera.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Spiegel\Core\Application.cpp">
@@ -276,6 +282,12 @@
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Core\UUID.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spiegel\Renderer\OrthographicCameraController.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spiegel\Renderer\OrthographicCamera.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
   </ItemGroup>

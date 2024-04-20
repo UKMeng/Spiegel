@@ -20,6 +20,8 @@
     <ClInclude Include="src\Spiegel\Renderer\EditorCamera.h" />
     <ClInclude Include="src\Spiegel\Renderer\Font.h" />
     <ClInclude Include="src\Spiegel\Renderer\Framebuffer.h" />
+    <ClInclude Include="src\Spiegel\Renderer\OrthographicCamera.h" />
+    <ClInclude Include="src\Spiegel\Renderer\OrthographicCameraController.h" />
     <ClInclude Include="src\Spiegel\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLContext.h" />
@@ -73,6 +75,8 @@
     <ClCompile Include="src\Spiegel\Renderer\EditorCamera.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Font.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Framebuffer.cpp" />
+    <ClCompile Include="src\Spiegel\Renderer\OrthographicCamera.cpp" />
+    <ClCompile Include="src\Spiegel\Renderer\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLContext.cpp" />
