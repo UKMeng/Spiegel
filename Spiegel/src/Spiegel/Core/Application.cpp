@@ -31,8 +31,7 @@ namespace spg {
 	Application::~Application() {
 		SPG_PROFILE_FUNCTION();
 
-		// TODO
-		// Renderer::Shutdown();
+		Renderer::Shutdown();
 	}
 
 	void Application::Run() {

@@ -55,12 +55,24 @@ namespace spg {
 		int EntityID;
 	};
 
+	// Temporary
+	struct MaterialVertex
+	{
+		glm::vec3 Position;
+
+		// Editor Only
+		int EntityID;
+	};
+
 	struct Renderer2DData
 	{
 		static const uint32_t MaxQuads = 10000;
 		static const uint32_t MaxVertices = MaxQuads * 4;
 		static const uint32_t MaxIndices = MaxQuads * 6;
 		static const uint32_t MaxTextureSlots = 32;
+
+		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
+		uint32_t TextureSlotIndex = 1; // 0 = white texture
 
 		// -------------Quad-----------------
 		Ref<VertexArray> QuadVertexArray;
@@ -71,9 +83,6 @@ namespace spg {
 		uint32_t QuadIndexCount = 0;
 		QuadVertex* QuadVertexBufferBase = nullptr;
 		QuadVertex* QuadVertexBufferPtr = nullptr;
-
-		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
-		uint32_t TextureSlotIndex = 1; // 0 = white texture
 		glm::vec4 QuadVertexPositions[4];
 		// -------------Quad-----------------
 
@@ -107,6 +116,16 @@ namespace spg {
 		TextVertex* TextVertexBufferBase = nullptr;
 		TextVertex* TextVertexBufferPtr = nullptr;
 		// -------------Text-----------------
+
+		// -------------Material-------------
+		Ref<VertexArray> MaterialVertexArray;
+		Ref<VertexBuffer> MaterialVertexBuffer;
+		Ref<Shader> MaterialShader;
+
+		uint32_t MaterialIndexCount = 0;
+		MaterialVertex* MaterialVertexBufferBase = nullptr;
+		MaterialVertex* MaterialVertexBufferPtr = nullptr;
+		// -------------Material-------------
 
 		Renderer2D::Statistics Stats;
 
@@ -144,6 +163,7 @@ namespace spg {
 
 		uint32_t offset = 0;
 		for (uint32_t i = 0; i < s_Data.MaxIndices; i += 6) {
+			// 0 1 2 2 3 0
 			quadIndices[i + 0] = offset + 0;
 			quadIndices[i + 1] = offset + 1;
 			quadIndices[i + 2] = offset + 2;
@@ -217,6 +237,18 @@ namespace spg {
 		s_Data.TextVertexBufferBase = new TextVertex[s_Data.MaxVertices];
 		s_Data.TextShader = Shader::Create("assets/shaders/Text.glsl");
 		// -------------Text-----------------
+
+		// -------------Material-------------
+		s_Data.MaterialVertexArray = VertexArray::Create();
+		s_Data.MaterialVertexBuffer = VertexBuffer::Create(100 * sizeof(MaterialVertex));
+		s_Data.MaterialVertexBuffer->SetLayout({
+			{ ShaderDataType::Float3, "a_Position" },
+			{ ShaderDataType::Int, "a_EntityID" }
+			});
+		s_Data.MaterialVertexArray->AddVertexBuffer(s_Data.MaterialVertexBuffer);
+		s_Data.MaterialVertexArray->SetIndexBuffer(quadIB);
+		s_Data.MaterialVertexBufferBase = new MaterialVertex[100];
+		// -------------Material-------------
 
 		s_Data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
 	}
@@ -318,11 +350,15 @@ namespace spg {
 		s_Data.TextVertexBufferPtr = s_Data.TextVertexBufferBase;
 
 		s_Data.TextureSlotIndex = 1;
+		
+		// Temporary
+		s_Data.MaterialIndexCount = 0;
+		s_Data.MaterialVertexBufferPtr = s_Data.MaterialVertexBufferBase;
 	}
 	
 	void Renderer2D::NextBatch()
 	{
-		EndScene();
+		Flush();
 		StartBatch();
 	}
 
@@ -815,4 +851,37 @@ namespace spg {
 	{
 		memset(&s_Data.Stats, 0, sizeof(Statistics));
 	}
+
+	// Temporary
+	void Renderer2D::DrawMaterial(const glm::mat4& transform, int entityID)
+	{
+		SPG_PROFILE_FUNCTION();
+
+		constexpr size_t materialVertexCount = 4;
+
+		if (s_Data.MaterialIndexCount >= 100) {
+			NextBatch();
+		}
+
+		for (size_t i = 0; i < materialVertexCount; i++) {
+			s_Data.MaterialVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
+			s_Data.MaterialVertexBufferPtr->EntityID = entityID;
+			s_Data.MaterialVertexBufferPtr++;
+		}
+
+		s_Data.MaterialIndexCount += 6;
+	}
+
+	void Renderer2D::SubmitMaterial(const Ref<Material>& material)
+	{
+		if (s_Data.MaterialIndexCount) {
+			uint32_t dataSize = (uint8_t*)s_Data.MaterialVertexBufferPtr - (uint8_t*)s_Data.MaterialVertexBufferBase;
+			s_Data.MaterialVertexBuffer->SetData(s_Data.MaterialVertexBufferBase, dataSize);
+			material->Upload();
+			RenderCommand::DrawIndexed(s_Data.MaterialVertexArray, s_Data.MaterialIndexCount);
+		}
+		s_Data.MaterialIndexCount = 0;
+		s_Data.MaterialVertexBufferPtr = s_Data.MaterialVertexBufferBase;
+	}
+
 }

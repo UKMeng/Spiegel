@@ -4,7 +4,9 @@
 #include "Components.h"
 #include "ScriptableEntity.h"
 
+#include "Spiegel/Renderer/Renderer.h"
 #include "Spiegel/Renderer/Renderer2D.h"
+#include "Spiegel/Renderer/Material.h"
 
 #include <glm/glm.hpp>
 
@@ -13,6 +15,9 @@
 #include <box2d/b2_fixture.h>
 #include <box2d/b2_polygon_shape.h>
 #include <box2d/b2_circle_shape.h>
+
+// Temporary
+#include <GLFW/glfw3.h>
 
 namespace spg {
 
@@ -257,13 +262,19 @@ namespace spg {
 
 	void Scene::RenderScene()
 	{
+		//Ref<Material> material = Material::Create("Test", Renderer::GetShaderLibrary()->Get("ColoredQuad"));
+		//material->SetFloat("u_Time", glfwGetTime());
+
 		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 		for (auto entity : group)
 		{
 			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 			Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 			//Renderer2D::DrawRect(transform.GetTransform(), { 1.0f, 0.0f, 0.0f, 1.0f }, (int)entity);
+			//Renderer2D::DrawMaterial(transform.GetTransform(), (int)entity);
 		}
+
+		// Renderer2D::SubmitMaterial(material);
 
 		auto circleView = m_Registry.view<TransformComponent, CircleRendererComponent>();
 		for (auto entity : circleView) {

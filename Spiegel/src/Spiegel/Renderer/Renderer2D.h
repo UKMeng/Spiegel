@@ -4,6 +4,7 @@
 #include "EditorCamera.h"
 #include "Texture.h"
 #include "SubTexture2D.h"
+#include "Material.h"
 
 #include "Spiegel/Scene/Components.h"
 
@@ -45,7 +46,6 @@ namespace spg {
 		static void DrawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, int entityID = -1);
 		static void DrawRect(const glm::mat4& transform, const glm::vec4& color, int entityID = -1);
 
-
 		static float GetLineWidth();
 		static void SetLineWidth(float width);
 
@@ -62,6 +62,10 @@ namespace spg {
 
 		static Statistics GetStats();
 		static void ResetStats();
+
+		// Temporary
+		static void DrawMaterial(const glm::mat4& transform, int entityID = -1);
+		static void SubmitMaterial(const Ref<Material>& material);
 	private:
 		static void StartBatch();
 		static void NextBatch();
