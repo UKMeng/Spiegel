@@ -25,7 +25,7 @@ namespace spg {
 
 		static void BeginScene(const EditorCamera& camera);
 
-		static void RenderScene();
+		static void RenderScene(const EditorCamera& camera);
 
 		static void EndScene();
 	};
