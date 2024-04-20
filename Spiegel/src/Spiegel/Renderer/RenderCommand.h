@@ -33,6 +33,10 @@ namespace spg {
 			s_RendererAPI->SetLineWidth(width);
 		}
 
+		static void SetWireframeMode(bool flag) {
+			s_RendererAPI->SetWireframeMode(flag);
+		}
+
 	private:
 		static RendererAPI* s_RendererAPI;
 	};

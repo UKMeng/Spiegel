@@ -22,6 +22,8 @@ namespace spg {
 		
 		virtual void SetLineWidth(float width) = 0;
 
+		virtual void SetWireframeMode(bool flag) = 0;
+
 		inline static API GetAPI() { return s_API; }
 	private:
 		static API s_API;

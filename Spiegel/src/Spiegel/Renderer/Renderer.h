@@ -3,6 +3,8 @@
 #include "RenderCommand.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Camera.h"
+#include "EditorCamera.h"
 
 namespace spg {
 	class Renderer {
@@ -19,7 +21,12 @@ namespace spg {
 		
 		static Ref<ShaderLibrary> GetShaderLibrary();
 
-	private:
-		
+		static void BeginScene(const Camera& camera, const glm::mat4& transform);
+
+		static void BeginScene(const EditorCamera& camera);
+
+		static void RenderScene();
+
+		static void EndScene();
 	};
 }

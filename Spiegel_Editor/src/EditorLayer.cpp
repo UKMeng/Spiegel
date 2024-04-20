@@ -268,6 +268,9 @@ namespace spg {
 		// Setting Panel Begin
 		ImGui::Begin("Settings");
 		ImGui::Checkbox("Show Physics Colliders", &m_ShowPhysicsColliders);
+		if (ImGui::Checkbox("Wireframe Mode", &m_WireframeMode)) {
+			RenderCommand::SetWireframeMode(m_WireframeMode);
+		};
 		ImGui::End();
 		// Setting Panel End
 

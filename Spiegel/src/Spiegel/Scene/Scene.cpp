@@ -16,9 +16,6 @@
 #include <box2d/b2_polygon_shape.h>
 #include <box2d/b2_circle_shape.h>
 
-// Temporary
-#include <GLFW/glfw3.h>
-
 namespace spg {
 
 	static b2BodyType GetB2BodyType(Rigidbody2DComponent::BodyType type)
@@ -193,7 +190,9 @@ namespace spg {
 	{
 		Renderer2D::BeginScene(camera);
 
-		RenderScene();
+		RenderScene2D();
+
+		Renderer::RenderScene();
 
 		Renderer2D::EndScene();
 	}
@@ -254,13 +253,13 @@ namespace spg {
 		if (mainCamera) {
 			Renderer2D::BeginScene(mainCamera->GetProjection(), cameraTransform);
 
-			RenderScene();
+			RenderScene2D();
 
 			Renderer2D::EndScene();
 		}
 	}
 
-	void Scene::RenderScene()
+	void Scene::RenderScene2D()
 	{
 		//Ref<Material> material = Material::Create("Test", Renderer::GetShaderLibrary()->Get("ColoredQuad"));
 		//material->SetFloat("u_Time", glfwGetTime());
@@ -320,6 +319,8 @@ namespace spg {
 		return {};
 	}
 
+
+	// TODO: Refactor this
 	template<typename T>
 	void Scene::OnComponentAdded(Entity entity, T& component)
 	{

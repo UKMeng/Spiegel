@@ -43,4 +43,12 @@ namespace spg {
 		// globally set line width
 		glLineWidth(width);
 	}
+
+	void OpenGLRendererAPI::SetWireframeMode(bool flag)
+	{
+		if (flag)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		else
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
 }

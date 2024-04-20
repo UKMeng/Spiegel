@@ -79,7 +79,8 @@ namespace spg {
 		// Gizmos
 		int m_GizmoType = -1;
 
+		// Settings
 		bool m_ShowPhysicsColliders = false;
-
+		bool m_WireframeMode = false;
 	};
 }
