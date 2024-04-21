@@ -3,6 +3,7 @@
 #include "Spiegel/Scene/SceneSerializer.h"
 #include "Spiegel/Utils/PlatformUtils.h"
 #include "Spiegel/Math/Math.h"
+#include "Spiegel/Scripting/ScriptEngine.h"
 
 #include <imgui.h>
 #include <ImGuizmo.h>
@@ -28,6 +29,7 @@ namespace spg {
 	{
 		SPG_PROFILE_FUNCTION();
 
+		ScriptEngine::Init();
 		Renderer::Init();
 
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard.png");
@@ -58,19 +60,6 @@ namespace spg {
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f); // 1.778f is the aspect ratio of 16:9
 
 #if 0
-		auto blueSquare = m_ActiveScene->CreateEntity("Blue Square");
-		blueSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 0.0f, 1.0f, 1.0f });
-
-		auto redSquare = m_ActiveScene->CreateEntity("Red Square");
-		redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
-
-		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
-		m_CameraEntity.AddComponent<CameraComponent>();
-	
-		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Second Camera");
-		auto& cc = m_SecondCameraEntity.AddComponent<CameraComponent>();
-		cc.Primary = false;
-
 		
 		// Native Script Example
 		class CameraController : public ScriptableEntity
@@ -496,6 +485,13 @@ namespace spg {
 			m_SceneHierarchyPanel.SetContext(m_EditorScene);
 			m_ActiveScene = m_EditorScene;
 			m_EditorScenePath = path;
+		}
+
+		// temporary
+		auto view = m_EditorScene->GetAllEntitiesWith<CameraComponent>();
+		for (auto e : view) {
+			Entity entity = { e, m_EditorScene.get() };
+			entity.AddComponent<NativeScriptComponent>().Bind();
 		}
 	}
 

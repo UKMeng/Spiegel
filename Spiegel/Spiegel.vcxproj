@@ -66,6 +66,7 @@
     <ClInclude Include="src\Spiegel\Scene\SceneCamera.h" />
     <ClInclude Include="src\Spiegel\Scene\SceneSerializer.h" />
     <ClInclude Include="src\Spiegel\Scene\ScriptableEntity.h" />
+    <ClInclude Include="src\Spiegel\Scripting\ScriptEngine.h" />
     <ClInclude Include="src\Spiegel\Utils\PlatformUtils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +112,7 @@
     <ClCompile Include="src\Spiegel\Scene\Scene.cpp" />
     <ClCompile Include="src\Spiegel\Scene\SceneCamera.cpp" />
     <ClCompile Include="src\Spiegel\Scene\SceneSerializer.cpp" />
+    <ClCompile Include="src\Spiegel\Scripting\ScriptEngine.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

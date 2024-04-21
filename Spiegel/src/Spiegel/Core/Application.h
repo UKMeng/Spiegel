@@ -13,7 +13,7 @@
 #include "Spiegel/Renderer/VertexArray.h"
 
 namespace spg {
-	class SPG_API Application
+	class Application
 	{
 	public:
 		Application(const std::string& name = "Spiegel App");
@@ -27,14 +27,14 @@ namespace spg {
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
-		inline Window& GetWindow() { return *m_Window; }
-		inline static Application& Get() { return *s_Instance; }
-		inline ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
+		Window& GetWindow() { return *m_Window; }
+		static Application& Get() { return *s_Instance; }
+		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 	private:
-		std::unique_ptr<Window> m_Window;
+		Scope<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool m_Minimized = false;

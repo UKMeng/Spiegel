@@ -4,7 +4,7 @@
 #include "Spiegel/Events/ApplicationEvent.h"
 #include "Spiegel/Events/KeyEvent.h"
 #include "Spiegel/Events/MouseEvent.h"
-#include "Platform/OpenGL/OpenGLContext.h"
+#include "Spiegel/Platform/OpenGL/OpenGLContext.h"
 
 namespace spg {
 	static int s_GLFWWindowCount = 0;

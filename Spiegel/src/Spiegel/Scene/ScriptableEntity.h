@@ -3,7 +3,6 @@
 #include "Entity.h"
 
 namespace spg {
-
 	class ScriptableEntity
 	{
 	public:

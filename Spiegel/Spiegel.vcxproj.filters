@@ -183,6 +183,9 @@
     <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLMaterial.h">
       <Filter>Header File</Filter>
     </ClInclude>
+    <ClInclude Include="src\Spiegel\Scripting\ScriptEngine.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Spiegel\Core\Application.cpp">
@@ -300,6 +303,9 @@
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLMaterial.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spiegel\Scripting\ScriptEngine.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
   </ItemGroup>

@@ -192,7 +192,7 @@ namespace spg {
 
 		RenderScene2D();
 
-		Renderer::RenderScene(camera);
+		// Renderer::RenderScene(camera);
 
 		Renderer2D::EndScene();
 	}

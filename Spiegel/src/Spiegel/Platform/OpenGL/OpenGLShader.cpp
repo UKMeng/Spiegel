@@ -93,7 +93,7 @@ namespace spg {
 		
 		for (auto&& [type, src] : shaderSources) {
 			SPG_CORE_TRACE("Shader Type: {0}", type == GL_VERTEX_SHADER ? "Vertex" : "Fragment");
-			SPG_CORE_TRACE("Source: {0}", src);
+			// SPG_CORE_TRACE("Source: {0}", src);
 			GLuint shader = glCreateShader(type);
 
 			// Send the vertex shader source code to GL

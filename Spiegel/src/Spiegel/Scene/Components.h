@@ -4,6 +4,7 @@
 #include "Spiegel/Renderer/Texture.h"
 #include "Spiegel/Renderer/Font.h"
 #include "Spiegel/Core/UUID.h"
+#include "Spiegel/Scripting/ScriptEngine.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -104,19 +105,12 @@ namespace spg {
 		ScriptableEntity*(*InstantiateScript)();
 		void (*DestroyScript)(NativeScriptComponent*);
 
-		/*std::function<void(ScriptableEntity*)> OnCreateFunction;
-		std::function<void(ScriptableEntity*)> OnDestroyFunction;
-		std::function<void(ScriptableEntity*, Timestep)> OnUpdateFunction;*/
-
-		template<typename T>
+		//template<typename T>
 		void Bind()
 		{
-			InstantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+			// InstantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+			InstantiateScript = ScriptEngine::GetInstantiateScript("CreateCameraController");
 			DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
-			
-			/*OnCreateFunction = [](ScriptableEntity* instance) { ((T*)instance)->OnCreate(); };
-			OnDestroyFunction = [](ScriptableEntity* instance) { ((T*)instance)->OnDestroy(); };
-			OnUpdateFunction = [](ScriptableEntity* instance, Timestep ts) { ((T*)instance)->OnUpdate(ts); };*/
 		}
 	};
 

@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Spiegel", "Spiegel\Spiegel.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Spiegel_Editor", "Spiegel_Editor\Spiegel_Editor.vcxproj", "{55A4CB6B-7594-4B05-8D0D-0E7C3B61DAE8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleGame", "ExampleGame\ExampleGame.vcxproj", "{464EC49F-57D4-446A-A040-B8A2DCFB32D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,10 @@ Global
 		{55A4CB6B-7594-4B05-8D0D-0E7C3B61DAE8}.Debug|x64.Build.0 = Debug|x64
 		{55A4CB6B-7594-4B05-8D0D-0E7C3B61DAE8}.Release|x64.ActiveCfg = Release|x64
 		{55A4CB6B-7594-4B05-8D0D-0E7C3B61DAE8}.Release|x64.Build.0 = Release|x64
+		{464EC49F-57D4-446A-A040-B8A2DCFB32D3}.Debug|x64.ActiveCfg = Debug|x64
+		{464EC49F-57D4-446A-A040-B8A2DCFB32D3}.Debug|x64.Build.0 = Debug|x64
+		{464EC49F-57D4-446A-A040-B8A2DCFB32D3}.Release|x64.ActiveCfg = Release|x64
+		{464EC49F-57D4-446A-A040-B8A2DCFB32D3}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
