@@ -209,6 +209,7 @@ namespace spg {
 						nsc.Instance->OnCreate();
 					}
 
+					nsc.Instance->SetApplicationInstance(Application::GetApp());
 					nsc.Instance->OnUpdate(ts);
 				});
 		}

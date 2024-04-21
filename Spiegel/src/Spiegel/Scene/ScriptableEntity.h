@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Spiegel/Core/Application.h"
 #include "Entity.h"
 
 namespace spg {
@@ -19,6 +20,9 @@ namespace spg {
 		virtual void OnCreate() {}
 		virtual void OnDestroy() {}
 		virtual void OnUpdate(Timestep ts) {}
+		virtual void SetApplicationInstance(Application* instance) {
+			Application::SetApp(instance);
+		}
 	private:
 		Entity m_Entity;
 		friend class Scene;

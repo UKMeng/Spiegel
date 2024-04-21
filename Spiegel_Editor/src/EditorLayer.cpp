@@ -58,40 +58,6 @@ namespace spg {
 		NewScene();
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f); // 1.778f is the aspect ratio of 16:9
-
-#if 0
-		
-		// Native Script Example
-		class CameraController : public ScriptableEntity
-		{
-		public:
-			/*void OnCreate()
-			{
-				
-			}
-
-			void OnDestroy()
-			{
-			}*/
-
-			void OnUpdate(Timestep ts)
-			{
-				auto& translation = GetComponent<TransformComponent>().Translation;
-				float speed = 5.0f;
-
-				if (Input::IsKeyPressed(SPG_KEY_A))
-					translation.x -= speed * ts;
-				if (Input::IsKeyPressed(SPG_KEY_D))
-					translation.x += speed * ts;
-				if (Input::IsKeyPressed(SPG_KEY_W))
-					translation.y += speed * ts;
-				if (Input::IsKeyPressed(SPG_KEY_S))
-					translation.y -= speed * ts;
-			}
-		};
-
-		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-#endif
 	}
 
 	void EditorLayer::OnDetach()
@@ -417,26 +383,29 @@ namespace spg {
 			}
 
 			// Gizmos Type
-			case Key::Q:
-			{
-				m_GizmoType = -1;
-				break;
+			if (m_SceneState == SceneState::Edit) {
+				case Key::Q:
+				{
+					m_GizmoType = -1;
+					break;
+				}
+				case Key::W:
+				{
+					m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+					break;
+				}
+				case Key::E:
+				{
+					m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+					break;
+				}
+				case Key::R:
+				{
+					m_GizmoType = ImGuizmo::OPERATION::SCALE;
+					break;
+				}
 			}
-			case Key::W:
-			{
-				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
-				break;
-			}
-			case Key::E:
-			{
-				m_GizmoType = ImGuizmo::OPERATION::ROTATE;
-				break;
-			}
-			case Key::R:
-			{
-				m_GizmoType = ImGuizmo::OPERATION::SCALE;
-				break;
-			}
+			
 				
 
 			break;
@@ -524,6 +493,7 @@ namespace spg {
 	void EditorLayer::OnScenePlay()
 	{
 		m_SceneState = SceneState::Play;
+		m_GizmoType = -1; // turn off gizmo
 		m_ActiveScene = Scene::Copy(m_EditorScene);
 		m_ActiveScene->OnRuntimeStart();
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
@@ -549,7 +519,6 @@ namespace spg {
 
 	void EditorLayer::OnOverlayRender()
 	{
-		
 		
 		if (m_SceneState == SceneState::Play) {
 			Entity camera = m_ActiveScene->GetPrimaryCameraEntity();

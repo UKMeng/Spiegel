@@ -26,13 +26,13 @@ public:
 		auto& translation = GetComponent<spg::TransformComponent>().Translation;
 		float speed = 5.0f;
 
-		if (IsKeyDown('A'))
+		if (spg::Input::IsKeyPressed(spg::Key::A))
 			translation.x -= speed * ts;
-		if (IsKeyDown('D'))
+		if (spg::Input::IsKeyPressed(spg::Key::D))
 			translation.x += speed * ts;
-		if (IsKeyDown('W'))
+		if (spg::Input::IsKeyPressed(spg::Key::W))
 			translation.y += speed * ts;
-		if (IsKeyDown('S'))
+		if (spg::Input::IsKeyPressed(spg::Key::S))
 			translation.y -= speed * ts;
 	}
 };

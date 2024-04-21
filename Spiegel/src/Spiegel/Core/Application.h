@@ -30,6 +30,9 @@ namespace spg {
 		Window& GetWindow() { return *m_Window; }
 		static Application& Get() { return *s_Instance; }
 		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
+
+		static Application* GetApp() { return s_Instance; }
+		static void SetApp(Application* app) { s_Instance = app; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
