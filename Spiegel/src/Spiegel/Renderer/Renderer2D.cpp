@@ -141,8 +141,6 @@ namespace spg {
 
 	void Renderer2D::Init()
 	{
-		SPG_PROFILE_FUNCTION();
-	
 		// -------------Quad-----------------
 		s_Data.QuadVertexArray = VertexArray::Create();
 		s_Data.QuadVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
@@ -255,8 +253,6 @@ namespace spg {
 
 	void Renderer2D::Shutdown()
 	{
-		SPG_PROFILE_FUNCTION();
-
 		delete[] s_Data.QuadVertexBufferBase;
 		delete[] s_Data.CircleVertexBufferBase;
 		delete[] s_Data.LineVertexBufferBase;
@@ -265,8 +261,6 @@ namespace spg {
 
 	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		s_Data.CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
@@ -275,8 +269,6 @@ namespace spg {
 
 	void Renderer2D::BeginScene(const EditorCamera& camera)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjection();
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
@@ -286,7 +278,6 @@ namespace spg {
 
 	void Renderer2D::EndScene()
 	{
-		SPG_PROFILE_FUNCTION();
 		Flush();
 	}
 
@@ -369,8 +360,6 @@ namespace spg {
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
@@ -384,8 +373,6 @@ namespace spg {
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
@@ -399,8 +386,6 @@ namespace spg {
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<SubTexture2D>& subtexture, float tilingFactor, const glm::vec4& tintColor)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		constexpr size_t quadVertexCount = 4;
 		const glm::vec2* textureCoords = subtexture->GetTexCoords();
 		const Ref<Texture2D> texture = subtexture->GetTexture();
@@ -445,8 +430,6 @@ namespace spg {
 
 	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color, int entityID)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		constexpr size_t quadVertexCount = 4;
 		constexpr glm::vec2 textureCoords[] = { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} };
 
@@ -474,8 +457,6 @@ namespace spg {
 
 	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor, int entityID)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		constexpr size_t quadVertexCount = 4;
 		constexpr glm::vec2 textureCoords[] = { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} };
 
@@ -521,8 +502,6 @@ namespace spg {
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		constexpr size_t quadVertexCount = 4;
 		constexpr glm::vec2 textureCoords[] = { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} };
 
@@ -567,8 +546,6 @@ namespace spg {
 	 */
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		constexpr size_t quadVertexCount = 4;
 		constexpr glm::vec2 textureCoords[] = { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} };
 
@@ -617,8 +594,6 @@ namespace spg {
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<SubTexture2D>& subtexture, float tilingFactor, const glm::vec4& tintColor)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		constexpr size_t quadVertexCount = 4;
 		const glm::vec2* textureCoords = subtexture->GetTexCoords();
 		const Ref<Texture2D> texture = subtexture->GetTexture();
@@ -673,8 +648,6 @@ namespace spg {
 
 	void Renderer2D::DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness, int entityID)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		constexpr size_t circleVertexCount = 4;
 
 		// TODO: Optimize this, not just Circle Index Count
@@ -699,8 +672,6 @@ namespace spg {
 
 	void Renderer2D::DrawLine(const glm::vec3& startPoint, const glm::vec3& endPoint, const glm::vec4& color, int entityID)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		// TODO: Optimize this, not just Line Vertex Count
 		if (s_Data.LineVertexCount >= Renderer2DData::MaxVertices) {
 			NextBatch();
@@ -752,8 +723,6 @@ namespace spg {
 
 	void Renderer2D::DrawText(const glm::mat4& transform, TextComponent& tc, int entityID)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		constexpr size_t textVertexCount = 4;
 		constexpr glm::vec2 textureCoords[] = { {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, 0.0f} };
 
@@ -855,8 +824,6 @@ namespace spg {
 	// Temporary
 	void Renderer2D::DrawMaterial(const glm::mat4& transform, int entityID)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		constexpr size_t materialVertexCount = 4;
 
 		if (s_Data.MaterialIndexCount >= 100) {

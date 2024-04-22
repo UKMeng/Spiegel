@@ -10,8 +10,6 @@ namespace spg {
 
 	void OpenGLContext::Init()
 	{
-		SPG_PROFILE_FUNCTION();
-
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		SPG_CORE_ASSERT(status, "Failed to initialize GLAD");
@@ -25,8 +23,6 @@ namespace spg {
 
 	void OpenGLContext::SwapBuffers()
 	{
-		SPG_PROFILE_FUNCTION();
-
 		glfwSwapBuffers(m_WindowHandle); // 交换颜色缓冲（它是一个储存着GLFW窗口每一个像素颜色的大缓冲），它在这一迭代中被用来绘制，并且将会作为输出显示在屏幕上。
 	}
 }

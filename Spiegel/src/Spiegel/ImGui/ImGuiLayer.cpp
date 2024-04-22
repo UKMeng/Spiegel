@@ -21,9 +21,8 @@ namespace spg {
 	{
 	}
 
-	void ImGuiLayer::OnAttach() {
-		SPG_PROFILE_FUNCTION();
-
+	void ImGuiLayer::OnAttach()
+	{
 		// Setup ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -54,9 +53,8 @@ namespace spg {
 		ImGui_ImplOpenGL3_Init("#version 450");
 	}
 
-	void ImGuiLayer::OnDetach() {
-		SPG_PROFILE_FUNCTION();
-
+	void ImGuiLayer::OnDetach()
+	{
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
@@ -71,18 +69,16 @@ namespace spg {
 		}
 	}
 
-	void ImGuiLayer::Begin() {
-		SPG_PROFILE_FUNCTION();
-
+	void ImGuiLayer::Begin()
+	{
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
 	}
 
-	void ImGuiLayer::End() {
-		SPG_PROFILE_FUNCTION();
-
+	void ImGuiLayer::End()
+	{
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());

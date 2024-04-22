@@ -13,8 +13,6 @@ namespace spg {
 	
 	void OrthographicCameraController::OnUpdate(Timestep ts)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		if (Input::IsKeyPressed(Key::W)) {
 			m_CameraPosition.y += m_CameraTranslationSpeed * ts;
 		}
@@ -46,8 +44,6 @@ namespace spg {
 	
 	void OrthographicCameraController::OnEvent(Event& e) 
 	{
-		SPG_PROFILE_FUNCTION();
-
 		EventDispatcher dispather(e);
 		dispather.Dispatch<MouseScrolledEvent>(SPG_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
 		dispather.Dispatch<WindowResizeEvent>(SPG_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
@@ -55,24 +51,18 @@ namespace spg {
 
 	void OrthographicCameraController::OnResize(float width, float height)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		m_AspectRatio = width / height;
 		CalculateView();
 	}
 
 	void OrthographicCameraController::CalculateView()
 	{
-		SPG_PROFILE_FUNCTION();
-
 		m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
 		m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
 	}
 	
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		m_ZoomLevel -= e.GetOffsetY() * 0.25f;
 		m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
 		CalculateView();
@@ -81,10 +71,7 @@ namespace spg {
 	
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e) 
 	{
-		SPG_PROFILE_FUNCTION();
-
 		OnResize((float)e.GetWidth(), (float)e.GetHeight());
 		return false;
 	}
-\
 }

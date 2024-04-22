@@ -21,8 +21,6 @@ namespace spg {
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 		: m_Name(name)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
 		sources[GL_FRAGMENT_SHADER] = fragmentSrc;
@@ -31,15 +29,11 @@ namespace spg {
 
 	OpenGLShader::~OpenGLShader() 
 	{
-		SPG_PROFILE_FUNCTION();
-
 		glDeleteProgram(m_RendererID);
 	}
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in) {
@@ -58,8 +52,6 @@ namespace spg {
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		std::unordered_map<GLenum, std::string> shaderSources;
 
 		const char* typeToken = "#type";
@@ -83,8 +75,6 @@ namespace spg {
 
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		// Get a program object.
 		GLuint program = glCreateProgram();
 		SPG_CORE_ASSERT(shaderSources.size() <= 2, "We only support 2 shaders for now");
@@ -170,57 +160,40 @@ namespace spg {
 
 	void OpenGLShader::Bind() const
 	{
-		SPG_PROFILE_FUNCTION();
-
 		glUseProgram(m_RendererID);
 	}
 	void OpenGLShader::Unbind() const
 	{
-		SPG_PROFILE_FUNCTION();
-
 		glUseProgram(0);
 	}
 
 	void OpenGLShader::SetInt(const std::string& name, int value)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		UploadUniformInt(name, value);
 	}
 
 	void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32_t count)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		UploadUniformIntArray(name, values, count);
-	
 	}
 
 	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		UploadUniformMat4(name, value);
 	}
 
 	void OpenGLShader::SetFloat(const std::string& name, float value)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		UploadUniformFloat(name, value);
 	}
 
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		UploadUniformFloat3(name, value);
 	}
 
 	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		UploadUniformFloat4(name, value);
 	}
 

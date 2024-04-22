@@ -13,7 +13,7 @@ namespace spg {
 
 		static void CreateTextures(bool multisample, uint32_t* outID, size_t count)
 		{
-			glCreateTextures(TextureTarget(multisample), count, outID);
+			glCreateTextures(TextureTarget(multisample), (GLsizei)count, outID);
 		}
 
 		static void BindTexture(bool multisample, uint32_t id)
@@ -120,7 +120,7 @@ namespace spg {
 	OpenGLFramebuffer::~OpenGLFramebuffer()
 	{
 		glDeleteFramebuffers(1, &m_RendererID);
-		glDeleteTextures(m_ColorAttachments.size(), m_ColorAttachments.data());
+		glDeleteTextures((GLsizei)m_ColorAttachments.size(), m_ColorAttachments.data());
 		glDeleteTextures(1, &m_DepthAttachment);
 	}
 
@@ -128,7 +128,7 @@ namespace spg {
 	{
 		if (m_RendererID) {
 			glDeleteFramebuffers(1, &m_RendererID);
-			glDeleteTextures(m_ColorAttachments.size(), m_ColorAttachments.data());
+			glDeleteTextures((GLsizei)m_ColorAttachments.size(), m_ColorAttachments.data());
 			glDeleteTextures(1, &m_DepthAttachment);
 
 			m_ColorAttachments.clear();
@@ -176,7 +176,7 @@ namespace spg {
 		if (m_ColorAttachments.size() > 1) {
 			SPG_CORE_ASSERT(m_ColorAttachments.size() <= 4, "Framebuffer only supports 4 attachments!");
 			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
-			glDrawBuffers(m_ColorAttachments.size(), buffers);
+			glDrawBuffers((GLsizei)m_ColorAttachments.size(), buffers);
 		}
 		else if (m_ColorAttachments.empty()) {
 			glDrawBuffer(GL_NONE);

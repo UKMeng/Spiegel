@@ -27,8 +27,6 @@ namespace spg {
 
 	void EditorLayer::OnAttach()
 	{
-		SPG_PROFILE_FUNCTION();
-
 		ScriptEngine::Init();
 		Renderer::Init();
 
@@ -62,12 +60,11 @@ namespace spg {
 
 	void EditorLayer::OnDetach()
 	{
-		SPG_PROFILE_FUNCTION();
+
 	}
 
 	void EditorLayer::OnUpdate(Timestep ts)
 	{
-		SPG_PROFILE_FUNCTION();
 
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
@@ -133,8 +130,6 @@ namespace spg {
 
 	void EditorLayer::OnImGuiRender()
 	{
-		SPG_PROFILE_FUNCTION();
-
 		static bool dockspaceOpen = true;
 		static bool opt_fullscreen_persistant = true;
 		bool opt_fullscreen = opt_fullscreen_persistant;

@@ -59,16 +59,12 @@ namespace spg {
 
 	void Renderer::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		s_Data->CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
 		s_Data->CameraUniformBuffer->SetData(&s_Data->CameraBuffer, sizeof(RendererData::CameraData));
 	}
 
 	void Renderer::BeginScene(const EditorCamera& camera)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		s_Data->CameraBuffer.ViewProjection = camera.GetViewProjection();
 		s_Data->CameraUniformBuffer->SetData(&s_Data->CameraBuffer, sizeof(RendererData::CameraData));
 	}

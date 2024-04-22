@@ -22,32 +22,27 @@ namespace spg {
 		return 0;
 	}
 
-	OpenGLVertexArray::OpenGLVertexArray() {
-		SPG_PROFILE_FUNCTION();
-
+	OpenGLVertexArray::OpenGLVertexArray()
+	{
 		glCreateVertexArrays(1, &m_RendererID);
 	}
 
-	OpenGLVertexArray::~OpenGLVertexArray() {
-		SPG_PROFILE_FUNCTION();
-
+	OpenGLVertexArray::~OpenGLVertexArray()
+	{
 		glDeleteVertexArrays(1, &m_RendererID);
 	}
-	void OpenGLVertexArray::Bind() const {
-		SPG_PROFILE_FUNCTION();
-
+	void OpenGLVertexArray::Bind() const
+	{
 		glBindVertexArray(m_RendererID);
 	}
 
-	void OpenGLVertexArray::Unbind() const {
-		SPG_PROFILE_FUNCTION();
-
+	void OpenGLVertexArray::Unbind() const
+	{
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) {
-		SPG_PROFILE_FUNCTION();
-		
+	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
+	{
 		SPG_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
 		
 		glBindVertexArray(m_RendererID);
@@ -110,9 +105,8 @@ namespace spg {
 		m_VertexBuffers.push_back(vertexBuffer);
 	}
 
-	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) {
-		SPG_PROFILE_FUNCTION();
-		
+	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
+	{
 		glBindVertexArray(m_RendererID);
 		indexBuffer->Bind();
 

@@ -8,8 +8,6 @@ namespace spg {
 	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
 		: m_Width(width), m_Height(height)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		m_InternalFormat = GL_RGBA8;
 		m_DataFormat = GL_RGBA;
 
@@ -26,13 +24,10 @@ namespace spg {
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : m_Path(path) {
-		SPG_PROFILE_FUNCTION();
-
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(1);
 		stbi_uc* data = nullptr;
 		{
-			SPG_PROFILE_SCOPE(" stbi_load - OpenGLTexture2D::OpenGLTexture2D(const std::string&)");
 			data = stbi_load(m_Path.c_str(), &width, &height, &channels, 0);
 		}
 		SPG_CORE_ASSERT(data, "Failed to load image!");
@@ -78,8 +73,6 @@ namespace spg {
 
 	OpenGLTexture2D::OpenGLTexture2D(const FT_Face& face)
 	{
-		SPG_PROFILE_FUNCTION();
-
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 		m_Width = face->glyph->bitmap.width;
@@ -102,24 +95,21 @@ namespace spg {
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	}
 
-	OpenGLTexture2D::~OpenGLTexture2D() {
-		SPG_PROFILE_FUNCTION();
-
+	OpenGLTexture2D::~OpenGLTexture2D()
+	{
 		glDeleteTextures(1, &m_TextureID);
 	}
 
-	void OpenGLTexture2D::SetData(void* data, uint32_t size) {
-		SPG_PROFILE_FUNCTION();
-
+	void OpenGLTexture2D::SetData(void* data, uint32_t size)
+	{
 		uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3; // bytes per pixel
 		SPG_CORE_ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture!");
 
 		glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
 	}
 
-	void OpenGLTexture2D::Bind(uint32_t slot) const {
-		SPG_PROFILE_FUNCTION();
-
+	void OpenGLTexture2D::Bind(uint32_t slot) const
+	{
 		glBindTextureUnit(slot, m_TextureID);
 	}
 }
