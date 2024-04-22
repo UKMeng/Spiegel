@@ -289,12 +289,6 @@ namespace spg {
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
 			ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, m_ViewportBounds[1].x - m_ViewportBounds[0].x, m_ViewportBounds[1].y - m_ViewportBounds[0].y);
-
-			// Get Primary Camera Runtime
-			// auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
-			// const auto& camera = cameraEntity.GetComponent<CameraComponent>();
-			// const glm::mat4& cameraProjection = camera.Camera.GetProjection();
-			// glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
 			
 			// Editor Camera
 			const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
@@ -302,7 +296,7 @@ namespace spg {
 
 			// Entity Transform
 			auto& tc = selectedEntity.GetComponent<TransformComponent>();
-			glm::mat4 transform = tc.GetTransform(); // TODO: Change IT
+			glm::mat4 transform = tc.GetTransform();
 
 			// Snapping
 			bool snap = Input::IsKeyPressed(Key::LeftControl);
@@ -311,23 +305,45 @@ namespace spg {
 				snapValue = 45.0f; // Snap to 45 degrees for rotation
 			float snapValues[3] = { snapValue, snapValue, snapValue };
 
-			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
-								(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform),
-								nullptr, snap ? snapValues : nullptr);
-		
-			if (ImGuizmo::IsUsing()) {
-				
-				glm::vec3 translation, rotation, scale;
-				Math::DecomposeTransform(transform, translation, rotation, scale);
-				tc.Translation = translation;
-				
-				// to avoid gimbal lock
-				// but why?
-				glm::vec3 deltaRotation = glm::degrees(rotation) - tc.Rotation;
-				tc.Rotation += deltaRotation;
-				
-				tc.Scale = scale;
+			if (selectedEntity.HasParent()) {
+				glm::mat4 parentTransform = m_ActiveScene->GetTransformRelatedToParents(m_ActiveScene->GetEntityByUUID(selectedEntity.GetParent()));
+				glm::mat4 overallTransform = parentTransform * transform;
+				ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+					(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(overallTransform),
+					nullptr, snap ? snapValues : nullptr);
+
+				if (ImGuizmo::IsUsing()) {
+					glm::vec3 translation, rotation, scale;
+
+					glm::mat4 newLoaclTransform = glm::inverse(parentTransform) * overallTransform;
+
+					Math::DecomposeTransform(newLoaclTransform, translation, rotation, scale);
+					tc.Translation = translation;
+					glm::vec3 deltaRotation = glm::degrees(rotation) - tc.Rotation;
+					tc.Rotation += deltaRotation;
+
+					tc.Scale = scale;
+				}
 			}
+			else {
+				ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+					(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform),
+					nullptr, snap ? snapValues : nullptr);
+
+				if (ImGuizmo::IsUsing()) {
+					glm::vec3 translation, rotation, scale;
+					Math::DecomposeTransform(transform, translation, rotation, scale);
+					tc.Translation = translation;
+
+					// to avoid gimbal lock
+					// but why?
+					glm::vec3 deltaRotation = glm::degrees(rotation) - tc.Rotation;
+					tc.Rotation += deltaRotation;
+
+					tc.Scale = scale;
+				}
+			}
+
 		}
 		
 		ImGui::End();
