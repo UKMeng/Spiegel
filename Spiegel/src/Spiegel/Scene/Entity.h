@@ -55,6 +55,29 @@ namespace spg {
 		UUID GetUUID() { return GetComponent<IDComponent>().ID; }
 		const std::string& GetName() { return GetComponent<TagComponent>().Tag; }
 
+		// Relationship
+		void SetParent(UUID parent) { GetComponent<RelationshipComponent>().ParentHandle = parent; }
+		UUID GetParent() { return GetComponent<RelationshipComponent>().ParentHandle; }
+		std::vector<UUID>& GetChildren() { return GetComponent<RelationshipComponent>().Chrildren; }
+		bool HasParent() { return GetComponent<RelationshipComponent>().ParentHandle != 0; }
+		bool IsAncesterOf(Entity entity)
+		{
+			if (entity.HasParent())
+			{
+				if (entity.GetParent() == GetUUID())
+					return true;
+				else
+					return IsAncesterOf(m_Scene->GetEntityByUUID(entity.GetParent()));
+			}
+			return false;
+		}
+		bool IsDescendantOf(Entity entity)
+		{
+			return entity.IsAncesterOf(*this);
+		}
+
+
+
 		operator bool() const { return m_EntityHandle != entt::null; }
 		operator entt::entity() const { return m_EntityHandle; }
 		operator uint32_t() const { return (uint32_t)m_EntityHandle; }
@@ -64,7 +87,6 @@ namespace spg {
 
 	private:
 		entt::entity m_EntityHandle = entt::null;
-		// maybe weak_ptr?
 		Scene* m_Scene = nullptr;
 	};
 }

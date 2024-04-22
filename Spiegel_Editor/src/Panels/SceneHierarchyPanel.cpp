@@ -25,7 +25,7 @@ namespace spg {
 		m_Context->m_Registry.view<TagComponent>().each([&](auto entityID, auto& tc)
 			{
 				Entity entity = { entityID, m_Context.get() };
-				DrawEntityNode(entity);
+				if(!entity.HasParent()) DrawEntityNode(entity);
 			});
 
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) m_SelectionContext = {};
@@ -54,9 +54,10 @@ namespace spg {
 
 	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
 	{
-		auto& tag = entity.GetComponent<TagComponent>().Tag;
+		auto& tag = entity.GetName();
 
 		ImGuiTreeNodeFlags flags = ((m_SelectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+		
 		bool opened = ImGui::TreeNodeEx((void*)(uint32_t)entity, flags, tag.c_str());
 		if (ImGui::IsItemClicked())
 			m_SelectionContext = entity;
@@ -64,19 +65,56 @@ namespace spg {
 		bool entityDeleted = false;
 
 		if (ImGui::BeginPopupContextItem()) {
+			if (ImGui::MenuItem("Create New Child Entity")) {
+				Entity childEntity = m_Context->CreateEntity("Empty Child Entity");
+				childEntity.SetParent(entity.GetUUID());
+				entity.GetChildren().emplace_back(childEntity.GetUUID());
+			}
 			if (ImGui::MenuItem("Delete Entity")) {
 				entityDeleted = true;
 			}
 			ImGui::EndPopup();
 		}
 
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
+			UUID entityID = entity.GetUUID();
+			ImGui::Text(entity.GetName().c_str());
+			ImGui::SetDragDropPayload("SCENE_ENTITY", &entityID, sizeof(UUID));
+			ImGui::EndDragDropSource();
+		}
+
+		if (ImGui::BeginDragDropTarget()) {
+			const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SCENE_ENTITY");
+
+			if (payload) {
+				UUID uuid = *(UUID*)payload->Data;
+				Entity child = m_Context->GetEntityByUUID(uuid);
+
+				if (!entity.IsDescendantOf(child)) {
+					// Remove from previous parent
+					if (child.HasParent()) {
+						Entity previousParent = m_Context->GetEntityByUUID(child.GetParent());
+						if (previousParent) {
+							auto parentChildren = previousParent.GetChildren();
+							parentChildren.erase(std::remove(parentChildren.begin(), parentChildren.end(), uuid), parentChildren.end());
+						}
+					}
+					// Add to new parent
+					child.SetParent(entity.GetUUID());
+					entity.GetChildren().emplace_back(uuid);
+				}
+			}
+
+			ImGui::EndDragDropTarget();
+		}
+
+
 		if (opened) {
-			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
-			// TODO: Perf
-			bool opened = ImGui::TreeNodeEx((void*)(uint32_t)entity, flags, tag.c_str());
-			if (opened) {
-				DrawComponents(entity);
-				ImGui::TreePop();
+			for (auto child : entity.GetChildren()) {
+				Entity e = m_Context->GetEntityByUUID(child);
+				if (e) {
+					DrawEntityNode(e);
+				}
 			}
 			ImGui::TreePop();
 		}

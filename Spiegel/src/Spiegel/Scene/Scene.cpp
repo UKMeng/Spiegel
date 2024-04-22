@@ -1,7 +1,6 @@
 #include "spgpch.h"
 #include "Scene.h"
 #include "Entity.h"
-#include "Components.h"
 #include "ScriptableEntity.h"
 
 #include "Spiegel/Renderer/Renderer.h"
@@ -80,6 +79,7 @@ namespace spg {
 		}
 
 		CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
+		CopyComponent<RelationshipComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
 		CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
 		CopyComponent<SpriteRendererComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
 		CopyComponent<CircleRendererComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
@@ -102,6 +102,7 @@ namespace spg {
 		Entity entity = { m_Registry.create(), this };
 		entity.AddComponent<IDComponent>(uuid);
 		entity.AddComponent<TransformComponent>();
+		entity.AddComponent<RelationshipComponent>();
 		auto& tag = entity.AddComponent<TagComponent>();
 		tag.Tag = name.empty() ? "Entity" : name;
 
@@ -110,11 +111,17 @@ namespace spg {
 
 	void Scene::DestroyEntity(Entity entity)
 	{
+		if (entity.HasParent()) {
+			Entity parentEntity = GetEntityByUUID(entity.GetParent());
+			auto& children = parentEntity.GetChildren();
+			children.erase(std::remove(children.begin(), children.end(), entity.GetUUID()), children.end());
+		}
 		m_Registry.destroy(entity);
 	}
 
 	void Scene::DuplicateEntity(Entity entity)
 	{
+		// TODO: Parent Child Relationship Duplication
 		Entity newEntity = CreateEntity(entity.GetName() + " Duplicated");
 		CopyComponentIfExists<TransformComponent>(newEntity, entity);
 		CopyComponentIfExists<CameraComponent>(newEntity, entity);
@@ -125,6 +132,15 @@ namespace spg {
 		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
 		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
 		CopyComponentIfExists<TextComponent>(newEntity, entity);
+	}
+
+	Entity Scene::GetEntityByUUID(UUID uuid)
+	{
+		auto view = GetAllEntitiesWith<IDComponent>();
+		for (auto entity : view) {
+			if (view.get<IDComponent>(entity).ID == uuid)
+				return Entity{ entity, this };
+		}
 	}
 
 	void Scene::OnRuntimeStart()
@@ -188,6 +204,8 @@ namespace spg {
 
 	void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
 	{
+		// TODO: Should have One OnUpdate funciton
+
 		Renderer2D::BeginScene(camera);
 
 		RenderScene2D();
@@ -260,6 +278,16 @@ namespace spg {
 		}
 	}
 
+	glm::mat4 Scene::GetParentTransform(Entity entity) {
+		glm::mat4 parentTransform = glm::mat4(1.0f);
+		if (entity.HasParent()) {
+			Entity parentEntity = GetEntityByUUID(entity.GetParent());
+			auto parentTc = parentEntity.GetComponent<TransformComponent>();
+			parentTransform = parentTc.GetTransform();
+		}
+		return parentTransform;
+	}
+
 	void Scene::RenderScene2D()
 	{
 		//Ref<Material> material = Material::Create("Test", Renderer::GetShaderLibrary()->Get("ColoredQuad"));
@@ -269,7 +297,8 @@ namespace spg {
 		for (auto entity : group)
 		{
 			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-			Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+
+			Renderer2D::DrawSprite(GetParentTransform({entity, this}) * transform.GetTransform(), sprite, (int)entity);
 			//Renderer2D::DrawRect(transform.GetTransform(), { 1.0f, 0.0f, 0.0f, 1.0f }, (int)entity);
 			//Renderer2D::DrawMaterial(transform.GetTransform(), (int)entity);
 		}
@@ -279,13 +308,13 @@ namespace spg {
 		auto circleView = m_Registry.view<TransformComponent, CircleRendererComponent>();
 		for (auto entity : circleView) {
 			auto [transform, circle] = circleView.get<TransformComponent, CircleRendererComponent>(entity);
-			Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, (int)entity);
+			Renderer2D::DrawCircle(GetParentTransform({ entity, this }) * transform.GetTransform(), circle.Color, circle.Thickness, (int)entity);
 		}
 
 		auto textView = m_Registry.view<TransformComponent, TextComponent>();
 		for (auto entity : textView) {
 			auto [transform, text] = textView.get<TransformComponent, TextComponent>(entity);
-			Renderer2D::DrawText(transform.GetTransform(), text, (int)entity);
+			Renderer2D::DrawText(GetParentTransform({ entity, this }) * transform.GetTransform(), text, (int)entity);
 		}
 
 		// Renderer2D::DrawLine({ 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f });
@@ -349,6 +378,12 @@ namespace spg {
 
 	template<>
 	void Scene::OnComponentAdded<TagComponent>(Entity entity, TagComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<RelationshipComponent>(Entity entity, RelationshipComponent& component)
 	{
 
 	}

@@ -14,7 +14,7 @@ namespace spg {
 	{
         s_Data = new ScriptEngineData();
 
-        s_Data->hmod = LoadLibrary(L"C:/Develop/Cpp/Spiegel/bin/Debug-x64/ExampleGame/ExampleGame.dll");
+        s_Data->hmod = LoadLibrary(L"assets/scripts/ExampleGame.dll");
         if (s_Data->hmod == NULL)
         {
             DWORD dw = GetLastError();

@@ -166,6 +166,19 @@ namespace spg {
             out << YAML::EndMap; // TransformComponent
         }
 
+        if (entity.CheckComponent<RelationshipComponent>()) {
+			out << YAML::Key << "RelationshipComponent";
+			out << YAML::BeginMap; // RelationshipComponent
+			auto& rc = entity.GetComponent<RelationshipComponent>();
+			out << YAML::Key << "Parent" << YAML::Value << rc.ParentHandle;
+			out << YAML::Key << "Children" << YAML::Value << YAML::BeginSeq;
+            for (auto child : rc.Chrildren) {
+				out << child;
+			}
+			out << YAML::EndSeq;
+			out << YAML::EndMap; // RelationshipComponent
+		}
+
         if (entity.CheckComponent<CameraComponent>()) {
             out << YAML::Key << "CameraComponent";
             out << YAML::BeginMap; // CameraComponent
@@ -325,6 +338,16 @@ namespace spg {
 					tc.Rotation = transformComponent["Rotation"].as<glm::vec3>();
 					tc.Scale = transformComponent["Scale"].as<glm::vec3>();
 				}
+
+                auto relationshipComponent = entity["RelationshipComponent"];
+                if (relationshipComponent) {
+                    auto& rc = deserializedEntity.GetComponent<RelationshipComponent>();
+                    rc.ParentHandle = relationshipComponent["Parent"].as<uint64_t>();
+                    auto children = relationshipComponent["Children"];
+                    for (auto child : children) {
+						rc.Chrildren.push_back(child.as<uint64_t>());
+					}
+                }
 
                 auto cameraComponent = entity["CameraComponent"];
 				if (cameraComponent) {

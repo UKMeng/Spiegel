@@ -33,6 +33,17 @@ namespace spg {
 			: Tag(tag) {}
 	};
 
+	struct RelationshipComponent
+	{
+		UUID ParentHandle = 0;
+		std::vector<UUID> Chrildren;
+
+		RelationshipComponent() = default;
+		RelationshipComponent(const RelationshipComponent&) = default;
+		RelationshipComponent(UUID parentHandle)
+			: ParentHandle(parentHandle) {}
+	};
+
 	struct TransformComponent
 	{
 		glm::vec3 Translation = { 0.0f, 0.0f, 0.0f };

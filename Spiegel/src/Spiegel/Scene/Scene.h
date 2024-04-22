@@ -1,8 +1,10 @@
 #pragma once
 
+#include "Components.h"
 #include "Spiegel/Core/UUID.h"
 #include "Spiegel/Core/Timestep.h"
 #include "Spiegel/Renderer/EditorCamera.h"
+
 
 #include <entt/entt.hpp>
 
@@ -33,7 +35,11 @@ namespace spg {
 		void OnUpdateRuntime(Timestep ts);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
+		Entity GetEntityByUUID(UUID uuid);
+
 		Entity GetPrimaryCameraEntity();
+
+		glm::mat4 GetParentTransform(Entity entity);
 
 		template<typename... Components>
 		auto GetAllEntitiesWith()
