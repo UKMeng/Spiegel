@@ -39,7 +39,7 @@ namespace spg {
 
 		Entity GetPrimaryCameraEntity();
 
-		glm::mat4 GetParentTransform(Entity entity);
+		glm::mat4 GetTransformRelatedToParents(Entity entity);
 
 		template<typename... Components>
 		auto GetAllEntitiesWith()

@@ -7,6 +7,8 @@
 #include "Spiegel/Renderer/Renderer2D.h"
 #include "Spiegel/Renderer/Material.h"
 
+#include "Spiegel/Math/Math.h"
+
 #include <glm/glm.hpp>
 
 #include <box2d/b2_world.h>
@@ -149,13 +151,18 @@ namespace spg {
 		auto view = m_Registry.view<Rigidbody2DComponent>();
 		for (auto e : view) {
 			Entity entity = { e, this };
-			auto& transform = entity.GetComponent<TransformComponent>();
 			auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+
+			glm::mat4 transform = GetTransformRelatedToParents(entity);
+			glm::vec3 translation = glm::vec3(0.0f);
+			glm::vec3 rotation = glm::vec3(0.0f);
+			glm::vec3 scale = glm::vec3(1.0f);
+			Math::DecomposeTransform(transform, translation, rotation, scale);
 
 			b2BodyDef bodyDef;
 			bodyDef.type = GetB2BodyType(rb2d.Type);
-			bodyDef.position.Set(transform.Translation.x, transform.Translation.y);
-			bodyDef.angle = glm::radians(transform.Rotation.z);
+			bodyDef.position.Set(translation.x, translation.y);
+			bodyDef.angle = rotation.z;
 
 			b2Body* body = m_b2World->CreateBody(&bodyDef);
 			body->SetFixedRotation(rb2d.FixedRotation);
@@ -165,7 +172,7 @@ namespace spg {
 				auto& bc2d = entity.GetComponent<BoxCollider2DComponent>();
 
 				b2PolygonShape boxShape;
-				boxShape.SetAsBox(bc2d.Size.x * transform.Scale.x, bc2d.Size.y * transform.Scale.y, b2Vec2(bc2d.Offset.x, bc2d.Offset.y), 0.0f);
+				boxShape.SetAsBox(bc2d.Size.x * scale.x, bc2d.Size.y * scale.y, b2Vec2(bc2d.Offset.x, bc2d.Offset.y), 0.0f);
 			
 				b2FixtureDef fixtureDef;
 				fixtureDef.shape = &boxShape;
@@ -182,7 +189,7 @@ namespace spg {
 
 				b2CircleShape circleShape;
 				circleShape.m_p.Set(cc2d.Offset.x, cc2d.Offset.y);
-				circleShape.m_radius = cc2d.Radius * transform.Scale.x;
+				circleShape.m_radius = cc2d.Radius * scale.x;
 
 				b2FixtureDef fixtureDef;
 				fixtureDef.shape = &circleShape;
@@ -245,9 +252,19 @@ namespace spg {
 				auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
 				auto* body = static_cast<b2Body*>(rb2d.RuntimeBody);
 				const auto& position = body->GetPosition();
-				transform.Translation.x = position.x;
-				transform.Translation.y = position.y;
-				transform.Rotation.z = glm::degrees(body->GetAngle());
+
+				if (entity.HasParent()) {
+					glm::mat4 parentTransform = GetTransformRelatedToParents(GetEntityByUUID(entity.GetParent()));
+					glm::vec3 newPosition = glm::inverse(parentTransform) * glm::vec4(position.x, position.y, 0.0f, 1.0f);
+					transform.Translation.x = newPosition.x;
+					transform.Translation.y = newPosition.y;
+					transform.Rotation.z = glm::degrees(body->GetAngle() - Math::DecomposeTransformToGetRotation(parentTransform).z);
+				}
+				else {
+					transform.Translation.x = position.x;
+					transform.Translation.y = position.y;
+					transform.Rotation.z = glm::degrees(body->GetAngle());
+				}
 			}
 		}
 
@@ -262,7 +279,7 @@ namespace spg {
 
 				if (camera.Primary) {
 					mainCamera = &camera.Camera;
-					cameraTransform = transform.GetTransform();
+					cameraTransform = GetTransformRelatedToParents({ entity, this });
 					break;
 				}
 			}
@@ -278,14 +295,13 @@ namespace spg {
 		}
 	}
 
-	glm::mat4 Scene::GetParentTransform(Entity entity) {
+	glm::mat4 Scene::GetTransformRelatedToParents(Entity entity) {
 		glm::mat4 parentTransform = glm::mat4(1.0f);
 		if (entity.HasParent()) {
 			Entity parentEntity = GetEntityByUUID(entity.GetParent());
-			auto parentTc = parentEntity.GetComponent<TransformComponent>();
-			parentTransform = parentTc.GetTransform();
+			parentTransform = GetTransformRelatedToParents(parentEntity);
 		}
-		return parentTransform;
+		return parentTransform * entity.GetComponent<TransformComponent>().GetTransform();
 	}
 
 	void Scene::RenderScene2D()
@@ -298,7 +314,7 @@ namespace spg {
 		{
 			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-			Renderer2D::DrawSprite(GetParentTransform({entity, this}) * transform.GetTransform(), sprite, (int)entity);
+			Renderer2D::DrawSprite(GetTransformRelatedToParents({entity, this}), sprite, (int)entity);
 			//Renderer2D::DrawRect(transform.GetTransform(), { 1.0f, 0.0f, 0.0f, 1.0f }, (int)entity);
 			//Renderer2D::DrawMaterial(transform.GetTransform(), (int)entity);
 		}
@@ -308,13 +324,13 @@ namespace spg {
 		auto circleView = m_Registry.view<TransformComponent, CircleRendererComponent>();
 		for (auto entity : circleView) {
 			auto [transform, circle] = circleView.get<TransformComponent, CircleRendererComponent>(entity);
-			Renderer2D::DrawCircle(GetParentTransform({ entity, this }) * transform.GetTransform(), circle.Color, circle.Thickness, (int)entity);
+			Renderer2D::DrawCircle(GetTransformRelatedToParents({ entity, this }), circle.Color, circle.Thickness, (int)entity);
 		}
 
 		auto textView = m_Registry.view<TransformComponent, TextComponent>();
 		for (auto entity : textView) {
 			auto [transform, text] = textView.get<TransformComponent, TextComponent>(entity);
-			Renderer2D::DrawText(GetParentTransform({ entity, this }) * transform.GetTransform(), text, (int)entity);
+			Renderer2D::DrawText(GetTransformRelatedToParents({ entity, this }), text, (int)entity);
 		}
 
 		// Renderer2D::DrawLine({ 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f });

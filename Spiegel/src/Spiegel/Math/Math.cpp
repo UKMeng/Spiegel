@@ -79,4 +79,11 @@ namespace spg::Math {
 		return true;
 	}
 
+
+	glm::vec3 DecomposeTransformToGetRotation(const glm::mat4& transform)
+	{
+		glm::vec3 translation, rotation, scale;
+		DecomposeTransform(transform, translation, rotation, scale);
+		return rotation;
+	}
 }
