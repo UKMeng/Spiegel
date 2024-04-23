@@ -46,11 +46,30 @@ namespace spg {
 		s_Data->LightMaterial = Material::Create("Light", Renderer::GetShaderLibrary()->Get("Light"));
 
 		s_Data->CubeMaterial->SetFloat4("objectColor", glm::vec4(1.0f, 0.5f, 0.31f, 1.0f));
-		s_Data->CubeMaterial->SetFloat3("light.position", lightPos);
-		s_Data->CubeMaterial->SetFloat3("light.color", glm::vec3(1.0f, 1.0f, 1.0f));
-		s_Data->CubeMaterial->SetFloat3("light.ambient", glm::vec3(0.2f));
-		s_Data->CubeMaterial->SetFloat3("light.diffuse", glm::vec3(0.6f));
-		s_Data->CubeMaterial->SetFloat3("light.specular", glm::vec3(1.0f));
+		s_Data->CubeMaterial->SetFloat3("pointLight.position", lightPos);
+		s_Data->CubeMaterial->SetFloat3("pointLight.color", glm::vec3(1.0f, 1.0f, 1.0f));
+		s_Data->CubeMaterial->SetFloat3("pointLight.ambient", glm::vec3(0.2f));
+		s_Data->CubeMaterial->SetFloat3("pointLight.diffuse", glm::vec3(0.8f));
+		s_Data->CubeMaterial->SetFloat3("pointLight.specular", glm::vec3(1.0f));
+		s_Data->CubeMaterial->SetFloat("pointLight.constant", 1.0f);
+		s_Data->CubeMaterial->SetFloat("pointLight.linear", 0.09f);
+		s_Data->CubeMaterial->SetFloat("pointLight.quadratic", 0.032f);
+
+		s_Data->CubeMaterial->SetFloat3("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+		s_Data->CubeMaterial->SetFloat3("dirLight.color", glm::vec3(1.0f, 1.0f, 1.0f));
+		s_Data->CubeMaterial->SetFloat3("dirLight.ambient", glm::vec3(0.2f));
+		s_Data->CubeMaterial->SetFloat3("dirLight.diffuse", glm::vec3(0.8f));
+		s_Data->CubeMaterial->SetFloat3("dirLight.specular", glm::vec3(1.0f));
+
+		s_Data->CubeMaterial->SetFloat3("spotLight.color", glm::vec3(1.0f, 1.0f, 1.0f));
+		s_Data->CubeMaterial->SetFloat3("spotLight.ambient", glm::vec3(0.5f));
+		s_Data->CubeMaterial->SetFloat3("spotLight.diffuse", glm::vec3(10.0f));
+		s_Data->CubeMaterial->SetFloat3("spotLight.specular", glm::vec3(15.0f));
+		s_Data->CubeMaterial->SetFloat("spotLight.constant", 1.0f);
+		s_Data->CubeMaterial->SetFloat("spotLight.linear", 0.09f);
+		s_Data->CubeMaterial->SetFloat("spotLight.quadratic", 0.032f);
+
+
 		s_Data->CubeMaterial->SetFloat3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
 		s_Data->CubeMaterial->SetFloat3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
 		s_Data->CubeMaterial->SetFloat3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
@@ -93,6 +112,11 @@ namespace spg {
 
 	void Renderer::BeginScene(const EditorCamera& camera)
 	{
+		s_Data->CubeMaterial->SetFloat3("spotLight.position", camera.GetPosition());
+		s_Data->CubeMaterial->SetFloat3("spotLight.direction", camera.GetForwardDirection());
+		s_Data->CubeMaterial->SetFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+		s_Data->CubeMaterial->SetFloat("spotLight.outerCutOff", glm::cos(glm::radians(17.5f)));
+
 		s_Data->CameraBuffer.ViewProjection = camera.GetViewProjection();
 		s_Data->CameraBuffer.ViewPosition = camera.GetPosition();
 		s_Data->CameraUniformBuffer->SetData(&s_Data->CameraBuffer, sizeof(RendererData::CameraData));
