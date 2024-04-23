@@ -286,7 +286,9 @@ namespace spg {
 		{
 			vertices[i].Position = transform * glm::vec4(verticesPosition[i], 1.0);
 			vertices[i].TexCoord = textureCoords[i];
-			vertices[i].Normal = normals[i];
+			// use Normal Matrix to transform normals
+			// Reference: http://www.lighthouse3d.com/tutorials/glsl-12-tutorial/the-normal-matrix/
+			vertices[i].Normal = glm::mat3(glm::transpose(glm::inverse(transform))) * normals[i];
 		}
 		vbo->SetData(vertices, sizeof(Vertex) * vertexCount);
 		delete[] vertices;
