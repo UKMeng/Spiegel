@@ -82,5 +82,9 @@ namespace spg {
 		// Settings
 		bool m_ShowPhysicsColliders = false;
 		bool m_WireframeMode = false;
+		bool m_VSync = true;
+
+		// Info
+		float m_FrameTime = 0.0f;
 	};
 }

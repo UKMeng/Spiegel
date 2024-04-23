@@ -56,6 +56,9 @@ namespace spg {
 		NewScene();
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f); // 1.778f is the aspect ratio of 16:9
+
+		// Setting Init
+		m_VSync = Application::Get().GetWindow().IsVSync();
 	}
 
 	void EditorLayer::OnDetach()
@@ -65,7 +68,7 @@ namespace spg {
 
 	void EditorLayer::OnUpdate(Timestep ts)
 	{
-
+		m_FrameTime = ts;
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
 		// Resize
@@ -204,6 +207,9 @@ namespace spg {
 		}
 		ImGui::Text("Hovered Entity: %s", name.c_str());
 
+		// Render Info
+		ImGui::Text("Frame Rate: %.1f", 1.0f / m_FrameTime);
+
 		// Renderer2D Stats
 		auto stats = Renderer2D::GetStats();
 		ImGui::Text("Renderer2D Stats:");
@@ -220,6 +226,9 @@ namespace spg {
 		ImGui::Checkbox("Show Physics Colliders", &m_ShowPhysicsColliders);
 		if (ImGui::Checkbox("Wireframe Mode", &m_WireframeMode)) {
 			RenderCommand::SetWireframeMode(m_WireframeMode);
+		};
+		if (ImGui::Checkbox("VSync", &m_VSync)) {
+			Application::Get().GetWindow().SetVSync(m_VSync);
 		};
 		ImGui::End();
 		// Setting Panel End
