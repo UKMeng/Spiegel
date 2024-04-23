@@ -3,6 +3,7 @@
 #include "RenderCommand.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Material.h"
 #include "Camera.h"
 #include "EditorCamera.h"
 
@@ -28,5 +29,8 @@ namespace spg {
 		static void RenderScene(const EditorCamera& camera);
 
 		static void EndScene();
+
+		// Draw
+		static void DrawCube(const glm::mat4& transform, Ref<Material> material, int entityID = -1);
 	};
 }

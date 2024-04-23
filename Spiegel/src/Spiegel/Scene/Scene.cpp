@@ -213,13 +213,15 @@ namespace spg {
 	{
 		// TODO: Should have One OnUpdate funciton
 
+		Renderer::BeginScene(camera);
+		Renderer::RenderScene(camera);
+		Renderer::EndScene();
+
 		Renderer2D::BeginScene(camera);
-
 		RenderScene2D();
-
-		// Renderer::RenderScene(camera);
-
 		Renderer2D::EndScene();
+
+		
 	}
 
 	void Scene::OnUpdateRuntime(Timestep ts)
