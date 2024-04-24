@@ -174,4 +174,55 @@ namespace spg {
 		CircleCollider2DComponent() = default;
 		CircleCollider2DComponent(const CircleCollider2DComponent&) = default;
 	};
+
+	struct LightComponent
+	{
+		enum class LightType
+		{
+			Directional = 0,
+			Point = 1,
+			Spot = 2
+		};
+
+		struct DirectionalLight
+		{
+			glm::vec3 direction = { -0.2f, -1.0f, -0.3f };
+			float ambient = 0.05f;
+			float diffuse = 0.8f;
+			float specular = 1.0f;
+		};
+
+		struct PointLight
+		{
+			float ambient = 0.05f;
+			float diffuse = 0.8f;
+			float specular = 1.0f;
+			float constant = 1.0f;
+			float linear = 0.09f;
+			float quadratic = 0.032f;
+		};
+
+		struct SpotLight
+		{
+			// direction is bind to entity
+			float cutOff = 12.5f;
+			float outerCutOff = 15.0f;
+			float ambient = 0.05f;
+			float diffuse = 0.8f;
+			float specular = 1.0f;
+			float constant = 1.0f;
+			float linear = 0.09f;
+			float quadratic = 0.032f;
+		};
+
+
+		LightType Type = LightType::Directional;
+		glm::vec4 Color = { 1.0f, 1.0f, 1.0f, 1.0f };
+		DirectionalLight Dir;
+		PointLight Point;
+		SpotLight Spot;
+
+		LightComponent() = default;
+		LightComponent(const LightComponent&) = default;
+	};
 }

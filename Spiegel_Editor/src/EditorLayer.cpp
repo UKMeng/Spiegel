@@ -28,7 +28,6 @@ namespace spg {
 	void EditorLayer::OnAttach()
 	{
 		ScriptEngine::Init();
-		Renderer::Init();
 
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard.png");
 		m_SpriteSheet = Texture2D::Create("assets/game/textures/RPGpack_sheet_2X.png");

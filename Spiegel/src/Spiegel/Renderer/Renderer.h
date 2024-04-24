@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "EditorCamera.h"
 
+
 namespace spg {
 	class Renderer {
 		// store the static state of the renderer API
@@ -26,11 +27,9 @@ namespace spg {
 
 		static void BeginScene(const EditorCamera& camera);
 
-		static void RenderScene(const EditorCamera& camera);
-
 		static void EndScene();
 
 		// Draw
-		static void DrawCube(const glm::mat4& transform, Ref<Material> material, int entityID = -1);
+		static void DrawCube(const glm::mat4& transform, Ref<Material> material, int entityID = -1);	
 	};
 }

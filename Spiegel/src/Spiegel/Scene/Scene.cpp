@@ -34,6 +34,27 @@ namespace spg {
 
 	Scene::Scene()
 	{
+		m_CubeMaterial = Material::Create("Test", Renderer::GetShaderLibrary()->Get("Test"));
+		m_LightMaterial = Material::Create("Light", Renderer::GetShaderLibrary()->Get("Light"));
+		m_CubeMaterial->SetFloat4("objectColor", glm::vec4(1.0f, 0.5f, 0.31f, 1.0f));
+		m_CubeMaterial->SetInt("dirLightCount", 0);
+		m_CubeMaterial->SetInt("pointLightCount", 0);
+
+		m_CubeMaterial->SetFloat3("spotLight.color", glm::vec3(1.0f, 1.0f, 1.0f));
+		m_CubeMaterial->SetFloat3("spotLight.ambient", glm::vec3(0.2f));
+		m_CubeMaterial->SetFloat3("spotLight.diffuse", glm::vec3(12.0f));
+		m_CubeMaterial->SetFloat3("spotLight.specular", glm::vec3(15.0f));
+		m_CubeMaterial->SetFloat("spotLight.constant", 1.0f);
+		m_CubeMaterial->SetFloat("spotLight.linear", 0.09f);
+		m_CubeMaterial->SetFloat("spotLight.quadratic", 0.032f);
+		m_CubeMaterial->SetFloat3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+		m_CubeMaterial->SetFloat3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+		m_CubeMaterial->SetFloat3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+		m_CubeMaterial->SetFloat("material.shininess", 128.0f);
+		Ref<Texture2D> texture3 = Texture2D::Create("assets/textures/container.png");
+		Ref<Texture2D> texture4 = Texture2D::Create("assets/textures/container_specular.png");
+		m_CubeMaterial->SetTexture2D(18, texture3);
+		m_CubeMaterial->SetTexture2D(19, texture4);
 	}
 
 	Scene::~Scene()
@@ -90,6 +111,11 @@ namespace spg {
 		CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
 		CopyComponent<CircleCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
 		CopyComponent<TextComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
+		CopyComponent<LightComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
+
+		// Tempoary
+		newScene->m_CubeMaterial = other->m_CubeMaterial;
+		newScene->m_LightMaterial = other->m_LightMaterial;
 
 		return newScene;
 	}
@@ -134,6 +160,7 @@ namespace spg {
 		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
 		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
 		CopyComponentIfExists<TextComponent>(newEntity, entity);
+		CopyComponentIfExists<LightComponent>(newEntity, entity);
 	}
 
 	Entity Scene::GetEntityByUUID(UUID uuid)
@@ -214,7 +241,7 @@ namespace spg {
 		// TODO: Should have One OnUpdate funciton
 
 		Renderer::BeginScene(camera);
-		Renderer::RenderScene(camera);
+		RenderScene();
 		Renderer::EndScene();
 
 		Renderer2D::BeginScene(camera);
@@ -304,6 +331,76 @@ namespace spg {
 			parentTransform = GetTransformRelatedToParents(parentEntity);
 		}
 		return parentTransform * entity.GetComponent<TransformComponent>().GetTransform();
+	}
+
+	void Scene::RenderScene() {
+
+		// Light
+		// TODO: Defered Shading
+		{
+			int dirLightCount = 0;
+			int pointLightCount = 0;
+			
+			auto view = m_Registry.view<TransformComponent, LightComponent>();
+			for (auto entity : view) {
+				auto [transform, light] = view.get<TransformComponent, LightComponent>(entity);
+				if (light.Type == LightComponent::LightType::Directional) {
+					dirLightCount++;
+					
+					m_CubeMaterial->SetFloat3("dirLight.direction", light.Dir.direction);
+					m_CubeMaterial->SetFloat3("dirLight.color", light.Color);
+					m_CubeMaterial->SetFloat3("dirLight.ambient", glm::vec3(light.Dir.ambient));
+					m_CubeMaterial->SetFloat3("dirLight.diffuse", glm::vec3(light.Dir.diffuse));
+					m_CubeMaterial->SetFloat3("dirLight.specular", glm::vec3(light.Dir.specular));
+				}
+				else if (light.Type == LightComponent::LightType::Point) {
+					std::string pointIndex = "pointLights[" + std::to_string(pointLightCount) + "]";
+					m_CubeMaterial->SetFloat3(pointIndex+ ".position", transform.Translation);
+					m_CubeMaterial->SetFloat3(pointIndex + ".color", glm::vec3(1.0f, 1.0f, 1.0f));
+					m_CubeMaterial->SetFloat3(pointIndex + ".ambient", glm::vec3(0.2f));
+					m_CubeMaterial->SetFloat3(pointIndex + ".diffuse", glm::vec3(4.8f));
+					m_CubeMaterial->SetFloat3(pointIndex + ".specular", glm::vec3(6.0f));
+					m_CubeMaterial->SetFloat(pointIndex + ".constant", 1.0f);
+					m_CubeMaterial->SetFloat(pointIndex + ".linear", 0.09f);
+					m_CubeMaterial->SetFloat(pointIndex + ".quadratic", 0.032f);
+					pointLightCount++;
+					
+					glm::mat4 lightTransform = glm::mat4(1.0f);
+					lightTransform = glm::translate(glm::mat4(1.0f), transform.Translation) * glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
+					Renderer::DrawCube(lightTransform, m_LightMaterial, (int)entity);
+				}
+				/*else if (light.Type == LightComponent::Type::Spot) {
+					m_CubeMaterial->SetFloat3("spotLight.position", transform.Translation);
+					m_CubeMaterial->SetFloat3("spotLight.direction", transform.GetTransform()[2]);
+				}*/
+			}
+			m_CubeMaterial->SetInt("dirLightCount", dirLightCount);
+			m_CubeMaterial->SetInt("pointLightCount", pointLightCount);
+		}
+		
+
+		// Draw 10 Cubes
+		glm::vec3 cubePositions[] = {
+		  glm::vec3(0.0f,  0.0f,  0.0f),
+		  glm::vec3(2.0f,  5.0f, -15.0f),
+		  glm::vec3(-1.5f, -2.2f, -2.5f),
+		  glm::vec3(-3.8f, -2.0f, -12.3f),
+		  glm::vec3(2.4f, -0.4f, -3.5f),
+		  glm::vec3(-1.7f,  3.0f, -7.5f),
+		  glm::vec3(1.3f, -2.0f, -2.5f),
+		  glm::vec3(1.5f,  2.0f, -2.5f),
+		  glm::vec3(1.5f,  0.2f, -1.5f),
+		  glm::vec3(-1.3f,  1.0f, -1.5f)
+		};
+
+		for (int i = 0; i < 10; i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			Renderer::DrawCube(model, m_CubeMaterial);
+		}
 	}
 
 	void Scene::RenderScene2D()
@@ -444,6 +541,12 @@ namespace spg {
 
 	template<>
 	void Scene::OnComponentAdded<TextComponent>(Entity entity, TextComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<LightComponent>(Entity entity, LightComponent& component)
 	{
 
 	}

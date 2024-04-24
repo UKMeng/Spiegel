@@ -1,8 +1,7 @@
 #include "spgpch.h"
 #include "Renderer.h"
-
-#include "Renderer2D.h"
 #include "UniformBuffer.h"
+#include "Renderer2D.h"
 
 #include "Spiegel/Platform/OpenGL/OpenGLShader.h"
 
@@ -15,7 +14,6 @@
 namespace spg {
 	struct RendererData
 	{
-		Ref<ShaderLibrary> m_ShaderLibrary;
 		struct CameraData
 		{
 			glm::mat4 ViewProjection;
@@ -23,62 +21,22 @@ namespace spg {
 		};
 		CameraData CameraBuffer;
 		Ref<UniformBuffer> CameraUniformBuffer;
-
-		// Temporary
-		Ref<Material> CubeMaterial;
-		Ref<Material> LightMaterial;
+		Ref<ShaderLibrary> m_ShaderLibrary;
 	};
-	static RendererData* s_Data = nullptr;
 
+	static RendererData* s_Data;
 	void Renderer::Init() {
 		RenderCommand::Init();
 		Renderer2D::Init();
 		s_Data = new RendererData;
+
 		s_Data->m_ShaderLibrary = CreateRef<ShaderLibrary>();
 		s_Data->m_ShaderLibrary->Load("ColoredQuad", "assets/shaders/ColoredQuad.glsl");
 		s_Data->m_ShaderLibrary->Load("Test", "assets/shaders/Test.glsl");
 		s_Data->m_ShaderLibrary->Load("Light", "assets/shaders/Light.glsl");
-
+		
 		// temporary
 		glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-
-		s_Data->CubeMaterial = Material::Create("Test", Renderer::GetShaderLibrary()->Get("Test"));
-		s_Data->LightMaterial = Material::Create("Light", Renderer::GetShaderLibrary()->Get("Light"));
-
-		s_Data->CubeMaterial->SetFloat4("objectColor", glm::vec4(1.0f, 0.5f, 0.31f, 1.0f));
-		s_Data->CubeMaterial->SetFloat3("pointLight.position", lightPos);
-		s_Data->CubeMaterial->SetFloat3("pointLight.color", glm::vec3(1.0f, 1.0f, 1.0f));
-		s_Data->CubeMaterial->SetFloat3("pointLight.ambient", glm::vec3(0.2f));
-		s_Data->CubeMaterial->SetFloat3("pointLight.diffuse", glm::vec3(0.8f));
-		s_Data->CubeMaterial->SetFloat3("pointLight.specular", glm::vec3(1.0f));
-		s_Data->CubeMaterial->SetFloat("pointLight.constant", 1.0f);
-		s_Data->CubeMaterial->SetFloat("pointLight.linear", 0.09f);
-		s_Data->CubeMaterial->SetFloat("pointLight.quadratic", 0.032f);
-
-		s_Data->CubeMaterial->SetFloat3("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
-		s_Data->CubeMaterial->SetFloat3("dirLight.color", glm::vec3(1.0f, 1.0f, 1.0f));
-		s_Data->CubeMaterial->SetFloat3("dirLight.ambient", glm::vec3(0.2f));
-		s_Data->CubeMaterial->SetFloat3("dirLight.diffuse", glm::vec3(0.8f));
-		s_Data->CubeMaterial->SetFloat3("dirLight.specular", glm::vec3(1.0f));
-
-		s_Data->CubeMaterial->SetFloat3("spotLight.color", glm::vec3(1.0f, 1.0f, 1.0f));
-		s_Data->CubeMaterial->SetFloat3("spotLight.ambient", glm::vec3(0.5f));
-		s_Data->CubeMaterial->SetFloat3("spotLight.diffuse", glm::vec3(10.0f));
-		s_Data->CubeMaterial->SetFloat3("spotLight.specular", glm::vec3(15.0f));
-		s_Data->CubeMaterial->SetFloat("spotLight.constant", 1.0f);
-		s_Data->CubeMaterial->SetFloat("spotLight.linear", 0.09f);
-		s_Data->CubeMaterial->SetFloat("spotLight.quadratic", 0.032f);
-
-
-		s_Data->CubeMaterial->SetFloat3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
-		s_Data->CubeMaterial->SetFloat3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
-		s_Data->CubeMaterial->SetFloat3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
-		s_Data->CubeMaterial->SetFloat("material.shininess", 128.0f);
-		Ref<Texture2D> texture3 = Texture2D::Create("assets/textures/container.png");
-		Ref<Texture2D> texture4 = Texture2D::Create("assets/textures/container_specular.png");
-		s_Data->CubeMaterial->SetTexture2D(18, texture3);
-		s_Data->CubeMaterial->SetTexture2D(19, texture4);
-
 		s_Data->CameraUniformBuffer = UniformBuffer::Create(sizeof(RendererData::CameraData), 0);
 	}
 
@@ -89,6 +47,7 @@ namespace spg {
 	void Renderer::Shutdown() {
 		Renderer2D::Shutdown();
 		delete s_Data;
+		s_Data = nullptr;
 	}
 
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform) {
@@ -112,62 +71,27 @@ namespace spg {
 
 	void Renderer::BeginScene(const EditorCamera& camera)
 	{
-		s_Data->CubeMaterial->SetFloat3("spotLight.position", camera.GetPosition());
-		s_Data->CubeMaterial->SetFloat3("spotLight.direction", camera.GetForwardDirection());
-		s_Data->CubeMaterial->SetFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
-		s_Data->CubeMaterial->SetFloat("spotLight.outerCutOff", glm::cos(glm::radians(17.5f)));
+		glDisable(GL_BLEND);
+		// Spot Light Code
+		//s_Data->CubeMaterial->SetFloat3("spotLight.position", camera.GetPosition());
+		//s_Data->CubeMaterial->SetFloat3("spotLight.direction", camera.GetForwardDirection());
+		//s_Data->CubeMaterial->SetFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+		//s_Data->CubeMaterial->SetFloat("spotLight.outerCutOff", glm::cos(glm::radians(17.5f)));
 
 		s_Data->CameraBuffer.ViewProjection = camera.GetViewProjection();
 		s_Data->CameraBuffer.ViewPosition = camera.GetPosition();
 		s_Data->CameraUniformBuffer->SetData(&s_Data->CameraBuffer, sizeof(RendererData::CameraData));
 	}
 	
-	void Renderer::RenderScene(const EditorCamera& camera)
-	{
-		glDisable(GL_BLEND);
-
-		// Draw 10 Cubes
-		glm::vec3 cubePositions[] = {
-		  glm::vec3(0.0f,  0.0f,  0.0f),
-		  glm::vec3(2.0f,  5.0f, -15.0f),
-		  glm::vec3(-1.5f, -2.2f, -2.5f),
-		  glm::vec3(-3.8f, -2.0f, -12.3f),
-		  glm::vec3(2.4f, -0.4f, -3.5f),
-		  glm::vec3(-1.7f,  3.0f, -7.5f),
-		  glm::vec3(1.3f, -2.0f, -2.5f),
-		  glm::vec3(1.5f,  2.0f, -2.5f),
-		  glm::vec3(1.5f,  0.2f, -1.5f),
-		  glm::vec3(-1.3f,  1.0f, -1.5f)
-		};
-
-		for (int i = 0; i < 10; i++)
-		{
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, cubePositions[i]);
-			float angle = 20.0f * i;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			DrawCube(model, s_Data->CubeMaterial);
-		}
-
-
-		// DrawCube(glm::mat4(1.0f), s_Data->CubeMaterial);
-
-		glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-		glm::mat4 lightTransform = glm::mat4(1.0f);
-		lightTransform = glm::translate(glm::mat4(1.0f), lightPos) * glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
-		DrawCube(lightTransform, s_Data->LightMaterial);
-
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	}
-
 	void Renderer::DrawCube(const glm::mat4& transform, Ref<Material> material, int entityID)
 	{
+		
 		struct Vertex
 		{
 			glm::vec4 Position;
 			glm::vec2 TexCoord;
 			glm::vec3 Normal;
+			int EntityID;
 		};
 
 		constexpr int vertexCount = 36;
@@ -294,7 +218,8 @@ namespace spg {
 		vbo->SetLayout({
 			{ ShaderDataType::Float4, "a_Position" },
 			{ ShaderDataType::Float2, "a_TexCoord" },
-			{ ShaderDataType::Float3, "a_Normal" }
+			{ ShaderDataType::Float3, "a_Normal" },
+			{ ShaderDataType::Int, "a_EntityID"},
 		});
 		vao->AddVertexBuffer(vbo);
 		
@@ -313,6 +238,7 @@ namespace spg {
 			// use Normal Matrix to transform normals
 			// Reference: http://www.lighthouse3d.com/tutorials/glsl-12-tutorial/the-normal-matrix/
 			vertices[i].Normal = glm::mat3(glm::transpose(glm::inverse(transform))) * normals[i];
+			vertices[i].EntityID = entityID;
 		}
 		vbo->SetData(vertices, sizeof(Vertex) * vertexCount);
 		delete[] vertices;
@@ -325,6 +251,8 @@ namespace spg {
 
 	void Renderer::EndScene()
 	{
-		
+		// temporary
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 }

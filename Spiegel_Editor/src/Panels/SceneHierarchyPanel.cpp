@@ -290,6 +290,13 @@ namespace spg {
 					ImGui::CloseCurrentPopup();
 				}
 			}
+
+			if (!m_SelectionContext.CheckComponent<LightComponent>()) {
+				if (ImGui::MenuItem("Light")) {
+					m_SelectionContext.AddComponent<LightComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
 			
 			ImGui::EndPopup();
 		}
@@ -447,5 +454,48 @@ namespace spg {
 					ImGui::EndDragDropTarget();
 				}
 			});
+
+		DrawComponent<LightComponent>("Light", entity, [](auto& component) {
+				ImGui::ColorEdit3("Color", glm::value_ptr(component.Color));
+				const char* lightTypeStrings[] = { "Directional Light", "Point Light", "Spot Light" };
+				const char* currentLightTypeString = lightTypeStrings[(int)component.Type];
+
+				if (ImGui::BeginCombo("Light Type", currentLightTypeString)) {
+					for (int i = 0; i < 3; i++) {
+						bool isSelected = currentLightTypeString == lightTypeStrings[i];
+						if (ImGui::Selectable(lightTypeStrings[i], isSelected)) {
+							currentLightTypeString = lightTypeStrings[i];
+							component.Type = (LightComponent::LightType)i;
+						}
+
+						if (isSelected) ImGui::SetItemDefaultFocus();
+					}
+					ImGui::EndCombo();
+				}
+				if (component.Type == LightComponent::LightType::Directional) {
+					DrawVec3Control("Direction", component.Dir.direction);
+					ImGui::DragFloat("Ambient", &component.Dir.ambient, 0.01f);
+					ImGui::DragFloat("Diffuse", &component.Dir.diffuse, 0.1f);
+					ImGui::DragFloat("Specular", &component.Dir.specular, 0.1f);
+				}
+				if (component.Type == LightComponent::LightType::Point) {
+					ImGui::DragFloat("Ambient", &component.Point.ambient, 0.01f);
+					ImGui::DragFloat("Diffuse", &component.Point.diffuse, 0.1f);
+					ImGui::DragFloat("Specular", &component.Point.specular, 0.1f);
+					ImGui::DragFloat("Constant", &component.Point.constant, 0.1f);
+					ImGui::DragFloat("Linear", &component.Point.linear, 0.01f);
+					ImGui::DragFloat("Quadratic", &component.Point.quadratic, 0.001f);
+				}
+				if (component.Type == LightComponent::LightType::Spot) {
+					ImGui::DragFloat("Cut Off", &component.Spot.cutOff, 0.1f);
+					ImGui::DragFloat("Outer Cut Off", &component.Spot.outerCutOff, 0.1f);
+					ImGui::DragFloat("Ambient", &component.Spot.ambient, 0.01f);
+					ImGui::DragFloat("Diffuse", &component.Spot.diffuse, 0.1f);
+					ImGui::DragFloat("Specular", &component.Spot.specular, 0.1f);
+					ImGui::DragFloat("Constant", &component.Spot.constant, 0.1f);
+					ImGui::DragFloat("Linear", &component.Spot.linear, 0.01f);
+					ImGui::DragFloat("Quadratic", &component.Spot.quadratic, 0.001f);
+				}
+		});
 	}
 }
