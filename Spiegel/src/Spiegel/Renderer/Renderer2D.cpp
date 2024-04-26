@@ -137,14 +137,14 @@ namespace spg {
 		Ref<UniformBuffer> CameraUniformBuffer;
 	};
 
-	static Renderer2DData s_Data;
+	static Renderer2DData s_Renderer2DData;
 
 	void Renderer2D::Init()
 	{
 		// -------------Quad-----------------
-		s_Data.QuadVertexArray = VertexArray::Create();
-		s_Data.QuadVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
-		s_Data.QuadVertexBuffer->SetLayout({
+		s_Renderer2DData.QuadVertexArray = VertexArray::Create();
+		s_Renderer2DData.QuadVertexBuffer = VertexBuffer::Create(s_Renderer2DData.MaxVertices * sizeof(QuadVertex));
+		s_Renderer2DData.QuadVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "a_Position" },
 			{ ShaderDataType::Float4, "a_Color" },
 			{ ShaderDataType::Float2, "a_TexCoord" },
@@ -152,15 +152,15 @@ namespace spg {
 			{ ShaderDataType::Float, "a_TilingFactor" },
 			{ ShaderDataType::Int, "a_EntityID" }
 		});
-		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
+		s_Renderer2DData.QuadVertexArray->AddVertexBuffer(s_Renderer2DData.QuadVertexBuffer);
 
-		s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxVertices];
+		s_Renderer2DData.QuadVertexBufferBase = new QuadVertex[s_Renderer2DData.MaxVertices];
 
 		// dangerous, TODO: fix this
-		uint32_t* quadIndices = new uint32_t[s_Data.MaxIndices];
+		uint32_t* quadIndices = new uint32_t[s_Renderer2DData.MaxIndices];
 
 		uint32_t offset = 0;
-		for (uint32_t i = 0; i < s_Data.MaxIndices; i += 6) {
+		for (uint32_t i = 0; i < s_Renderer2DData.MaxIndices; i += 6) {
 			// 0 1 2 2 3 0
 			quadIndices[i + 0] = offset + 0;
 			quadIndices[i + 1] = offset + 1;
@@ -173,104 +173,104 @@ namespace spg {
 			offset += 4;
 		}
 
-		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, s_Data.MaxIndices);
-		s_Data.QuadVertexArray->SetIndexBuffer(quadIB);
+		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, s_Renderer2DData.MaxIndices);
+		s_Renderer2DData.QuadVertexArray->SetIndexBuffer(quadIB);
 		delete[] quadIndices;
 
-		s_Data.WhiteTexture = Texture2D::Create(1, 1);
+		s_Renderer2DData.WhiteTexture = Texture2D::Create(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
-		s_Data.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+		s_Renderer2DData.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 
-		s_Data.QuadShader = Shader::Create("assets/shaders/Quad.glsl");
+		s_Renderer2DData.QuadShader = Shader::Create("assets/shaders/Quad.glsl");
 
-		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
+		s_Renderer2DData.TextureSlots[0] = s_Renderer2DData.WhiteTexture;
 
-		s_Data.QuadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
-		s_Data.QuadVertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
-		s_Data.QuadVertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
-		s_Data.QuadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
+		s_Renderer2DData.QuadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
+		s_Renderer2DData.QuadVertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
+		s_Renderer2DData.QuadVertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
+		s_Renderer2DData.QuadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
 		// -------------Quad-----------------
 
 		// -------------Circle---------------
-		s_Data.CircleVertexArray = VertexArray::Create();
-		s_Data.CircleVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(CircleVertex));
-		s_Data.CircleVertexBuffer->SetLayout({
+		s_Renderer2DData.CircleVertexArray = VertexArray::Create();
+		s_Renderer2DData.CircleVertexBuffer = VertexBuffer::Create(s_Renderer2DData.MaxVertices * sizeof(CircleVertex));
+		s_Renderer2DData.CircleVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "a_WorldPosition" },
 			{ ShaderDataType::Float3, "a_LocalPosition" },
 			{ ShaderDataType::Float4, "a_Color" },
 			{ ShaderDataType::Float, "a_Thickness" },
 			{ ShaderDataType::Int, "a_EntityID" }
 			});
-		s_Data.CircleVertexArray->AddVertexBuffer(s_Data.CircleVertexBuffer);
-		s_Data.CircleVertexArray->SetIndexBuffer(quadIB);
-		s_Data.CircleVertexBufferBase = new CircleVertex[s_Data.MaxVertices];
-		s_Data.CircleShader = Shader::Create("assets/shaders/Circle.glsl");
+		s_Renderer2DData.CircleVertexArray->AddVertexBuffer(s_Renderer2DData.CircleVertexBuffer);
+		s_Renderer2DData.CircleVertexArray->SetIndexBuffer(quadIB);
+		s_Renderer2DData.CircleVertexBufferBase = new CircleVertex[s_Renderer2DData.MaxVertices];
+		s_Renderer2DData.CircleShader = Shader::Create("assets/shaders/Circle.glsl");
 		// -------------Circle---------------
 
 		// -------------Line-----------------
-		s_Data.LineVertexArray = VertexArray::Create();
-		s_Data.LineVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(LineVertex));
-		s_Data.LineVertexBuffer->SetLayout({
+		s_Renderer2DData.LineVertexArray = VertexArray::Create();
+		s_Renderer2DData.LineVertexBuffer = VertexBuffer::Create(s_Renderer2DData.MaxVertices * sizeof(LineVertex));
+		s_Renderer2DData.LineVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "a_Position" },
 			{ ShaderDataType::Float4, "a_Color" },
 			{ ShaderDataType::Int, "a_EntityID" }
 			});
-		s_Data.LineVertexArray->AddVertexBuffer(s_Data.LineVertexBuffer);
-		s_Data.LineVertexBufferBase = new LineVertex[s_Data.MaxVertices];
-		s_Data.LineShader = Shader::Create("assets/shaders/Line.glsl");
+		s_Renderer2DData.LineVertexArray->AddVertexBuffer(s_Renderer2DData.LineVertexBuffer);
+		s_Renderer2DData.LineVertexBufferBase = new LineVertex[s_Renderer2DData.MaxVertices];
+		s_Renderer2DData.LineShader = Shader::Create("assets/shaders/Line.glsl");
 		// -------------Line-----------------
 
 		// -------------Text-----------------
-		s_Data.TextVertexArray = VertexArray::Create();
-		s_Data.TextVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(TextVertex));
-		s_Data.TextVertexBuffer->SetLayout({
+		s_Renderer2DData.TextVertexArray = VertexArray::Create();
+		s_Renderer2DData.TextVertexBuffer = VertexBuffer::Create(s_Renderer2DData.MaxVertices * sizeof(TextVertex));
+		s_Renderer2DData.TextVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "a_Position" },
 			{ ShaderDataType::Float4, "a_Color" },
 			{ ShaderDataType::Float2, "a_TexCoord" },
 			{ ShaderDataType::Float, "a_TexIndex" },
 			{ ShaderDataType::Int, "a_EntityID" }
 			});
-		s_Data.TextVertexArray->AddVertexBuffer(s_Data.TextVertexBuffer);
-		s_Data.TextVertexArray->SetIndexBuffer(quadIB);
-		s_Data.TextVertexBufferBase = new TextVertex[s_Data.MaxVertices];
-		s_Data.TextShader = Shader::Create("assets/shaders/Text.glsl");
+		s_Renderer2DData.TextVertexArray->AddVertexBuffer(s_Renderer2DData.TextVertexBuffer);
+		s_Renderer2DData.TextVertexArray->SetIndexBuffer(quadIB);
+		s_Renderer2DData.TextVertexBufferBase = new TextVertex[s_Renderer2DData.MaxVertices];
+		s_Renderer2DData.TextShader = Shader::Create("assets/shaders/Text.glsl");
 		// -------------Text-----------------
 
 		// -------------Material-------------
-		s_Data.MaterialVertexArray = VertexArray::Create();
-		s_Data.MaterialVertexBuffer = VertexBuffer::Create(100 * sizeof(MaterialVertex));
-		s_Data.MaterialVertexBuffer->SetLayout({
+		s_Renderer2DData.MaterialVertexArray = VertexArray::Create();
+		s_Renderer2DData.MaterialVertexBuffer = VertexBuffer::Create(100 * sizeof(MaterialVertex));
+		s_Renderer2DData.MaterialVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "a_Position" },
 			{ ShaderDataType::Int, "a_EntityID" }
 			});
-		s_Data.MaterialVertexArray->AddVertexBuffer(s_Data.MaterialVertexBuffer);
-		s_Data.MaterialVertexArray->SetIndexBuffer(quadIB);
-		s_Data.MaterialVertexBufferBase = new MaterialVertex[100];
+		s_Renderer2DData.MaterialVertexArray->AddVertexBuffer(s_Renderer2DData.MaterialVertexBuffer);
+		s_Renderer2DData.MaterialVertexArray->SetIndexBuffer(quadIB);
+		s_Renderer2DData.MaterialVertexBufferBase = new MaterialVertex[100];
 		// -------------Material-------------
 
-		s_Data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
+		s_Renderer2DData.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
 	}
 
 	void Renderer2D::Shutdown()
 	{
-		delete[] s_Data.QuadVertexBufferBase;
-		delete[] s_Data.CircleVertexBufferBase;
-		delete[] s_Data.LineVertexBufferBase;
-		delete[] s_Data.TextVertexBufferBase;
+		delete[] s_Renderer2DData.QuadVertexBufferBase;
+		delete[] s_Renderer2DData.CircleVertexBufferBase;
+		delete[] s_Renderer2DData.LineVertexBufferBase;
+		delete[] s_Renderer2DData.TextVertexBufferBase;
 	}
 
 	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
-		s_Data.CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
-		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
+		s_Renderer2DData.CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
+		s_Renderer2DData.CameraUniformBuffer->SetData(&s_Renderer2DData.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
 		StartBatch();
 	}
 
 	void Renderer2D::BeginScene(const EditorCamera& camera)
 	{
-		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjection();
-		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
+		s_Renderer2DData.CameraBuffer.ViewProjection = camera.GetViewProjection();
+		s_Renderer2DData.CameraUniformBuffer->SetData(&s_Renderer2DData.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
 		StartBatch();
 	}
@@ -283,68 +283,68 @@ namespace spg {
 
 	void Renderer2D::Flush()
 	{
-		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++) {
-			s_Data.TextureSlots[i]->Bind(i);
+		for (uint32_t i = 0; i < s_Renderer2DData.TextureSlotIndex; i++) {
+			s_Renderer2DData.TextureSlots[i]->Bind(i);
 		}
 
-		if (s_Data.QuadIndexCount) {
-			uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
-			s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
+		if (s_Renderer2DData.QuadIndexCount) {
+			uint32_t dataSize = (uint8_t*)s_Renderer2DData.QuadVertexBufferPtr - (uint8_t*)s_Renderer2DData.QuadVertexBufferBase;
+			s_Renderer2DData.QuadVertexBuffer->SetData(s_Renderer2DData.QuadVertexBufferBase, dataSize);
 
-			s_Data.QuadShader->Bind();
-			RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
-			s_Data.Stats.DrawCalls++;
+			s_Renderer2DData.QuadShader->Bind();
+			RenderCommand::DrawIndexed(s_Renderer2DData.QuadVertexArray, s_Renderer2DData.QuadIndexCount);
+			s_Renderer2DData.Stats.DrawCalls++;
 		}
 
-		if (s_Data.CircleIndexCount) {
-			uint32_t dataSize = (uint8_t*)s_Data.CircleVertexBufferPtr - (uint8_t*)s_Data.CircleVertexBufferBase;
-			s_Data.CircleVertexBuffer->SetData(s_Data.CircleVertexBufferBase, dataSize);
+		if (s_Renderer2DData.CircleIndexCount) {
+			uint32_t dataSize = (uint8_t*)s_Renderer2DData.CircleVertexBufferPtr - (uint8_t*)s_Renderer2DData.CircleVertexBufferBase;
+			s_Renderer2DData.CircleVertexBuffer->SetData(s_Renderer2DData.CircleVertexBufferBase, dataSize);
 
-			s_Data.CircleShader->Bind();
-			RenderCommand::DrawIndexed(s_Data.CircleVertexArray, s_Data.CircleIndexCount);
-			s_Data.Stats.DrawCalls++;
+			s_Renderer2DData.CircleShader->Bind();
+			RenderCommand::DrawIndexed(s_Renderer2DData.CircleVertexArray, s_Renderer2DData.CircleIndexCount);
+			s_Renderer2DData.Stats.DrawCalls++;
 		}
 
-		if (s_Data.LineVertexCount) {
-			uint32_t dataSize = (uint8_t*)s_Data.LineVertexBufferPtr - (uint8_t*)s_Data.LineVertexBufferBase;
-			s_Data.LineVertexBuffer->SetData(s_Data.LineVertexBufferBase, dataSize);
+		if (s_Renderer2DData.LineVertexCount) {
+			uint32_t dataSize = (uint8_t*)s_Renderer2DData.LineVertexBufferPtr - (uint8_t*)s_Renderer2DData.LineVertexBufferBase;
+			s_Renderer2DData.LineVertexBuffer->SetData(s_Renderer2DData.LineVertexBufferBase, dataSize);
 
-			s_Data.LineShader->Bind();
-			RenderCommand::SetLineWidth(s_Data.LineWidth);
-			RenderCommand::DrawLines(s_Data.LineVertexArray, s_Data.LineVertexCount);
-			s_Data.Stats.DrawCalls++;
+			s_Renderer2DData.LineShader->Bind();
+			RenderCommand::SetLineWidth(s_Renderer2DData.LineWidth);
+			RenderCommand::DrawLines(s_Renderer2DData.LineVertexArray, s_Renderer2DData.LineVertexCount);
+			s_Renderer2DData.Stats.DrawCalls++;
 		}
 
-		if (s_Data.TextIndexCount) {
-			uint32_t dataSize = (uint8_t*)s_Data.TextVertexBufferPtr - (uint8_t*)s_Data.TextVertexBufferBase;
-			s_Data.TextVertexBuffer->SetData(s_Data.TextVertexBufferBase, dataSize);
+		if (s_Renderer2DData.TextIndexCount) {
+			uint32_t dataSize = (uint8_t*)s_Renderer2DData.TextVertexBufferPtr - (uint8_t*)s_Renderer2DData.TextVertexBufferBase;
+			s_Renderer2DData.TextVertexBuffer->SetData(s_Renderer2DData.TextVertexBufferBase, dataSize);
 
 			// TODO: For Text Renderer, Texture slot 32 is too small, should refactor
-			s_Data.TextShader->Bind();
-			RenderCommand::DrawIndexed(s_Data.TextVertexArray, s_Data.TextIndexCount);
-			s_Data.Stats.DrawCalls++;
+			s_Renderer2DData.TextShader->Bind();
+			RenderCommand::DrawIndexed(s_Renderer2DData.TextVertexArray, s_Renderer2DData.TextIndexCount);
+			s_Renderer2DData.Stats.DrawCalls++;
 		}
 	}
 
 	void Renderer2D::StartBatch()
 	{
-		s_Data.QuadIndexCount = 0;
-		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+		s_Renderer2DData.QuadIndexCount = 0;
+		s_Renderer2DData.QuadVertexBufferPtr = s_Renderer2DData.QuadVertexBufferBase;
 
-		s_Data.CircleIndexCount = 0;
-		s_Data.CircleVertexBufferPtr = s_Data.CircleVertexBufferBase;
+		s_Renderer2DData.CircleIndexCount = 0;
+		s_Renderer2DData.CircleVertexBufferPtr = s_Renderer2DData.CircleVertexBufferBase;
 
-		s_Data.LineVertexCount = 0;
-		s_Data.LineVertexBufferPtr = s_Data.LineVertexBufferBase;
+		s_Renderer2DData.LineVertexCount = 0;
+		s_Renderer2DData.LineVertexBufferPtr = s_Renderer2DData.LineVertexBufferBase;
 
-		s_Data.TextIndexCount = 0;
-		s_Data.TextVertexBufferPtr = s_Data.TextVertexBufferBase;
+		s_Renderer2DData.TextIndexCount = 0;
+		s_Renderer2DData.TextVertexBufferPtr = s_Renderer2DData.TextVertexBufferBase;
 
-		s_Data.TextureSlotIndex = 1;
+		s_Renderer2DData.TextureSlotIndex = 1;
 		
 		// Temporary
-		s_Data.MaterialIndexCount = 0;
-		s_Data.MaterialVertexBufferPtr = s_Data.MaterialVertexBufferBase;
+		s_Renderer2DData.MaterialIndexCount = 0;
+		s_Renderer2DData.MaterialVertexBufferPtr = s_Renderer2DData.MaterialVertexBufferBase;
 	}
 	
 	void Renderer2D::NextBatch()
@@ -390,14 +390,14 @@ namespace spg {
 		const glm::vec2* textureCoords = subtexture->GetTexCoords();
 		const Ref<Texture2D> texture = subtexture->GetTexture();
 
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+		if (s_Renderer2DData.QuadIndexCount >= Renderer2DData::MaxIndices) {
 			NextBatch();
 		}
 
 		float textureIndex = 0.0f;
 
-		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
-			if (*s_Data.TextureSlots[i] == *texture) {
+		for (uint32_t i = 1; i < s_Renderer2DData.TextureSlotIndex; i++) {
+			if (*s_Renderer2DData.TextureSlots[i] == *texture) {
 				// texture is already submitted
 				textureIndex = (float)i;
 				break;
@@ -406,26 +406,26 @@ namespace spg {
 
 		// texture is not submitted yet, submit it
 		if (textureIndex == 0.0f) {
-			textureIndex = (float)s_Data.TextureSlotIndex;
-			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
-			s_Data.TextureSlotIndex++;
+			textureIndex = (float)s_Renderer2DData.TextureSlotIndex;
+			s_Renderer2DData.TextureSlots[s_Renderer2DData.TextureSlotIndex] = texture;
+			s_Renderer2DData.TextureSlotIndex++;
 		}
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		for (size_t i = 0; i < quadVertexCount; i++) {
-			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
-			s_Data.QuadVertexBufferPtr->Color = tintColor;
-			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
-			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-			s_Data.QuadVertexBufferPtr++;
+			s_Renderer2DData.QuadVertexBufferPtr->Position = transform * s_Renderer2DData.QuadVertexPositions[i];
+			s_Renderer2DData.QuadVertexBufferPtr->Color = tintColor;
+			s_Renderer2DData.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+			s_Renderer2DData.QuadVertexBufferPtr->TexIndex = textureIndex;
+			s_Renderer2DData.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Renderer2DData.QuadVertexBufferPtr++;
 		}
 
-		s_Data.QuadIndexCount += 6;
+		s_Renderer2DData.QuadIndexCount += 6;
 
-		s_Data.Stats.QuadCount++;
+		s_Renderer2DData.Stats.QuadCount++;
 	}
 
 	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color, int entityID)
@@ -433,7 +433,7 @@ namespace spg {
 		constexpr size_t quadVertexCount = 4;
 		constexpr glm::vec2 textureCoords[] = { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} };
 
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+		if (s_Renderer2DData.QuadIndexCount >= Renderer2DData::MaxIndices) {
 			NextBatch();
 		}
 
@@ -441,18 +441,18 @@ namespace spg {
 		const float tilingFactor = 1.0f;
 
 		for (size_t i = 0; i < quadVertexCount; i++) {
-			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
-			s_Data.QuadVertexBufferPtr->Color = color;
-			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
-			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-			s_Data.QuadVertexBufferPtr->EntityID = entityID;
-			s_Data.QuadVertexBufferPtr++;
+			s_Renderer2DData.QuadVertexBufferPtr->Position = transform * s_Renderer2DData.QuadVertexPositions[i];
+			s_Renderer2DData.QuadVertexBufferPtr->Color = color;
+			s_Renderer2DData.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+			s_Renderer2DData.QuadVertexBufferPtr->TexIndex = textureIndex;
+			s_Renderer2DData.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Renderer2DData.QuadVertexBufferPtr->EntityID = entityID;
+			s_Renderer2DData.QuadVertexBufferPtr++;
 		}
 
-		s_Data.QuadIndexCount += 6;
+		s_Renderer2DData.QuadIndexCount += 6;
 
-		s_Data.Stats.QuadCount++;
+		s_Renderer2DData.Stats.QuadCount++;
 	}
 
 	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor, int entityID)
@@ -460,14 +460,14 @@ namespace spg {
 		constexpr size_t quadVertexCount = 4;
 		constexpr glm::vec2 textureCoords[] = { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} };
 
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+		if (s_Renderer2DData.QuadIndexCount >= Renderer2DData::MaxIndices) {
 			NextBatch();
 		}
 
 		float textureIndex = 0.0f;
 
-		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
-			if (*s_Data.TextureSlots[i] == *texture) {
+		for (uint32_t i = 1; i < s_Renderer2DData.TextureSlotIndex; i++) {
+			if (*s_Renderer2DData.TextureSlots[i] == *texture) {
 				// texture is already submitted
 				textureIndex = (float)i;
 				break;
@@ -475,24 +475,24 @@ namespace spg {
 		}
 
 		if (textureIndex == 0.0f) {
-			textureIndex = (float)s_Data.TextureSlotIndex;
-			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
-			s_Data.TextureSlotIndex++;
+			textureIndex = (float)s_Renderer2DData.TextureSlotIndex;
+			s_Renderer2DData.TextureSlots[s_Renderer2DData.TextureSlotIndex] = texture;
+			s_Renderer2DData.TextureSlotIndex++;
 		}
 
 		for (size_t i = 0; i < quadVertexCount; i++) {
-			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
-			s_Data.QuadVertexBufferPtr->Color = tintColor;
-			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
-			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-			s_Data.QuadVertexBufferPtr->EntityID = entityID;
-			s_Data.QuadVertexBufferPtr++;
+			s_Renderer2DData.QuadVertexBufferPtr->Position = transform * s_Renderer2DData.QuadVertexPositions[i];
+			s_Renderer2DData.QuadVertexBufferPtr->Color = tintColor;
+			s_Renderer2DData.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+			s_Renderer2DData.QuadVertexBufferPtr->TexIndex = textureIndex;
+			s_Renderer2DData.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Renderer2DData.QuadVertexBufferPtr->EntityID = entityID;
+			s_Renderer2DData.QuadVertexBufferPtr++;
 		}
 
-		s_Data.QuadIndexCount += 6;
+		s_Renderer2DData.QuadIndexCount += 6;
 
-		s_Data.Stats.QuadCount++;
+		s_Renderer2DData.Stats.QuadCount++;
 	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
@@ -505,7 +505,7 @@ namespace spg {
 		constexpr size_t quadVertexCount = 4;
 		constexpr glm::vec2 textureCoords[] = { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} };
 
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+		if (s_Renderer2DData.QuadIndexCount >= Renderer2DData::MaxIndices) {
 			NextBatch();
 		}
 
@@ -517,17 +517,17 @@ namespace spg {
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		for (size_t i = 0; i < quadVertexCount; i++) {
-			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
-			s_Data.QuadVertexBufferPtr->Color = color;
-			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
-			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-			s_Data.QuadVertexBufferPtr++;
+			s_Renderer2DData.QuadVertexBufferPtr->Position = transform * s_Renderer2DData.QuadVertexPositions[i];
+			s_Renderer2DData.QuadVertexBufferPtr->Color = color;
+			s_Renderer2DData.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+			s_Renderer2DData.QuadVertexBufferPtr->TexIndex = textureIndex;
+			s_Renderer2DData.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Renderer2DData.QuadVertexBufferPtr++;
 		}
 
-		s_Data.QuadIndexCount += 6;
+		s_Renderer2DData.QuadIndexCount += 6;
 
-		s_Data.Stats.QuadCount++;
+		s_Renderer2DData.Stats.QuadCount++;
 	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
@@ -549,14 +549,14 @@ namespace spg {
 		constexpr size_t quadVertexCount = 4;
 		constexpr glm::vec2 textureCoords[] = { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} };
 
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+		if (s_Renderer2DData.QuadIndexCount >= Renderer2DData::MaxIndices) {
 			NextBatch();
 		}
 
 		float textureIndex = 0.0f;
 
-		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
-			if (*s_Data.TextureSlots[i] == *texture) {
+		for (uint32_t i = 1; i < s_Renderer2DData.TextureSlotIndex; i++) {
+			if (*s_Renderer2DData.TextureSlots[i] == *texture) {
 				// texture is already submitted
 				textureIndex = (float)i;
 				break;
@@ -564,9 +564,9 @@ namespace spg {
 		}
 
 		if (textureIndex == 0.0f) {
-			textureIndex = (float)s_Data.TextureSlotIndex;
-			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
-			s_Data.TextureSlotIndex++;
+			textureIndex = (float)s_Renderer2DData.TextureSlotIndex;
+			s_Renderer2DData.TextureSlots[s_Renderer2DData.TextureSlotIndex] = texture;
+			s_Renderer2DData.TextureSlotIndex++;
 		}
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
@@ -574,17 +574,17 @@ namespace spg {
 			* glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
 		for (size_t i = 0; i < quadVertexCount; i++) {
-			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
-			s_Data.QuadVertexBufferPtr->Color = tintColor;
-			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
-			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-			s_Data.QuadVertexBufferPtr++;
+			s_Renderer2DData.QuadVertexBufferPtr->Position = transform * s_Renderer2DData.QuadVertexPositions[i];
+			s_Renderer2DData.QuadVertexBufferPtr->Color = tintColor;
+			s_Renderer2DData.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+			s_Renderer2DData.QuadVertexBufferPtr->TexIndex = textureIndex;
+			s_Renderer2DData.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Renderer2DData.QuadVertexBufferPtr++;
 		}
 
-		s_Data.QuadIndexCount += 6;
+		s_Renderer2DData.QuadIndexCount += 6;
 
-		s_Data.Stats.QuadCount++;
+		s_Renderer2DData.Stats.QuadCount++;
 	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<SubTexture2D>& subtexture, float tilingFactor, const glm::vec4& tintColor)
@@ -598,14 +598,14 @@ namespace spg {
 		const glm::vec2* textureCoords = subtexture->GetTexCoords();
 		const Ref<Texture2D> texture = subtexture->GetTexture();
 
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+		if (s_Renderer2DData.QuadIndexCount >= Renderer2DData::MaxIndices) {
 			NextBatch();
 		}
 
 		float textureIndex = 0.0f;
 
-		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
-			if (*s_Data.TextureSlots[i] == *texture) {
+		for (uint32_t i = 1; i < s_Renderer2DData.TextureSlotIndex; i++) {
+			if (*s_Renderer2DData.TextureSlots[i] == *texture) {
 				// texture is already submitted
 				textureIndex = (float)i;
 				break;
@@ -613,9 +613,9 @@ namespace spg {
 		}
 
 		if (textureIndex == 0.0f) {
-			textureIndex = (float)s_Data.TextureSlotIndex;
-			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
-			s_Data.TextureSlotIndex++;
+			textureIndex = (float)s_Renderer2DData.TextureSlotIndex;
+			s_Renderer2DData.TextureSlots[s_Renderer2DData.TextureSlotIndex] = texture;
+			s_Renderer2DData.TextureSlotIndex++;
 		}
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
@@ -623,17 +623,17 @@ namespace spg {
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		for (size_t i = 0; i < quadVertexCount; i++) {
-			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
-			s_Data.QuadVertexBufferPtr->Color = tintColor;
-			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
-			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-			s_Data.QuadVertexBufferPtr++;
+			s_Renderer2DData.QuadVertexBufferPtr->Position = transform * s_Renderer2DData.QuadVertexPositions[i];
+			s_Renderer2DData.QuadVertexBufferPtr->Color = tintColor;
+			s_Renderer2DData.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+			s_Renderer2DData.QuadVertexBufferPtr->TexIndex = textureIndex;
+			s_Renderer2DData.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Renderer2DData.QuadVertexBufferPtr++;
 		}
 
-		s_Data.QuadIndexCount += 6;
+		s_Renderer2DData.QuadIndexCount += 6;
 
-		s_Data.Stats.QuadCount++;
+		s_Renderer2DData.Stats.QuadCount++;
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& src, int entityID)
@@ -651,45 +651,45 @@ namespace spg {
 		constexpr size_t circleVertexCount = 4;
 
 		// TODO: Optimize this, not just Circle Index Count
-		if (s_Data.CircleIndexCount >= Renderer2DData::MaxIndices) {
+		if (s_Renderer2DData.CircleIndexCount >= Renderer2DData::MaxIndices) {
 			NextBatch();
 		}
 
 		for (size_t i = 0; i < circleVertexCount; i++) {
-			s_Data.CircleVertexBufferPtr->WorldPosition = transform * s_Data.QuadVertexPositions[i];
-			s_Data.CircleVertexBufferPtr->LocalPosition = s_Data.QuadVertexPositions[i] * 2.0f;
-			s_Data.CircleVertexBufferPtr->Color = color;
-			s_Data.CircleVertexBufferPtr->Thickness = thickness;
-			s_Data.CircleVertexBufferPtr->EntityID = entityID;
-			s_Data.CircleVertexBufferPtr++;
+			s_Renderer2DData.CircleVertexBufferPtr->WorldPosition = transform * s_Renderer2DData.QuadVertexPositions[i];
+			s_Renderer2DData.CircleVertexBufferPtr->LocalPosition = s_Renderer2DData.QuadVertexPositions[i] * 2.0f;
+			s_Renderer2DData.CircleVertexBufferPtr->Color = color;
+			s_Renderer2DData.CircleVertexBufferPtr->Thickness = thickness;
+			s_Renderer2DData.CircleVertexBufferPtr->EntityID = entityID;
+			s_Renderer2DData.CircleVertexBufferPtr++;
 		}
 
-		s_Data.CircleIndexCount += 6;
+		s_Renderer2DData.CircleIndexCount += 6;
 
-		s_Data.Stats.CircleCount++;
+		s_Renderer2DData.Stats.CircleCount++;
 	
 	}
 
 	void Renderer2D::DrawLine(const glm::vec3& startPoint, const glm::vec3& endPoint, const glm::vec4& color, int entityID)
 	{
 		// TODO: Optimize this, not just Line Vertex Count
-		if (s_Data.LineVertexCount >= Renderer2DData::MaxVertices) {
+		if (s_Renderer2DData.LineVertexCount >= Renderer2DData::MaxVertices) {
 			NextBatch();
 		}
 
-		s_Data.LineVertexBufferPtr->Position = startPoint;
-		s_Data.LineVertexBufferPtr->Color = color;
-		s_Data.LineVertexBufferPtr->EntityID = entityID;
-		s_Data.LineVertexBufferPtr++;
+		s_Renderer2DData.LineVertexBufferPtr->Position = startPoint;
+		s_Renderer2DData.LineVertexBufferPtr->Color = color;
+		s_Renderer2DData.LineVertexBufferPtr->EntityID = entityID;
+		s_Renderer2DData.LineVertexBufferPtr++;
 
-		s_Data.LineVertexBufferPtr->Position = endPoint;
-		s_Data.LineVertexBufferPtr->Color = color;
-		s_Data.LineVertexBufferPtr->EntityID = entityID;
-		s_Data.LineVertexBufferPtr++;
+		s_Renderer2DData.LineVertexBufferPtr->Position = endPoint;
+		s_Renderer2DData.LineVertexBufferPtr->Color = color;
+		s_Renderer2DData.LineVertexBufferPtr->EntityID = entityID;
+		s_Renderer2DData.LineVertexBufferPtr++;
 
-		s_Data.LineVertexCount += 2;
+		s_Renderer2DData.LineVertexCount += 2;
 
-		s_Data.Stats.LineCount++;
+		s_Renderer2DData.Stats.LineCount++;
 	
 	}
 
@@ -711,7 +711,7 @@ namespace spg {
 		glm::vec3 lineVertices[4];
 
 		for (size_t i = 0; i < 4; i++) {
-			lineVertices[i] = transform * s_Data.QuadVertexPositions[i];
+			lineVertices[i] = transform * s_Renderer2DData.QuadVertexPositions[i];
 		}
 
 		DrawLine(lineVertices[0], lineVertices[1], color, entityID);
@@ -733,7 +733,7 @@ namespace spg {
 		float fontSize = (float)font->GetFontSize();
 		
 		// TODO: Optimize this
-		if (s_Data.TextIndexCount + wtext.length() * 6 >= Renderer2DData::MaxIndices) {
+		if (s_Renderer2DData.TextIndexCount + wtext.length() * 6 >= Renderer2DData::MaxIndices) {
 			NextBatch();
 		}
 
@@ -770,8 +770,8 @@ namespace spg {
 
 			float textureIndex = 0.0f;
 
-			for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
-				if (*s_Data.TextureSlots[i] == *texture) {
+			for (uint32_t i = 1; i < s_Renderer2DData.TextureSlotIndex; i++) {
+				if (*s_Renderer2DData.TextureSlots[i] == *texture) {
 					// texture is already submitted
 					textureIndex = (float)i;
 					break;
@@ -779,46 +779,46 @@ namespace spg {
 			}
 
 			if (textureIndex == 0.0f) {
-				textureIndex = (float)s_Data.TextureSlotIndex;
-				s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
-				s_Data.TextureSlotIndex++;
+				textureIndex = (float)s_Renderer2DData.TextureSlotIndex;
+				s_Renderer2DData.TextureSlots[s_Renderer2DData.TextureSlotIndex] = texture;
+				s_Renderer2DData.TextureSlotIndex++;
 			}
 
 			for (size_t i = 0; i < textVertexCount; i++) {
-				s_Data.TextVertexBufferPtr->Position = transform * textVertexPositions[i];
-				s_Data.TextVertexBufferPtr->Color = tc.Color;
-				s_Data.TextVertexBufferPtr->TexCoord = textureCoords[i];
-				s_Data.TextVertexBufferPtr->TexIndex = textureIndex;
-				s_Data.TextVertexBufferPtr->EntityID = entityID;
-				s_Data.TextVertexBufferPtr++;
+				s_Renderer2DData.TextVertexBufferPtr->Position = transform * textVertexPositions[i];
+				s_Renderer2DData.TextVertexBufferPtr->Color = tc.Color;
+				s_Renderer2DData.TextVertexBufferPtr->TexCoord = textureCoords[i];
+				s_Renderer2DData.TextVertexBufferPtr->TexIndex = textureIndex;
+				s_Renderer2DData.TextVertexBufferPtr->EntityID = entityID;
+				s_Renderer2DData.TextVertexBufferPtr++;
 			}
 
 			x += (character.Advance >> 6) / fontSize;
 
-			s_Data.TextIndexCount += 6;
+			s_Renderer2DData.TextIndexCount += 6;
 
-			s_Data.Stats.TextCount++;
+			s_Renderer2DData.Stats.TextCount++;
 		}
 	}
 
 	float Renderer2D::GetLineWidth()
 	{
-		return s_Data.LineWidth;
+		return s_Renderer2DData.LineWidth;
 	}
 
 	void Renderer2D::SetLineWidth(float width)
 	{
-		s_Data.LineWidth = width;
+		s_Renderer2DData.LineWidth = width;
 	}
 
 	Renderer2D::Statistics Renderer2D::GetStats()
 	{
-		return s_Data.Stats;
+		return s_Renderer2DData.Stats;
 	}
 
 	void Renderer2D::ResetStats()
 	{
-		memset(&s_Data.Stats, 0, sizeof(Statistics));
+		memset(&s_Renderer2DData.Stats, 0, sizeof(Statistics));
 	}
 
 	// Temporary
@@ -826,29 +826,29 @@ namespace spg {
 	{
 		constexpr size_t materialVertexCount = 4;
 
-		if (s_Data.MaterialIndexCount >= 100) {
+		if (s_Renderer2DData.MaterialIndexCount >= 100) {
 			NextBatch();
 		}
 
 		for (size_t i = 0; i < materialVertexCount; i++) {
-			s_Data.MaterialVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
-			s_Data.MaterialVertexBufferPtr->EntityID = entityID;
-			s_Data.MaterialVertexBufferPtr++;
+			s_Renderer2DData.MaterialVertexBufferPtr->Position = transform * s_Renderer2DData.QuadVertexPositions[i];
+			s_Renderer2DData.MaterialVertexBufferPtr->EntityID = entityID;
+			s_Renderer2DData.MaterialVertexBufferPtr++;
 		}
 
-		s_Data.MaterialIndexCount += 6;
+		s_Renderer2DData.MaterialIndexCount += 6;
 	}
 
 	void Renderer2D::SubmitMaterial(const Ref<Material>& material)
 	{
-		if (s_Data.MaterialIndexCount) {
-			uint32_t dataSize = (uint8_t*)s_Data.MaterialVertexBufferPtr - (uint8_t*)s_Data.MaterialVertexBufferBase;
-			s_Data.MaterialVertexBuffer->SetData(s_Data.MaterialVertexBufferBase, dataSize);
+		if (s_Renderer2DData.MaterialIndexCount) {
+			uint32_t dataSize = (uint8_t*)s_Renderer2DData.MaterialVertexBufferPtr - (uint8_t*)s_Renderer2DData.MaterialVertexBufferBase;
+			s_Renderer2DData.MaterialVertexBuffer->SetData(s_Renderer2DData.MaterialVertexBufferBase, dataSize);
 			material->Upload();
-			RenderCommand::DrawIndexed(s_Data.MaterialVertexArray, s_Data.MaterialIndexCount);
+			RenderCommand::DrawIndexed(s_Renderer2DData.MaterialVertexArray, s_Renderer2DData.MaterialIndexCount);
 		}
-		s_Data.MaterialIndexCount = 0;
-		s_Data.MaterialVertexBufferPtr = s_Data.MaterialVertexBufferBase;
+		s_Renderer2DData.MaterialIndexCount = 0;
+		s_Renderer2DData.MaterialVertexBufferPtr = s_Renderer2DData.MaterialVertexBufferBase;
 	}
 
 }

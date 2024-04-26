@@ -8,14 +8,14 @@ namespace spg {
         HMODULE hmod;
 	};
 
-	static ScriptEngineData* s_Data;
+	static ScriptEngineData* s_SEData;
 
 	void ScriptEngine::Init()
 	{
-        s_Data = new ScriptEngineData();
+        s_SEData = new ScriptEngineData();
 
-        s_Data->hmod = LoadLibrary(L"assets/scripts/ExampleGame.dll");
-        if (s_Data->hmod == NULL)
+        s_SEData->hmod = LoadLibrary(L"assets/scripts/ExampleGame.dll");
+        if (s_SEData->hmod == NULL)
         {
             DWORD dw = GetLastError();
             printf("Failed to load DLL: error code %d\n", dw);
@@ -26,18 +26,18 @@ namespace spg {
 
 	void ScriptEngine::Shutdown()
 	{
-        if (!FreeLibrary(s_Data->hmod))
+        if (!FreeLibrary(s_SEData->hmod))
         {
             DWORD dw = GetLastError();
             printf("Failed to free DLL: error code %d\n", dw);
             return;
         }
-        delete s_Data;
+        delete s_SEData;
 	}
 
     ScriptFunc ScriptEngine::GetInstantiateScript(const char* funcName)
     {
-        ScriptFunc func = (ScriptFunc)GetProcAddress(s_Data->hmod, funcName);
+        ScriptFunc func = (ScriptFunc)GetProcAddress(s_SEData->hmod, funcName);
         if (func == NULL)
         {
             DWORD dw = GetLastError();

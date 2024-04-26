@@ -46,7 +46,7 @@ namespace spg {
 		else {
 			SPG_CORE_ERROR("Could not open file '{0}'", filepath);
 		}
-
+		SPG_CORE_INFO("Compiling Shader: {0}", filepath);
 		return result;
 	}
 

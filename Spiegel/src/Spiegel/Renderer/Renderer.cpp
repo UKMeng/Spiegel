@@ -24,20 +24,20 @@ namespace spg {
 		Ref<ShaderLibrary> m_ShaderLibrary;
 	};
 
-	static RendererData* s_Data;
+	static RendererData* s_RendererData;
 	void Renderer::Init() {
 		RenderCommand::Init();
 		Renderer2D::Init();
-		s_Data = new RendererData;
+		s_RendererData = new RendererData;
 
-		s_Data->m_ShaderLibrary = CreateRef<ShaderLibrary>();
-		s_Data->m_ShaderLibrary->Load("ColoredQuad", "assets/shaders/ColoredQuad.glsl");
-		s_Data->m_ShaderLibrary->Load("Test", "assets/shaders/Test.glsl");
-		s_Data->m_ShaderLibrary->Load("Light", "assets/shaders/Light.glsl");
+		s_RendererData->m_ShaderLibrary = CreateRef<ShaderLibrary>();
+		s_RendererData->m_ShaderLibrary->Load("ColoredQuad", "assets/shaders/ColoredQuad.glsl");
+		s_RendererData->m_ShaderLibrary->Load("Test", "assets/shaders/Test.glsl");
+		s_RendererData->m_ShaderLibrary->Load("Light", "assets/shaders/Light.glsl");
 		
 		// temporary
 		glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-		s_Data->CameraUniformBuffer = UniformBuffer::Create(sizeof(RendererData::CameraData), 0);
+		s_RendererData->CameraUniformBuffer = UniformBuffer::Create(sizeof(RendererData::CameraData), 1);
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height) {
@@ -46,8 +46,8 @@ namespace spg {
 
 	void Renderer::Shutdown() {
 		Renderer2D::Shutdown();
-		delete s_Data;
-		s_Data = nullptr;
+		delete s_RendererData;
+		s_RendererData = nullptr;
 	}
 
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform) {
@@ -60,13 +60,13 @@ namespace spg {
 
 	Ref<ShaderLibrary> Renderer::GetShaderLibrary()
 	{
-		return s_Data->m_ShaderLibrary;
+		return s_RendererData->m_ShaderLibrary;
 	}
 
 	void Renderer::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
-		s_Data->CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
-		s_Data->CameraUniformBuffer->SetData(&s_Data->CameraBuffer, sizeof(RendererData::CameraData));
+		s_RendererData->CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
+		s_RendererData->CameraUniformBuffer->SetData(&s_RendererData->CameraBuffer, sizeof(RendererData::CameraData));
 	}
 
 	void Renderer::BeginScene(const EditorCamera& camera)
@@ -78,9 +78,9 @@ namespace spg {
 		//s_Data->CubeMaterial->SetFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
 		//s_Data->CubeMaterial->SetFloat("spotLight.outerCutOff", glm::cos(glm::radians(17.5f)));
 
-		s_Data->CameraBuffer.ViewProjection = camera.GetViewProjection();
-		s_Data->CameraBuffer.ViewPosition = camera.GetPosition();
-		s_Data->CameraUniformBuffer->SetData(&s_Data->CameraBuffer, sizeof(RendererData::CameraData));
+		s_RendererData->CameraBuffer.ViewProjection = camera.GetViewProjection();
+		s_RendererData->CameraBuffer.ViewPosition = camera.GetPosition();
+		s_RendererData->CameraUniformBuffer->SetData(&s_RendererData->CameraBuffer, sizeof(RendererData::CameraData));
 	}
 	
 	void Renderer::DrawCube(const glm::mat4& transform, Ref<Material> material, int entityID)

@@ -6,7 +6,7 @@ layout(location = 1) in vec2 a_TexCoord;
 layout(location = 2) in vec3 a_Normal; // Normal Vector
 
 
-layout(std140, binding = 0) uniform Camera {
+layout(std140, binding = 1) uniform Camera {
 	mat4 u_ViewProjection;
 	vec3 u_ViewPosition;
 };
@@ -32,7 +32,7 @@ in vec2 v_TexCoord;
 in vec3 v_Normal;
 in vec3 v_Pos;
 
-layout(std140, binding = 0) uniform Camera {
+layout(std140, binding = 1) uniform Camera {
 	mat4 u_ViewProjection;
 	vec3 u_ViewPosition;
 };

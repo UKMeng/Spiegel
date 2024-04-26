@@ -4,8 +4,9 @@
 layout(location = 0) in vec4 a_Position;
 layout(location = 3) in int a_EntityID;
 
-layout(std140, binding = 0) uniform Camera {
+layout(std140, binding = 1) uniform Camera {
 	mat4 u_ViewProjection;
+	vec3 u_ViewPosition;
 };
 
 out flat int v_EntityID;
