@@ -23,9 +23,9 @@ namespace spg {
 		glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
 
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : m_Path(path) {
+	OpenGLTexture2D::OpenGLTexture2D(const std::string& path, bool flip) : m_Path(path) {
 		int width, height, channels;
-		stbi_set_flip_vertically_on_load(1);
+		stbi_set_flip_vertically_on_load(flip);
 		stbi_uc* data = nullptr;
 		{
 			data = stbi_load(m_Path.c_str(), &width, &height, &channels, 0);
@@ -68,6 +68,14 @@ namespace spg {
 		glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
 
 		m_LoadStatus = true;
+
+		// Extract shader name from filepath
+		auto lastSlash = path.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = path.rfind('.');
+		auto count = lastDot == std::string::npos ? path.size() - lastSlash : lastDot - lastSlash;
+		m_Name = path.substr(lastSlash, count);
+
 		stbi_image_free(data);
 	}
 

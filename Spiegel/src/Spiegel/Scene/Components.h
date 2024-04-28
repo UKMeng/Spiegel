@@ -3,6 +3,7 @@
 #include "SceneCamera.h"
 #include "Spiegel/Renderer/Texture.h"
 #include "Spiegel/Renderer/Font.h"
+#include "Spiegel/Renderer/Mesh.h"
 #include "Spiegel/Core/UUID.h"
 #include "Spiegel/Scripting/ScriptEngine.h"
 
@@ -175,6 +176,8 @@ namespace spg {
 		CircleCollider2DComponent(const CircleCollider2DComponent&) = default;
 	};
 
+	// 3D
+	
 	struct LightComponent
 	{
 		enum class LightType
@@ -224,5 +227,13 @@ namespace spg {
 
 		LightComponent() = default;
 		LightComponent(const LightComponent&) = default;
+	};
+
+	struct MeshComponent
+	{
+		Ref<Mesh> Mesh;
+
+		MeshComponent() = default;
+		MeshComponent(const MeshComponent&) = default;
 	};
 }

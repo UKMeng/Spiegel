@@ -2,7 +2,7 @@
 #include "Renderer.h"
 #include "UniformBuffer.h"
 #include "Renderer2D.h"
-
+#include "Texture.h"
 #include "Spiegel/Platform/OpenGL/OpenGLShader.h"
 
 // Temporary
@@ -22,6 +22,15 @@ namespace spg {
 		CameraData CameraBuffer;
 		Ref<UniformBuffer> CameraUniformBuffer;
 		Ref<ShaderLibrary> m_ShaderLibrary;
+		Ref<TextureLibrary> m_TextureLibrary;
+
+		static const uint32_t MaxTextureSlots = 32;
+		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
+		Ref<Texture2D> WhiteTexture;
+		uint32_t TextureSlotIndex = 1; // 0 = white texture
+
+		// Temporary
+		Ref<Mesh> mesh;
 	};
 
 	static RendererData* s_RendererData;
@@ -34,10 +43,15 @@ namespace spg {
 		s_RendererData->m_ShaderLibrary->Load("ColoredQuad", "assets/shaders/ColoredQuad.glsl");
 		s_RendererData->m_ShaderLibrary->Load("Test", "assets/shaders/Test.glsl");
 		s_RendererData->m_ShaderLibrary->Load("Light", "assets/shaders/Light.glsl");
+		s_RendererData->m_ShaderLibrary->Load("Mesh", "assets/shaders/Mesh.glsl");
+		s_RendererData->m_TextureLibrary = CreateRef<TextureLibrary>();
 		
-		// temporary
-		glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 		s_RendererData->CameraUniformBuffer = UniformBuffer::Create(sizeof(RendererData::CameraData), 1);
+
+		s_RendererData->WhiteTexture = Texture2D::Create(1, 1);
+		uint32_t whiteTextureData = 0xffffffff;
+		s_RendererData->WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+		s_RendererData->TextureSlots[0] = s_RendererData->WhiteTexture;
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height) {
@@ -61,6 +75,11 @@ namespace spg {
 	Ref<ShaderLibrary> Renderer::GetShaderLibrary()
 	{
 		return s_RendererData->m_ShaderLibrary;
+	}
+
+	Ref<TextureLibrary> Renderer::GetTextureLibrary()
+	{
+		return s_RendererData->m_TextureLibrary;
 	}
 
 	void Renderer::BeginScene(const Camera& camera, const glm::mat4& transform)
@@ -247,6 +266,117 @@ namespace spg {
 		vao->Bind();
 		glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 		// RenderCommand::DrawIndexed(vao, indexCount);
+	}
+
+	void Renderer::DrawMesh(const glm::mat4& transform, Ref<Mesh> mesh, int entityID)
+	{
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+
+		struct MeshVertex
+		{
+			glm::vec4 Position;
+			glm::vec2 TexCoord;
+			glm::vec3 Normal;
+			float DiffuseTextureID;
+			float SpecularTextureID;
+			int EntityID;
+		};
+
+		size_t vertexCount = 0;
+		size_t indexCount = 0;
+
+		for (auto& subMesh : mesh->GetSubMeshes()) {
+			vertexCount += subMesh.Vertices.size();
+			indexCount += subMesh.Indices.size();
+		}
+
+		Ref<Material> material = mesh->GetMaterial();
+
+		MeshVertex* MeshVertexBase = nullptr;
+		MeshVertex* MeshVertexPtr = nullptr;
+
+		for (auto& subMesh : mesh->GetSubMeshes())
+		{
+			Ref<VertexArray> vao = VertexArray::Create();
+			Ref<VertexBuffer> vbo = VertexBuffer::Create(vertexCount * sizeof(MeshVertex));
+			vbo->SetLayout({
+				{ ShaderDataType::Float4, "a_Position" },
+				{ ShaderDataType::Float2, "a_TexCoord" },
+				{ ShaderDataType::Float3, "a_Normal" },
+				{ ShaderDataType::Float, "a_DiffuseTextureID"},
+				{ ShaderDataType::Float, "a_SpecularTextureID"},
+				{ ShaderDataType::Int, "a_EntityID"},
+				});
+			vao->AddVertexBuffer(vbo);
+
+			// Index Buffer
+			size_t indexCount = subMesh.Indices.size();
+			uint32_t* meshIndices = new uint32_t[indexCount];		
+			for (auto i = 0; i < subMesh.Indices.size(); i++) {
+				meshIndices[i] = subMesh.Indices[i];
+			}
+			Ref<IndexBuffer> ibo = IndexBuffer::Create(meshIndices, indexCount);
+			vao->SetIndexBuffer(ibo);
+			delete[] meshIndices;
+
+			float dtextureIndex = 0.0f;
+			float stextureIndex = 0.0f;
+			for (auto& [type, texture] : subMesh.Textures)
+			{
+				float textureIndex = 0.0f;
+
+				for (uint32_t i = 1; i < s_RendererData->TextureSlotIndex; i++) {
+					if (*s_RendererData->TextureSlots[i] == *texture) {
+						// texture is already submitted
+						textureIndex = (float)i;
+						break;
+					}
+				}
+
+				if (textureIndex == 0.0f) {
+					textureIndex = (float)s_RendererData->TextureSlotIndex;
+					s_RendererData->TextureSlots[s_RendererData->TextureSlotIndex] = texture;
+					s_RendererData->TextureSlotIndex++;
+				}
+
+				if (type == MeshTextureType::DIFFUSE) {
+					material->SetTexture2D((int)textureIndex, texture);
+					dtextureIndex = textureIndex;
+				}
+				else {
+					material->SetTexture2D((int)textureIndex, texture);
+					stextureIndex = textureIndex;
+				}
+			}
+
+			MeshVertex* MeshVertexBase = new MeshVertex[subMesh.Vertices.size()];
+			MeshVertex* MeshVertexPtr = MeshVertexBase;
+
+			// Vertex Buffer Data
+			for (uint32_t i = 0; i < subMesh.Vertices.size(); i++)
+			{
+				Mesh::Vertex vertex = subMesh.Vertices[i];
+				MeshVertexPtr->Position = transform * glm::vec4(vertex.Position, 1.0);
+				MeshVertexPtr->TexCoord = vertex.TexCoords;
+				MeshVertexPtr->Normal = glm::mat3(glm::transpose(glm::inverse(transform))) * vertex.Normal;
+				MeshVertexPtr->EntityID = -1;
+				MeshVertexPtr->DiffuseTextureID = dtextureIndex;
+				MeshVertexPtr->SpecularTextureID = stextureIndex;
+				MeshVertexPtr++;
+			}
+
+			uint32_t dataSize = (uint8_t*)MeshVertexPtr - (uint8_t*)MeshVertexBase;
+			vbo->SetData(MeshVertexBase, dataSize);
+
+			material->Upload();
+			RenderCommand::DrawIndexed(vao, indexCount);
+
+			delete[] MeshVertexBase;
+			MeshVertexBase = nullptr;
+			MeshVertexPtr = nullptr;
+		}
+		glDisable(GL_CULL_FACE);
 	}
 
 	void Renderer::EndScene()

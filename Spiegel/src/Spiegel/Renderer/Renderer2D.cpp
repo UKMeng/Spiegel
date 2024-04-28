@@ -73,13 +73,13 @@ namespace spg {
 
 		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
 		uint32_t TextureSlotIndex = 1; // 0 = white texture
+		Ref<Texture2D> WhiteTexture;
 
 		// -------------Quad-----------------
 		Ref<VertexArray> QuadVertexArray;
 		Ref<VertexBuffer> QuadVertexBuffer;
 		Ref<Shader> QuadShader;
-		Ref<Texture2D> WhiteTexture;
-
+		
 		uint32_t QuadIndexCount = 0;
 		QuadVertex* QuadVertexBufferBase = nullptr;
 		QuadVertex* QuadVertexBufferPtr = nullptr;
@@ -180,11 +180,9 @@ namespace spg {
 		s_Renderer2DData.WhiteTexture = Texture2D::Create(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
 		s_Renderer2DData.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
-
-		s_Renderer2DData.QuadShader = Shader::Create("assets/shaders/Quad.glsl");
-
 		s_Renderer2DData.TextureSlots[0] = s_Renderer2DData.WhiteTexture;
 
+		s_Renderer2DData.QuadShader = Shader::Create("assets/shaders/Quad.glsl");
 		s_Renderer2DData.QuadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
 		s_Renderer2DData.QuadVertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
 		s_Renderer2DData.QuadVertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };

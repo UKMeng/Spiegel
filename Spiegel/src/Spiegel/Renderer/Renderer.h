@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Material.h"
+#include "Mesh.h"
 #include "Camera.h"
 #include "EditorCamera.h"
 
@@ -23,6 +24,8 @@ namespace spg {
 		
 		static Ref<ShaderLibrary> GetShaderLibrary();
 
+		static Ref<TextureLibrary> GetTextureLibrary();
+
 		static void BeginScene(const Camera& camera, const glm::mat4& transform);
 
 		static void BeginScene(const EditorCamera& camera);
@@ -30,6 +33,7 @@ namespace spg {
 		static void EndScene();
 
 		// Draw
-		static void DrawCube(const glm::mat4& transform, Ref<Material> material, int entityID = -1);	
+		static void DrawCube(const glm::mat4& transform, Ref<Material> material, int entityID = -1);
+		static void DrawMesh(const glm::mat4& transform, Ref<Mesh> mesh, int entityID = -1);
 	};
 }

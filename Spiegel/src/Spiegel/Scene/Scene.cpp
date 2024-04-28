@@ -34,6 +34,7 @@ namespace spg {
 
 	Scene::Scene()
 	{
+		// Todo:: Remove this
 		m_CubeMaterial = Material::Create("Test", Renderer::GetShaderLibrary()->Get("Test"));
 		m_LightMaterial = Material::Create("Light", Renderer::GetShaderLibrary()->Get("Light"));
 		m_CubeMaterial->SetFloat4("objectColor", glm::vec4(1.0f, 0.5f, 0.31f, 1.0f));
@@ -112,6 +113,7 @@ namespace spg {
 		CopyComponent<CircleCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
 		CopyComponent<TextComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
 		CopyComponent<LightComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
+		CopyComponent<MeshComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
 
 		// Tempoary
 		newScene->m_CubeMaterial = other->m_CubeMaterial;
@@ -161,6 +163,8 @@ namespace spg {
 		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
 		CopyComponentIfExists<TextComponent>(newEntity, entity);
 		CopyComponentIfExists<LightComponent>(newEntity, entity);
+		CopyComponentIfExists<MeshComponent>(newEntity, entity);
+		// TODO: RelationshipComponent Duplication
 	}
 
 	Entity Scene::GetEntityByUUID(UUID uuid)
@@ -341,43 +345,63 @@ namespace spg {
 			int dirLightCount = 0;
 			int pointLightCount = 0;
 			
+			Ref<Material> meshMaterial = nullptr;
+			auto meshView = m_Registry.view<TransformComponent, MeshComponent>();
+			for (auto entity : meshView) {
+				auto [transform, mesh] = meshView.get<TransformComponent, MeshComponent>(entity);
+				meshMaterial = mesh.Mesh->GetMaterial();
+				break;
+			}
+			
 			auto view = m_Registry.view<TransformComponent, LightComponent>();
 			for (auto entity : view) {
 				auto [transform, light] = view.get<TransformComponent, LightComponent>(entity);
 				if (light.Type == LightComponent::LightType::Directional) {
 					dirLightCount++;
 					
-					m_CubeMaterial->SetFloat3("dirLight.direction", light.Dir.direction);
-					m_CubeMaterial->SetFloat3("dirLight.color", light.Color);
-					m_CubeMaterial->SetFloat3("dirLight.ambient", glm::vec3(light.Dir.ambient));
-					m_CubeMaterial->SetFloat3("dirLight.diffuse", glm::vec3(light.Dir.diffuse));
-					m_CubeMaterial->SetFloat3("dirLight.specular", glm::vec3(light.Dir.specular));
+					meshMaterial->SetFloat3("dirLight.direction", light.Dir.direction);
+					meshMaterial->SetFloat3("dirLight.color", light.Color);
+					meshMaterial->SetFloat3("dirLight.ambient", glm::vec3(light.Dir.ambient));
+					meshMaterial->SetFloat3("dirLight.diffuse", glm::vec3(light.Dir.diffuse));
+					meshMaterial->SetFloat3("dirLight.specular", glm::vec3(light.Dir.specular));
 				}
 				else if (light.Type == LightComponent::LightType::Point) {
 					std::string pointIndex = "pointLights[" + std::to_string(pointLightCount) + "]";
-					m_CubeMaterial->SetFloat3(pointIndex+ ".position", transform.Translation);
-					m_CubeMaterial->SetFloat3(pointIndex + ".color", glm::vec3(1.0f, 1.0f, 1.0f));
-					m_CubeMaterial->SetFloat3(pointIndex + ".ambient", glm::vec3(0.2f));
-					m_CubeMaterial->SetFloat3(pointIndex + ".diffuse", glm::vec3(4.8f));
-					m_CubeMaterial->SetFloat3(pointIndex + ".specular", glm::vec3(6.0f));
-					m_CubeMaterial->SetFloat(pointIndex + ".constant", 1.0f);
-					m_CubeMaterial->SetFloat(pointIndex + ".linear", 0.09f);
-					m_CubeMaterial->SetFloat(pointIndex + ".quadratic", 0.032f);
+					meshMaterial->SetFloat3(pointIndex+ ".position", transform.Translation);
+					meshMaterial->SetFloat3(pointIndex + ".color", light.Color);
+					meshMaterial->SetFloat3(pointIndex + ".ambient", glm::vec3(light.Point.ambient));
+					meshMaterial->SetFloat3(pointIndex + ".diffuse", glm::vec3(light.Point.diffuse));
+					meshMaterial->SetFloat3(pointIndex + ".specular", glm::vec3(light.Point.specular));
+					meshMaterial->SetFloat(pointIndex + ".constant", light.Point.constant);
+					meshMaterial->SetFloat(pointIndex + ".linear", light.Point.linear);
+					meshMaterial->SetFloat(pointIndex + ".quadratic", light.Point.quadratic);
 					pointLightCount++;
 					
 					glm::mat4 lightTransform = glm::mat4(1.0f);
 					lightTransform = glm::translate(glm::mat4(1.0f), transform.Translation) * glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
 					Renderer::DrawCube(lightTransform, m_LightMaterial, (int)entity);
 				}
+
 				/*else if (light.Type == LightComponent::Type::Spot) {
 					m_CubeMaterial->SetFloat3("spotLight.position", transform.Translation);
 					m_CubeMaterial->SetFloat3("spotLight.direction", transform.GetTransform()[2]);
 				}*/
 			}
-			m_CubeMaterial->SetInt("dirLightCount", dirLightCount);
-			m_CubeMaterial->SetInt("pointLightCount", pointLightCount);
+			if (meshMaterial != nullptr) {
+				meshMaterial->SetInt("dirLightCount", dirLightCount);
+				meshMaterial->SetInt("pointLightCount", pointLightCount);
+			}
+			
 		}
 		
+		// Mesh
+		{
+			auto view = m_Registry.view<TransformComponent, MeshComponent>();
+			for (auto entity : view) {
+				auto [transform, mesh] = view.get<TransformComponent, MeshComponent>(entity);
+				Renderer::DrawMesh(GetTransformRelatedToParents({ entity, this }), mesh.Mesh, (int)entity);
+			}
+		}
 
 		// Draw 10 Cubes
 		glm::vec3 cubePositions[] = {
@@ -549,5 +573,12 @@ namespace spg {
 	void Scene::OnComponentAdded<LightComponent>(Entity entity, LightComponent& component)
 	{
 
+	}
+
+	template<>
+	void Scene::OnComponentAdded<MeshComponent>(Entity entity, MeshComponent& component)
+	{
+		// TODO: a cube mesh
+		component.Mesh = CreateRef<Mesh>("assets/meshes/nanosuit/nanosuit.obj");
 	}
 }

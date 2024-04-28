@@ -183,6 +183,9 @@
     <ClInclude Include="src\Spiegel\Scripting\ScriptEngine.h">
       <Filter>Header File</Filter>
     </ClInclude>
+    <ClInclude Include="src\Spiegel\Renderer\Mesh.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Spiegel\Core\Application.cpp">
@@ -303,6 +306,9 @@
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Scripting\ScriptEngine.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spiegel\Renderer\Mesh.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
   </ItemGroup>

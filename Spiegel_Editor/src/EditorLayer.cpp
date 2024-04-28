@@ -250,6 +250,8 @@ namespace spg {
 		else
 			Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
 
+
+		// Draw Viewport Through ImGui
 		ImVec2 viewportWindowSize = ImGui::GetContentRegionAvail();
 		if (m_ViewportSize != *((glm::vec2*)&viewportWindowSize)) {
 			m_Framebuffer->Resize((uint32_t)viewportWindowSize.x, (uint32_t)viewportWindowSize.y);
@@ -259,6 +261,7 @@ namespace spg {
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID(0);
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
+		// Drag and Drop to Viewport
 		if (ImGui::BeginDragDropTarget()) {
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
 				const wchar_t* path = (const wchar_t*)payload->Data;

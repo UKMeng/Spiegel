@@ -11,6 +11,7 @@ It is a learning project followed by the tutorial of [The Cherno’s Game Engine
   - [X] 2D Physics (Box2D)
   - [X] Text Rendering (Use FreeType to import .ttf fonts)
 - [X] Basic Light (Directional, Point, Spot)
+- [x] Use Assimp To Load 3D Models
 - [X] Basic Scripting (C++)
   - [X] Accept User Input To Control Entities
 - [X] Editor
@@ -31,7 +32,6 @@ It is a learning project followed by the tutorial of [The Cherno’s Game Engine
 - [ ] Project Serialization and Deserialization
 - [ ] An Audio System
 - [ ] Import A 3D Physics Engine
-- [ ] Use Assimp To Load Models (Use Mesh Class to Handle this)
 - [ ] A Better Scripting System
 - [ ] A Better Way to Get Sprites from a Sprite Sheet
 

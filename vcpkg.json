@@ -1,5 +1,6 @@
 {
   "dependencies": [
+    "box2d",
     "entt",
     "freetype",
     {
@@ -22,6 +23,6 @@
     "spdlog",
     "stb",
     "yaml-cpp",
-    "box2d"
+    "assimp"
   ]
 }

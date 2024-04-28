@@ -297,6 +297,13 @@ namespace spg {
 					ImGui::CloseCurrentPopup();
 				}
 			}
+
+			if (!m_SelectionContext.CheckComponent<MeshComponent>()) {
+				if (ImGui::MenuItem("Mesh")) {
+					m_SelectionContext.AddComponent<MeshComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
 			
 			ImGui::EndPopup();
 		}
@@ -497,5 +504,16 @@ namespace spg {
 					ImGui::DragFloat("Quadratic", &component.Spot.quadratic, 0.001f);
 				}
 		});
+
+		DrawComponent<MeshComponent>("Mesh", entity, [](auto& component) {
+			ImGui::Button("Model", { 128.0f, 128.0f });
+			if (ImGui::BeginDragDropTarget()) {
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					component.Mesh = CreateRef<Mesh>(path);
+				}
+				ImGui::EndDragDropTarget();
+			}
+			});
 	}
 }
