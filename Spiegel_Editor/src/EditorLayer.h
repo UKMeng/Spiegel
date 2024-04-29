@@ -86,5 +86,6 @@ namespace spg {
 
 		// Info
 		float m_FrameTime = 0.0f;
+		float m_TempFrameTimeForRefresh = 0.0f;
 	};
 }

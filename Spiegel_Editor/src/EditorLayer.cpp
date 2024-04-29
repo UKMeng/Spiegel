@@ -67,7 +67,12 @@ namespace spg {
 
 	void EditorLayer::OnUpdate(Timestep ts)
 	{
-		m_FrameTime = ts;
+		m_TempFrameTimeForRefresh += ts;
+		if (m_TempFrameTimeForRefresh > 0.5f) {
+			m_TempFrameTimeForRefresh = 0.0f;
+			m_FrameTime = ts;
+		}
+		
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
 		// Resize
@@ -207,7 +212,7 @@ namespace spg {
 		ImGui::Text("Hovered Entity: %s", name.c_str());
 
 		// Render Info
-		ImGui::Text("Frame Rate: %.1f", 1.0f / m_FrameTime);
+		ImGui::Text("Frame Rate: %.1f (%.1fms)", 1.0f / m_FrameTime, m_FrameTime * 1000);
 
 		// Renderer2D Stats
 		auto stats = Renderer2D::GetStats();
