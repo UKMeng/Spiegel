@@ -353,41 +353,42 @@ namespace spg {
 				break;
 			}
 			
-			auto view = m_Registry.view<TransformComponent, LightComponent>();
-			for (auto entity : view) {
-				auto [transform, light] = view.get<TransformComponent, LightComponent>(entity);
-				if (light.Type == LightComponent::LightType::Directional) {
-					dirLightCount++;
-					
-					meshMaterial->SetFloat3("dirLight.direction", light.Dir.direction);
-					meshMaterial->SetFloat3("dirLight.color", light.Color);
-					meshMaterial->SetFloat3("dirLight.ambient", glm::vec3(light.Dir.ambient));
-					meshMaterial->SetFloat3("dirLight.diffuse", glm::vec3(light.Dir.diffuse));
-					meshMaterial->SetFloat3("dirLight.specular", glm::vec3(light.Dir.specular));
-				}
-				else if (light.Type == LightComponent::LightType::Point) {
-					std::string pointIndex = "pointLights[" + std::to_string(pointLightCount) + "]";
-					meshMaterial->SetFloat3(pointIndex+ ".position", transform.Translation);
-					meshMaterial->SetFloat3(pointIndex + ".color", light.Color);
-					meshMaterial->SetFloat3(pointIndex + ".ambient", glm::vec3(light.Point.ambient));
-					meshMaterial->SetFloat3(pointIndex + ".diffuse", glm::vec3(light.Point.diffuse));
-					meshMaterial->SetFloat3(pointIndex + ".specular", glm::vec3(light.Point.specular));
-					meshMaterial->SetFloat(pointIndex + ".constant", light.Point.constant);
-					meshMaterial->SetFloat(pointIndex + ".linear", light.Point.linear);
-					meshMaterial->SetFloat(pointIndex + ".quadratic", light.Point.quadratic);
-					pointLightCount++;
-					
-					glm::mat4 lightTransform = glm::mat4(1.0f);
-					lightTransform = glm::translate(glm::mat4(1.0f), transform.Translation) * glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
-					Renderer::DrawCube(lightTransform, m_LightMaterial, (int)entity);
-				}
-
-				/*else if (light.Type == LightComponent::Type::Spot) {
-					m_CubeMaterial->SetFloat3("spotLight.position", transform.Translation);
-					m_CubeMaterial->SetFloat3("spotLight.direction", transform.GetTransform()[2]);
-				}*/
-			}
 			if (meshMaterial != nullptr) {
+				auto view = m_Registry.view<TransformComponent, LightComponent>();
+				for (auto entity : view) {
+					auto [transform, light] = view.get<TransformComponent, LightComponent>(entity);
+					if (light.Type == LightComponent::LightType::Directional) {
+						dirLightCount++;
+					
+						meshMaterial->SetFloat3("dirLight.direction", light.Dir.direction);
+						meshMaterial->SetFloat3("dirLight.color", light.Color);
+						meshMaterial->SetFloat3("dirLight.ambient", glm::vec3(light.Dir.ambient));
+						meshMaterial->SetFloat3("dirLight.diffuse", glm::vec3(light.Dir.diffuse));
+						meshMaterial->SetFloat3("dirLight.specular", glm::vec3(light.Dir.specular));
+					}
+					else if (light.Type == LightComponent::LightType::Point) {
+						std::string pointIndex = "pointLights[" + std::to_string(pointLightCount) + "]";
+						meshMaterial->SetFloat3(pointIndex+ ".position", transform.Translation);
+						meshMaterial->SetFloat3(pointIndex + ".color", light.Color);
+						meshMaterial->SetFloat3(pointIndex + ".ambient", glm::vec3(light.Point.ambient));
+						meshMaterial->SetFloat3(pointIndex + ".diffuse", glm::vec3(light.Point.diffuse));
+						meshMaterial->SetFloat3(pointIndex + ".specular", glm::vec3(light.Point.specular));
+						meshMaterial->SetFloat(pointIndex + ".constant", light.Point.constant);
+						meshMaterial->SetFloat(pointIndex + ".linear", light.Point.linear);
+						meshMaterial->SetFloat(pointIndex + ".quadratic", light.Point.quadratic);
+						pointLightCount++;
+					
+						glm::mat4 lightTransform = glm::mat4(1.0f);
+						lightTransform = glm::translate(glm::mat4(1.0f), transform.Translation) * glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
+						Renderer::DrawCube(lightTransform, m_LightMaterial, (int)entity);
+					}
+
+					/*else if (light.Type == LightComponent::Type::Spot) {
+						m_CubeMaterial->SetFloat3("spotLight.position", transform.Translation);
+						m_CubeMaterial->SetFloat3("spotLight.direction", transform.GetTransform()[2]);
+					}*/
+				}
+			
 				meshMaterial->SetInt("dirLightCount", dirLightCount);
 				meshMaterial->SetInt("pointLightCount", pointLightCount);
 			}

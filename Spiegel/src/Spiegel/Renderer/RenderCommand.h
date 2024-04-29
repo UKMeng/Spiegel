@@ -37,6 +37,62 @@ namespace spg {
 			s_RendererAPI->SetWireframeMode(flag);
 		}
 
+		// Blending
+		static void SetBlend(bool flag) {
+			s_RendererAPI->SetBlend(flag);
+		}
+
+		static void SetBlendFunc(BlendFactor sfactor, BlendFactor dfactor) {
+			s_RendererAPI->SetBlendFunc(sfactor, dfactor);
+		}
+
+		static void SetBlendSeparate(BlendFactor srcRGB, BlendFactor dstRGB, BlendFactor srcAlpha, BlendFactor dstAlpha) {
+			s_RendererAPI->SetBlendSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
+		}
+
+		// Depth Test
+		static void SetDepthTest(bool flag) {
+			s_RendererAPI->SetDepthTest(flag);
+		}
+
+		static void SetDepthMask(bool flag) {
+			s_RendererAPI->SetDepthMask(flag);
+		}
+
+		static void SetDepthFunc(CompareFunc func) {
+			s_RendererAPI->SetDepthFunc(func);
+		}
+
+		// Stencil Test
+		static void SetStencilTest(bool flag) {
+			s_RendererAPI->SetStencilTest(flag);
+		}
+
+		static void SetStencilMask(uint32_t mask) {
+			s_RendererAPI->SetStencilMask(mask);
+		}
+
+		static void SetStencilFunc(CompareFunc func, int ref, uint32_t mask) {
+			s_RendererAPI->SetStencilFunc(func, ref, mask);
+		}
+
+		static void SetStencilOp(StencilOp sfail, StencilOp dpfail, StencilOp dppass) {
+			s_RendererAPI->SetStencilOp(sfail, dpfail, dppass);
+		}
+
+		// Face Culling
+		static void SetCullFace(bool flag) {
+			s_RendererAPI->SetCullFace(flag);
+		}
+
+		static void SetCullFaceSide(CullFace side) {
+			s_RendererAPI->SetCullFaceSide(side);
+		}
+
+		static void SetCullFaceFrontFace(int mode) {
+			s_RendererAPI->SetCullFaceFrontFace(mode);
+		}
+
 	private:
 		static RendererAPI* s_RendererAPI;
 	};

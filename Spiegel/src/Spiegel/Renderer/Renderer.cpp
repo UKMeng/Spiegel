@@ -90,7 +90,7 @@ namespace spg {
 
 	void Renderer::BeginScene(const EditorCamera& camera)
 	{
-		glDisable(GL_BLEND);
+		RenderCommand::SetBlend(false);
 		// Spot Light Code
 		//s_Data->CubeMaterial->SetFloat3("spotLight.position", camera.GetPosition());
 		//s_Data->CubeMaterial->SetFloat3("spotLight.direction", camera.GetForwardDirection());
@@ -270,8 +270,7 @@ namespace spg {
 
 	void Renderer::DrawMesh(const glm::mat4& transform, Ref<Mesh> mesh, int entityID)
 	{
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
+		RenderCommand::SetCullFace(true);
 
 		struct MeshVertex
 		{
@@ -376,13 +375,11 @@ namespace spg {
 			MeshVertexBase = nullptr;
 			MeshVertexPtr = nullptr;
 		}
-		glDisable(GL_CULL_FACE);
+		RenderCommand::SetCullFace(false);
 	}
 
 	void Renderer::EndScene()
 	{
-		// temporary
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		RenderCommand::SetBlend(true);
 	}
 }
