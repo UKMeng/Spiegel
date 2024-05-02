@@ -3,6 +3,8 @@
 // For use by Spiegel applications
 
 #include <stdio.h>
+
+#include "Spiegel/Core/Base.h"
 #include "Spiegel/Core/Application.h"
 #include "Spiegel/Core/Layer.h"
 #include "Spiegel/Core/Log.h"
@@ -11,6 +13,8 @@
 #include "Spiegel/Core/KeyCodes.h"
 #include "Spiegel/Core/Timestep.h"
 #include "Spiegel/Core/UUID.h"
+
+#include "Spiegel/Asset/AssetManager.h"
 
 #include "Spiegel/ImGui/ImGuiLayer.h"
 

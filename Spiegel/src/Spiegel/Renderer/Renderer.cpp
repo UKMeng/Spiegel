@@ -3,6 +3,7 @@
 #include "UniformBuffer.h"
 #include "Renderer2D.h"
 #include "Texture.h"
+#include "Spiegel/Asset/AssetManager.h"
 #include "Spiegel/Platform/OpenGL/OpenGLShader.h"
 
 // Temporary
@@ -21,8 +22,6 @@ namespace spg {
 		};
 		CameraData CameraBuffer;
 		Ref<UniformBuffer> CameraUniformBuffer;
-		Ref<ShaderLibrary> m_ShaderLibrary;
-		Ref<TextureLibrary> m_TextureLibrary;
 
 		static const uint32_t MaxTextureSlots = 32;
 		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
@@ -39,12 +38,10 @@ namespace spg {
 		Renderer2D::Init();
 		s_RendererData = new RendererData;
 
-		s_RendererData->m_ShaderLibrary = CreateRef<ShaderLibrary>();
-		s_RendererData->m_ShaderLibrary->Load("ColoredQuad", "assets/shaders/ColoredQuad.glsl");
-		s_RendererData->m_ShaderLibrary->Load("Test", "assets/shaders/Test.glsl");
-		s_RendererData->m_ShaderLibrary->Load("Light", "assets/shaders/Light.glsl");
-		s_RendererData->m_ShaderLibrary->Load("Mesh", "assets/shaders/Mesh.glsl");
-		s_RendererData->m_TextureLibrary = CreateRef<TextureLibrary>();
+		AssetManager::GetShaderLibrary()->Load("ColoredQuad", "assets/shaders/ColoredQuad.glsl");
+		AssetManager::GetShaderLibrary()->Load("Test", "assets/shaders/Test.glsl");
+		AssetManager::GetShaderLibrary()->Load("Light", "assets/shaders/Light.glsl");
+		AssetManager::GetShaderLibrary()->Load("Mesh", "assets/shaders/Mesh.glsl");
 		
 		s_RendererData->CameraUniformBuffer = UniformBuffer::Create(sizeof(RendererData::CameraData), 1);
 
@@ -70,16 +67,6 @@ namespace spg {
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_Transform", transform);
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);*/
-	}
-
-	Ref<ShaderLibrary> Renderer::GetShaderLibrary()
-	{
-		return s_RendererData->m_ShaderLibrary;
-	}
-
-	Ref<TextureLibrary> Renderer::GetTextureLibrary()
-	{
-		return s_RendererData->m_TextureLibrary;
 	}
 
 	void Renderer::BeginScene(const Camera& camera, const glm::mat4& transform)

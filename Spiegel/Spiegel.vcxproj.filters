@@ -180,6 +180,9 @@
     <ClInclude Include="src\Spiegel\Renderer\Mesh.h">
       <Filter>Header File</Filter>
     </ClInclude>
+    <ClInclude Include="src\Spiegel\Asset\AssetManager.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Spiegel\Core\Application.cpp">
@@ -297,6 +300,9 @@
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\Spiegel\Renderer\Mesh.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spiegel\Asset\AssetManager.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
   </ItemGroup>

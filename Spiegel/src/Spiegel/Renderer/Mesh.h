@@ -38,8 +38,6 @@ namespace spg {
 		Mesh(const std::string& name, const std::vector<SubMesh>& subMeshes);
 		~Mesh() = default;
 
-		void Draw();
-
 		void SetMaterial(const Ref<Material>& material) { m_Material = material; }
 		const Ref<Material>& GetMaterial() const { return m_Material; }
 
@@ -47,6 +45,9 @@ namespace spg {
 		const std::filesystem::path& GetFilePath() const { return m_FilePath; }
 		const std::vector<SubMesh>& GetSubMeshes() const { return m_SubMeshes; }
 
+		static Ref<Mesh> Create(const std::filesystem::path& path);
+		static Ref<Mesh> CreateCube();
+		static Ref<Mesh> CreateSphere();
 	private:
 		void LoadMesh(const std::filesystem::path& path);
 		void ProcessNode(aiNode* node, const aiScene* scene);
@@ -58,5 +59,17 @@ namespace spg {
 		Ref<Material> m_Material;
 	};
 
-	
+	class MeshLibrary {
+	public:
+		void Add(const Ref<Mesh>& mesh);
+		void Add(const std::string& name, const Ref<Mesh>& mesh);
+		Ref<Mesh> Load(const std::filesystem::path& filepath);
+		Ref<Mesh> Load(const std::string& name, const std::filesystem::path& filepath);
+
+		Ref<Mesh> Get(const std::string& name);
+
+		bool Exists(const std::string& name) const;
+	private:
+		std::unordered_map<std::string, Ref<Mesh>> m_Meshes;
+	};
 }

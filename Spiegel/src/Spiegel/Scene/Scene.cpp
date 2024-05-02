@@ -7,6 +7,8 @@
 #include "Spiegel/Renderer/Renderer2D.h"
 #include "Spiegel/Renderer/Material.h"
 
+#include "Spiegel/Asset/AssetManager.h"
+
 #include "Spiegel/Math/Math.h"
 
 #include <glm/glm.hpp>
@@ -35,8 +37,8 @@ namespace spg {
 	Scene::Scene()
 	{
 		// Todo:: Remove this
-		m_CubeMaterial = Material::Create("Test", Renderer::GetShaderLibrary()->Get("Test"));
-		m_LightMaterial = Material::Create("Light", Renderer::GetShaderLibrary()->Get("Light"));
+		m_CubeMaterial = Material::Create("Test", AssetManager::GetShaderLibrary()->Get("Test"));
+		m_LightMaterial = Material::Create("Light", AssetManager::GetShaderLibrary()->Get("Light"));
 		m_CubeMaterial->SetFloat4("objectColor", glm::vec4(1.0f, 0.5f, 0.31f, 1.0f));
 		m_CubeMaterial->SetInt("dirLightCount", 0);
 		m_CubeMaterial->SetInt("pointLightCount", 0);

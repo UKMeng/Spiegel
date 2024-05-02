@@ -5,6 +5,7 @@
 #include "KeyCodes.h"
 
 #include "Spiegel/Renderer/Renderer.h"
+#include "Spiegel/Asset/AssetManager.h"
 
 #include <GLFW/glfw3.h>
 
@@ -19,7 +20,8 @@ namespace spg {
 		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps(name)));
 		m_Window->SetEventCallback(SPG_BIND_EVENT_FN(Application::OnEvent));
 		m_Window->SetVSync(false);
-
+		
+		AssetManager::Init();
 		Renderer::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();

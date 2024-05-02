@@ -2,6 +2,8 @@
 #include "Mesh.h"
 #include "Renderer.h"
 
+#include "Spiegel/Asset/AssetManager.h"
+
 
 namespace spg {
 
@@ -10,7 +12,7 @@ namespace spg {
 	{
 		LoadMesh(path);
 		// TODO: Need a Material Library
-		Ref<Material> material = Material::Create("Mesh", Renderer::GetShaderLibrary()->Get("Mesh"));
+		Ref<Material> material = Material::Create("Mesh", AssetManager::GetShaderLibrary()->Get("Mesh"));
 		material->SetInt("dirLightCount", 0);
 		material->SetInt("pointLightCount", 0);
 		material->SetFloat3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
@@ -18,6 +20,22 @@ namespace spg {
 		material->SetFloat3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
 		material->SetFloat("material.shininess", 128.0f);
 		SetMaterial(material);
+		m_Name = path.stem().string();
+	}
+
+	Ref<Mesh> Mesh::Create(const std::filesystem::path& path)
+	{
+		return CreateRef<Mesh>(path);
+	}
+
+	Ref<Mesh> Mesh::CreateCube()
+	{
+		return Ref<Mesh>();
+	}
+
+	Ref<Mesh> Mesh::CreateSphere()
+	{
+		return Ref<Mesh>();
 	}
 
 	void Mesh::LoadMesh(const std::filesystem::path& path)
@@ -87,7 +105,7 @@ namespace spg {
 	std::vector<std::pair<MeshTextureType, Ref<Texture2D>>> Mesh::LoadMaterialTextures(aiMaterial* material, aiTextureType type)
 	{
 		std::vector<std::pair<MeshTextureType, Ref<Texture2D>>> textures;
-		Ref<TextureLibrary> textureLibrary = Renderer::GetTextureLibrary();
+		Ref<TextureLibrary> textureLibrary = AssetManager::GetTextureLibrary();
 		MeshTextureType mType = (type == aiTextureType_DIFFUSE) ? MeshTextureType::DIFFUSE : MeshTextureType::SPECULAR;
 		for (uint32_t i = 0; i < material->GetTextureCount(type); i++) {
 			aiString str;
@@ -104,5 +122,40 @@ namespace spg {
 			textures.push_back(std::make_pair(mType, texture));
 		}
 		return textures;
+	}
+
+	void MeshLibrary::Add(const Ref<Mesh>& mesh)
+	{
+		auto& name = mesh->GetName();
+		Add(name, mesh);
+	}
+
+	void MeshLibrary::Add(const std::string& name, const Ref<Mesh>& mesh)
+	{
+		SPG_CORE_ASSERT(!Exists(name), "Shader already exist!");
+		m_Meshes[name] = mesh;
+	}
+
+	Ref<Mesh> MeshLibrary::Load(const std::filesystem::path& filepath)
+	{
+		return Load(filepath.stem().string(), filepath);
+	}
+
+	Ref<Mesh> MeshLibrary::Load(const std::string& name, const std::filesystem::path& filepath)
+	{
+		auto mesh = Mesh::Create(filepath);
+		Add(name, mesh);
+		return mesh;
+	}
+
+	Ref<Mesh> MeshLibrary::Get(const std::string& name)
+	{
+		SPG_CORE_ASSERT(Exists(name), "Mesh not found!");
+		return m_Meshes[name];
+	}
+
+	bool MeshLibrary::Exists(const std::string& name) const
+	{
+		return m_Meshes.find(name) != m_Meshes.end();
 	}
 }

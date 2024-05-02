@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Spiegel\Asset\AssetManager.h" />
     <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLFramebuffer.h" />
     <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLMaterial.h" />
     <ClInclude Include="src\Spiegel\Platform\OpenGL\OpenGLUniformBuffer.h" />
@@ -68,6 +69,7 @@
     <ClInclude Include="src\Spiegel\Utils\PlatformUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Spiegel\Asset\AssetManager.cpp" />
     <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLFramebuffer.cpp" />
     <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLMaterial.cpp" />
     <ClCompile Include="src\Spiegel\Platform\OpenGL\OpenGLUniformBuffer.cpp" />
