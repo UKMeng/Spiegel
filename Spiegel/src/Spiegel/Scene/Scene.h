@@ -50,6 +50,7 @@ namespace spg {
 	private:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
+
 		void RenderScene();
 		void RenderScene2D();
 	private:

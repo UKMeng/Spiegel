@@ -20,7 +20,20 @@ namespace spg {
 		material->SetFloat3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
 		material->SetFloat("material.shininess", 128.0f);
 		SetMaterial(material);
-		m_Name = path.stem().string();
+	}
+
+	Mesh::Mesh(const std::string& name, const std::vector<SubMesh>& subMeshes)
+		: m_Name(name), m_SubMeshes(subMeshes)
+	{
+		// TODO: Need a Material Library
+		Ref<Material> material = Material::Create("Mesh", AssetManager::GetShaderLibrary()->Get("Mesh"));
+		material->SetInt("dirLightCount", 0);
+		material->SetInt("pointLightCount", 0);
+		material->SetFloat3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+		material->SetFloat3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+		material->SetFloat3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+		material->SetFloat("material.shininess", 128.0f);
+		SetMaterial(material);
 	}
 
 	Ref<Mesh> Mesh::Create(const std::filesystem::path& path)
@@ -30,7 +43,55 @@ namespace spg {
 
 	Ref<Mesh> Mesh::CreateCube()
 	{
-		return Ref<Mesh>();
+		SubMesh subMesh;
+		subMesh.Vertices = {
+			// Back
+			{ {-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f}, {0.0f, 0.0f, -1.0f} },
+			{ { 0.5f,  0.5f, -0.5f}, {1.0f, 1.0f}, {0.0f, 0.0f, -1.0f} },
+			{ { 0.5f, -0.5f, -0.5f}, {1.0f, 0.0f}, {0.0f, 0.0f, -1.0f} },
+			{ { 0.5f,  0.5f, -0.5f}, {1.0f, 1.0f}, {0.0f, 0.0f, -1.0f} },
+			{ {-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f}, {0.0f, 0.0f, -1.0f} },
+			{ {-0.5f,  0.5f, -0.5f}, {0.0f, 1.0f}, {0.0f, 0.0f, -1.0f} },
+			// Front
+			{ {-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f}, {0.0f, 0.0f, 1.0f} },
+			{ { 0.5f, -0.5f,  0.5f}, {1.0f, 0.0f}, {0.0f, 0.0f, 1.0f} },
+			{ { 0.5f,  0.5f,  0.5f}, {1.0f, 1.0f}, {0.0f, 0.0f, 1.0f} },
+			{ { 0.5f,  0.5f,  0.5f}, {1.0f, 1.0f}, {0.0f, 0.0f, 1.0f} },
+			{ {-0.5f,  0.5f,  0.5f}, {0.0f, 1.0f}, {0.0f, 0.0f, 1.0f} },
+			{ {-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f}, {0.0f, 0.0f, 1.0f} },
+			// Left
+			{ {-0.5f,  0.5f,  0.5f}, {1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f} },
+			{ {-0.5f,  0.5f, -0.5f}, {1.0f, 1.0f}, {-1.0f, 0.0f, 0.0f} },
+			{ {-0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f} },
+			{ {-0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f} },
+			{ {-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f} },
+			{ {-0.5f,  0.5f,  0.5f}, {1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f} },
+			// Right
+			{ { 0.5f,  0.5f,  0.5f}, {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f} },
+			{ { 0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f} },
+			{ { 0.5f,  0.5f, -0.5f}, {0.0f, 0.0f}, {1.0f, 0.0f, 0.0f} },
+			{ { 0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f} },
+			{ { 0.5f,  0.5f,  0.5f}, {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f} },
+			{ { 0.5f, -0.5f,  0.5f}, {1.0f, 1.0f}, {1.0f, 0.0f, 0.0f} },
+			// Bottom
+			{ {-0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}, {0.0f, -1.0f, 0.0f} },
+			{ { 0.5f, -0.5f, -0.5f}, {1.0f, 1.0f}, {0.0f, -1.0f, 0.0f} },
+			{ { 0.5f, -0.5f,  0.5f}, {1.0f, 0.0f}, {0.0f, -1.0f, 0.0f} },
+			{ { 0.5f, -0.5f,  0.5f}, {1.0f, 0.0f}, {0.0f, -1.0f, 0.0f} },
+			{ {-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f}, {0.0f, -1.0f, 0.0f} },
+			{ {-0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}, {0.0f, -1.0f, 0.0f} },
+			// Top
+			{ {-0.5f,  0.5f, -0.5f}, {0.0f, 0.0f}, {0.0f, 1.0f, 0.0f} },
+			{ { 0.5f,  0.5f,  0.5f}, {1.0f, 1.0f}, {0.0f, 1.0f, 0.0f} },
+			{ { 0.5f,  0.5f, -0.5f}, {1.0f, 0.0f}, {0.0f, 1.0f, 0.0f} },
+			{ { 0.5f,  0.5f,  0.5f}, {1.0f, 1.0f}, {0.0f, 1.0f, 0.0f} },
+			{ {-0.5f,  0.5f, -0.5f}, {0.0f, 0.0f}, {0.0f, 1.0f, 0.0f} },
+			{ {-0.5f,  0.5f,  0.5f}, {0.0f, 1.0f}, {0.0f, 1.0f, 0.0f} },
+		};
+
+		subMesh.Indices = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 };
+
+		return CreateRef<Mesh>("Cube", std::vector<SubMesh>{ subMesh });
 	}
 
 	Ref<Mesh> Mesh::CreateSphere()

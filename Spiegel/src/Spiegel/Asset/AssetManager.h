@@ -22,6 +22,7 @@ namespace spg {
 		
 		static Ref<ShaderLibrary>& GetShaderLibrary() { return s_ShaderLibrary; }
 		static Ref<TextureLibrary>& GetTextureLibrary() { return s_TextureLibrary; }
+		static Ref<MeshLibrary>& GetMeshLibrary() { return s_MeshLibrary; }
 	private:
 		static Ref<ShaderLibrary> s_ShaderLibrary;
 		static Ref<TextureLibrary> s_TextureLibrary;

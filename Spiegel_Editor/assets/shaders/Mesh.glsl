@@ -6,6 +6,7 @@ layout(location = 1) in vec2 a_TexCoord;
 layout(location = 2) in vec3 a_Normal; // Normal Vector
 layout(location = 3) in float a_DiffuseTextureID;
 layout(location = 4) in float a_SpecularTextureID;
+layout(location = 5) in int a_EntityID;
 
 
 layout(std140, binding = 1) uniform Camera {
@@ -18,6 +19,7 @@ out vec3 v_Normal;
 out vec3 v_Pos;
 out flat float v_DiffuseTextureID;
 out flat float v_SpecularTextureID;
+out flat int v_EntityID;
 
 void main() {
 	v_TexCoord = a_TexCoord;
@@ -25,6 +27,7 @@ void main() {
 	v_Pos = a_Position.xyz;
 	v_DiffuseTextureID = a_DiffuseTextureID;
 	v_SpecularTextureID = a_SpecularTextureID;
+	v_EntityID = a_EntityID;
 	gl_Position = u_ViewProjection * a_Position;
 }
 
@@ -39,6 +42,7 @@ in vec3 v_Normal;
 in vec3 v_Pos;
 in flat float v_DiffuseTextureID;
 in flat float v_SpecularTextureID;
+in flat int v_EntityID;
 
 layout(std140, binding = 1) uniform Camera {
 	mat4 u_ViewProjection;
@@ -183,5 +187,5 @@ void main() {
 	
 
 	o_Color = vec4(pointLightResult + dirLightResult, 1.0f) * vec4(diffuseColor, 1.0f);
-	o_EntityID = -1;
+	o_EntityID = v_EntityID;
 }

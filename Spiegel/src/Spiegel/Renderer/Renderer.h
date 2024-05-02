@@ -29,7 +29,6 @@ namespace spg {
 		static void EndScene();
 
 		// Draw
-		static void DrawCube(const glm::mat4& transform, Ref<Material> material, int entityID = -1);
 		static void DrawMesh(const glm::mat4& transform, Ref<Mesh> mesh, int entityID = -1);
 	};
 }

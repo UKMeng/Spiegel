@@ -38,11 +38,6 @@ namespace spg {
 		Renderer2D::Init();
 		s_RendererData = new RendererData;
 
-		AssetManager::GetShaderLibrary()->Load("ColoredQuad", "assets/shaders/ColoredQuad.glsl");
-		AssetManager::GetShaderLibrary()->Load("Test", "assets/shaders/Test.glsl");
-		AssetManager::GetShaderLibrary()->Load("Light", "assets/shaders/Light.glsl");
-		AssetManager::GetShaderLibrary()->Load("Mesh", "assets/shaders/Mesh.glsl");
-		
 		s_RendererData->CameraUniformBuffer = UniformBuffer::Create(sizeof(RendererData::CameraData), 1);
 
 		s_RendererData->WhiteTexture = Texture2D::Create(1, 1);
@@ -87,172 +82,6 @@ namespace spg {
 		s_RendererData->CameraBuffer.ViewProjection = camera.GetViewProjection();
 		s_RendererData->CameraBuffer.ViewPosition = camera.GetPosition();
 		s_RendererData->CameraUniformBuffer->SetData(&s_RendererData->CameraBuffer, sizeof(RendererData::CameraData));
-	}
-	
-	void Renderer::DrawCube(const glm::mat4& transform, Ref<Material> material, int entityID)
-	{
-		
-		struct Vertex
-		{
-			glm::vec4 Position;
-			glm::vec2 TexCoord;
-			glm::vec3 Normal;
-			int EntityID;
-		};
-
-		constexpr int vertexCount = 36;
-		constexpr int indexCount = 6;
-		constexpr glm::vec3 verticesPosition[] = {
-			{-0.5f, -0.5f, -0.5f},
-			{ 0.5f, -0.5f, -0.5f},
-			{ 0.5f,  0.5f, -0.5f},
-			{ 0.5f,  0.5f, -0.5f},
-			{-0.5f,  0.5f, -0.5f},
-			{-0.5f, -0.5f, -0.5f},
-			{-0.5f, -0.5f,  0.5f},
-			{ 0.5f, -0.5f,  0.5f},
-			{ 0.5f,  0.5f,  0.5f},
-			{ 0.5f,  0.5f,  0.5f},
-			{-0.5f,  0.5f,  0.5f},
-			{-0.5f, -0.5f,  0.5f},
-			{-0.5f,  0.5f,  0.5f},
-			{-0.5f,  0.5f, -0.5f},
-			{-0.5f, -0.5f, -0.5f},
-			{-0.5f, -0.5f, -0.5f},
-			{-0.5f, -0.5f,  0.5f},
-			{-0.5f,  0.5f,  0.5f},
-			{ 0.5f,  0.5f,  0.5f},
-			{ 0.5f,  0.5f, -0.5f},
-			{ 0.5f, -0.5f, -0.5f},
-			{ 0.5f, -0.5f, -0.5f},
-			{ 0.5f, -0.5f,  0.5f},
-			{ 0.5f,  0.5f,  0.5f},
-			{-0.5f, -0.5f, -0.5f},
-			{ 0.5f, -0.5f, -0.5f},
-			{ 0.5f, -0.5f,  0.5f},
-			{ 0.5f, -0.5f,  0.5f},
-			{-0.5f, -0.5f,  0.5f},
-			{-0.5f, -0.5f, -0.5f},
-			{-0.5f,  0.5f, -0.5f},
-			{ 0.5f,  0.5f, -0.5f},
-			{ 0.5f,  0.5f,  0.5f},
-			{ 0.5f,  0.5f,  0.5f},
-			{-0.5f,  0.5f,  0.5f},
-			{-0.5f,  0.5f, -0.5f}
-		};
-		constexpr glm::vec2 textureCoords[] = {
-			{0.0f, 0.0f},
-			{1.0f, 0.0f},
-			{1.0f, 1.0f},
-			{1.0f, 1.0f},
-			{0.0f, 1.0f},
-			{0.0f, 0.0f},
-			{0.0f, 0.0f},
-			{1.0f, 0.0f},
-			{1.0f, 1.0f},
-			{1.0f, 1.0f},
-			{0.0f, 1.0f},
-			{0.0f, 0.0f},
-			{1.0f, 0.0f},
-			{1.0f, 1.0f},
-			{0.0f, 1.0f},
-			{0.0f, 1.0f},
-			{0.0f, 0.0f},
-			{1.0f, 0.0f},
-			{1.0f, 0.0f},
-			{1.0f, 1.0f},
-			{0.0f, 1.0f},
-			{0.0f, 1.0f},
-			{0.0f, 0.0f},
-			{1.0f, 0.0f},
-			{0.0f, 1.0f},
-			{1.0f, 1.0f},
-			{1.0f, 0.0f},
-			{1.0f, 0.0f},
-			{0.0f, 0.0f},
-			{0.0f, 1.0f},
-			{0.0f, 1.0f},
-			{1.0f, 1.0f},
-			{1.0f, 0.0f},
-			{1.0f, 0.0f},
-			{0.0f, 0.0f},
-			{0.0f, 1.0f}
-		};
-		constexpr glm::vec3 normals[] = {
-			{ 0.0f,  0.0f, -1.0f },
-			{ 0.0f,  0.0f, -1.0f },
-			{ 0.0f,  0.0f, -1.0f },
-			{ 0.0f,  0.0f, -1.0f },
-			{ 0.0f,  0.0f, -1.0f },
-			{ 0.0f,  0.0f, -1.0f },
-			{ 0.0f,  0.0f,  1.0f },
-			{ 0.0f,  0.0f,  1.0f },
-			{ 0.0f,  0.0f,  1.0f },
-			{ 0.0f,  0.0f,  1.0f },
-			{ 0.0f,  0.0f,  1.0f },
-			{ 0.0f,  0.0f,  1.0f },
-			{-1.0f,  0.0f,  0.0f },
-			{-1.0f,  0.0f,  0.0f },
-			{-1.0f,  0.0f,  0.0f },
-			{-1.0f,  0.0f,  0.0f },
-			{-1.0f,  0.0f,  0.0f },
-			{-1.0f,  0.0f,  0.0f },
-			{ 1.0f,  0.0f,  0.0f },
-			{ 1.0f,  0.0f,  0.0f },
-			{ 1.0f,  0.0f,  0.0f },
-			{ 1.0f,  0.0f,  0.0f },
-			{ 1.0f,  0.0f,  0.0f },
-			{ 1.0f,  0.0f,  0.0f },
-			{ 0.0f, -1.0f,  0.0f },
-			{ 0.0f, -1.0f,  0.0f },
-			{ 0.0f, -1.0f,  0.0f },
-			{ 0.0f, -1.0f,  0.0f },
-			{ 0.0f, -1.0f,  0.0f },
-			{ 0.0f, -1.0f,  0.0f },
-			{ 0.0f,  1.0f,  0.0f },
-			{ 0.0f,  1.0f,  0.0f },
-			{ 0.0f,  1.0f,  0.0f },
-			{ 0.0f,  1.0f,  0.0f },
-			{ 0.0f,  1.0f,  0.0f },
-			{ 0.0f,  1.0f,  0.0f }
-		};
-		
-
-		Ref<VertexArray> vao = VertexArray::Create();
-		Ref<VertexBuffer> vbo = VertexBuffer::Create(vertexCount * sizeof(Vertex));
-		
-		vbo->SetLayout({
-			{ ShaderDataType::Float4, "a_Position" },
-			{ ShaderDataType::Float2, "a_TexCoord" },
-			{ ShaderDataType::Float3, "a_Normal" },
-			{ ShaderDataType::Int, "a_EntityID"},
-		});
-		vao->AddVertexBuffer(vbo);
-		
-		/*uint32_t indice[] = {
-			0, 1, 2,
-			2, 3, 0
-		};
-		Ref<IndexBuffer> ibo = IndexBuffer::Create(indice, indexCount);
-		vao->SetIndexBuffer(ibo);*/
-		
-		Vertex* vertices = new Vertex[vertexCount];
-		for (int i = 0; i < vertexCount; i++)
-		{
-			vertices[i].Position = transform * glm::vec4(verticesPosition[i], 1.0);
-			vertices[i].TexCoord = textureCoords[i];
-			// use Normal Matrix to transform normals
-			// Reference: http://www.lighthouse3d.com/tutorials/glsl-12-tutorial/the-normal-matrix/
-			vertices[i].Normal = glm::mat3(glm::transpose(glm::inverse(transform))) * normals[i];
-			vertices[i].EntityID = entityID;
-		}
-		vbo->SetData(vertices, sizeof(Vertex) * vertexCount);
-		delete[] vertices;
-
-		material->Upload();
-		vao->Bind();
-		glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-		// RenderCommand::DrawIndexed(vao, indexCount);
 	}
 
 	void Renderer::DrawMesh(const glm::mat4& transform, Ref<Mesh> mesh, int entityID)
@@ -345,8 +174,10 @@ namespace spg {
 				Mesh::Vertex vertex = subMesh.Vertices[i];
 				MeshVertexPtr->Position = transform * glm::vec4(vertex.Position, 1.0);
 				MeshVertexPtr->TexCoord = vertex.TexCoords;
+				// use Normal Matrix to transform normals
+				// Reference: http://www.lighthouse3d.com/tutorials/glsl-12-tutorial/the-normal-matrix/
 				MeshVertexPtr->Normal = glm::mat3(glm::transpose(glm::inverse(transform))) * vertex.Normal;
-				MeshVertexPtr->EntityID = -1;
+				MeshVertexPtr->EntityID = entityID;
 				MeshVertexPtr->DiffuseTextureID = dtextureIndex;
 				MeshVertexPtr->SpecularTextureID = stextureIndex;
 				MeshVertexPtr++;
