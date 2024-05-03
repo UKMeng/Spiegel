@@ -111,6 +111,7 @@ void main() {
 	vec3 norm = normalize(v_Normal);
 	vec3 viewDir = normalize(u_ViewPosition - v_Pos);
 
+	// TODO: vec4 adding alpha channel is better
 	vec3 diffuseColor = vec3(0.0f);
 	vec3 specularColor = vec3(0.0f);
 	if(v_DiffuseTextureID != 0.0) diffuseColor = vec3(texture(u_Textures[int(v_DiffuseTextureID)], v_TexCoord));

@@ -38,6 +38,17 @@ namespace spg {
 		return nullptr;
 	}
 
+	Ref<TextureCubeMap> TextureCubeMap::Create(const std::filesystem::path& path)
+	{
+		switch (RendererAPI::GetAPI()) {
+			case RendererAPI::API::None:    SPG_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
+			case RendererAPI::API::OpenGL:  return CreateRef<OpenGLTextureCubeMap>(path);
+		}
+
+		SPG_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
+	}
+
 	void TextureLibrary::Add(const std::string& name, const Ref<Texture>& texture) {
 		SPG_CORE_ASSERT(!Exists(name), "Texture already exist!");
 		m_Textures[name] = texture;
@@ -69,6 +80,9 @@ namespace spg {
 		{
 		case TextureType::Texture2D:
 			texture = Texture2D::Create(filepath, flip);
+			break;
+		case TextureType::TextureCubeMap:
+			texture = TextureCubeMap::Create(filepath);
 			break;
 		default:
 			SPG_CORE_ASSERT(false, "Unknown TextureType!");

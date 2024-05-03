@@ -304,6 +304,13 @@ namespace spg {
 					ImGui::CloseCurrentPopup();
 				}
 			}
+
+			if (!m_SelectionContext.CheckComponent<SkyboxComponent>()) {
+				if (ImGui::MenuItem("Skybox")) {
+					m_SelectionContext.AddComponent<SkyboxComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
 			
 			ImGui::EndPopup();
 		}
@@ -528,11 +535,23 @@ namespace spg {
 					const wchar_t* path = (const wchar_t*)payload->Data;
 					std::filesystem::path filePath = std::filesystem::path(path);
 					std::string extension = filePath.extension().string();
-					if (extension == ".obj") {
+					if (extension == ".obj" || extension == ".pmx") {
 						// TODO: Check if the mesh is loaded successfully
 						component.Mesh = AssetManager::GetMeshLibrary()->Load(filePath);
 						component.isBasic = false;
 					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+			});
+
+		DrawComponent<SkyboxComponent>("Skybox", entity, [](auto& component) {
+			ImGui::Button("Skybox", { 128.0f, 128.0f });
+			if (ImGui::BeginDragDropTarget()) {
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					std::filesystem::path folderPath = std::filesystem::path(path).parent_path();
+					component.Skybox = std::static_pointer_cast<TextureCubeMap>(AssetManager::GetTextureLibrary()->Load(folderPath.stem().string(), folderPath.string(), TextureType::TextureCubeMap));
 				}
 				ImGui::EndDragDropTarget();
 			}

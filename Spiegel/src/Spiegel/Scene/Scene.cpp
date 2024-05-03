@@ -116,7 +116,7 @@ namespace spg {
 		CopyComponent<TextComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
 		CopyComponent<LightComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
 		CopyComponent<MeshComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
-
+		CopyComponent<SkyboxComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
 		// Tempoary
 		newScene->m_CubeMaterial = other->m_CubeMaterial;
 		newScene->m_LightMaterial = other->m_LightMaterial;
@@ -166,6 +166,7 @@ namespace spg {
 		CopyComponentIfExists<TextComponent>(newEntity, entity);
 		CopyComponentIfExists<LightComponent>(newEntity, entity);
 		CopyComponentIfExists<MeshComponent>(newEntity, entity);
+		CopyComponentIfExists<SkyboxComponent>(newEntity, entity);
 		// TODO: RelationshipComponent Duplication
 	}
 
@@ -247,7 +248,16 @@ namespace spg {
 		// TODO: Should have One OnUpdate funciton
 
 		Renderer::BeginScene(camera);
+		// SkyBox
 		RenderScene();
+
+		m_Registry.view<SkyboxComponent>().each([=](auto entity, auto& skybox)
+			{
+				if (skybox.Skybox) {
+					Renderer::DrawSkybox(camera.GetViewMatrix(), camera.GetProjection(), skybox.Skybox);
+				}
+			});
+
 		Renderer::EndScene();
 
 		Renderer2D::BeginScene(camera);
@@ -339,7 +349,9 @@ namespace spg {
 		return parentTransform * entity.GetComponent<TransformComponent>().GetTransform();
 	}
 
-	void Scene::RenderScene() {
+	void Scene::RenderScene() 
+	{
+		
 
 		// Light
 		// TODO: Defered Shading
@@ -561,4 +573,11 @@ namespace spg {
 		// component.Mesh = CreateRef<Mesh>("assets/meshes/nanosuit/nanosuit.obj");
 		component.Mesh = AssetManager::GetMeshLibrary()->Get("Cube");
 	}
+
+	template<>
+	void Scene::OnComponentAdded<SkyboxComponent>(Entity entity, SkyboxComponent& component)
+	{
+
+	}
+
 }

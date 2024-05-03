@@ -10,10 +10,10 @@ namespace spg {
 		s_ShaderLibrary->Load("Test", "assets/shaders/Test.glsl");
 		s_ShaderLibrary->Load("Light", "assets/shaders/Light.glsl");
 		s_ShaderLibrary->Load("Mesh", "assets/shaders/Mesh.glsl");
-		
+		s_ShaderLibrary->Load("Skybox", "assets/shaders/Skybox.glsl");
 		
 		s_TextureLibrary = CreateRef<TextureLibrary>();
-		
+		s_TextureLibrary->Load("CubeMap", "assets/skybox/water", TextureType::TextureCubeMap);
 		
 		s_MeshLibrary = CreateRef<MeshLibrary>();
 		s_MeshLibrary->Add("Cube", Mesh::CreateCube());

@@ -23,7 +23,8 @@ namespace spg {
 		glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
 
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& path, bool flip) : m_Path(path) {
+	OpenGLTexture2D::OpenGLTexture2D(const std::string& path, bool flip) : m_Path(path)
+	{
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(flip);
 		stbi_uc* data = nullptr;
@@ -120,4 +121,50 @@ namespace spg {
 	{
 		glBindTextureUnit(slot, m_TextureID);
 	}
+
+	OpenGLTextureCubeMap::OpenGLTextureCubeMap(const std::filesystem::path& path)
+		: m_Path(path.string())
+	{
+		int width, height, channels;
+		const char* faces[6] = { "right.jpg", "left.jpg", "top.jpg", "bottom.jpg", "front.jpg", "back.jpg" };
+		stbi_set_flip_vertically_on_load(false);
+
+		glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &m_TextureID);
+		for (size_t i = 0; i < 6; i++) {
+			std::string facePath = m_Path + "/" + faces[i];
+			stbi_uc* data = stbi_load(facePath.c_str(), &width, &height, &channels, 0);
+			if (i == 0) glTextureStorage2D(m_TextureID, 1, m_InternalFormat, width, height);
+			SPG_CORE_ASSERT(data, "Failed to load image!");
+			glTextureSubImage3D(m_TextureID, 0, 0, 0, i, width, height, 1, m_DataFormat, GL_UNSIGNED_BYTE, data);
+
+			stbi_image_free(data);
+		}
+
+		glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+		m_Width = width;
+		m_Height = height;
+		m_LoadStatus = true;
+	}
+
+	OpenGLTextureCubeMap::~OpenGLTextureCubeMap()
+	{
+		glDeleteTextures(1, &m_TextureID);
+	}
+
+	void OpenGLTextureCubeMap::SetData(void* data, uint32_t size)
+	{
+		SPG_CORE_ASSERT(false, "Not implemented!");
+	}
+
+	void OpenGLTextureCubeMap::Bind(uint32_t slot) const
+	{
+		glBindTextureUnit(slot, m_TextureID);
+	}
+	
 }

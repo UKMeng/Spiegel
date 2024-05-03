@@ -27,9 +27,6 @@ namespace spg {
 		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
 		Ref<Texture2D> WhiteTexture;
 		uint32_t TextureSlotIndex = 1; // 0 = white texture
-
-		// Temporary
-		Ref<Mesh> mesh;
 	};
 
 	static RendererData* s_RendererData;
@@ -82,6 +79,68 @@ namespace spg {
 		s_RendererData->CameraBuffer.ViewProjection = camera.GetViewProjection();
 		s_RendererData->CameraBuffer.ViewPosition = camera.GetPosition();
 		s_RendererData->CameraUniformBuffer->SetData(&s_RendererData->CameraBuffer, sizeof(RendererData::CameraData));
+	}
+
+	void Renderer::DrawSkybox(const glm::mat4& view, const glm::mat4& projection, Ref<TextureCubeMap> skybox)
+	{
+		RenderCommand::SetDepthFunc(CompareFunc::LessEqual);
+		Ref<Shader> skyboxShader = AssetManager::GetShader("Skybox");
+
+		constexpr size_t vertexCount = 36;
+		glm::vec3 skyboxVertices[] = {
+			// positions          
+			{-1.0f,  1.0f, -1.0f},
+			{-1.0f, -1.0f, -1.0f},
+			{ 1.0f, -1.0f, -1.0f},
+			{ 1.0f, -1.0f, -1.0f},
+			{ 1.0f,  1.0f, -1.0f},
+			{-1.0f,  1.0f, -1.0f},
+			{-1.0f, -1.0f,  1.0f},
+			{-1.0f, -1.0f, -1.0f},
+			{-1.0f,  1.0f, -1.0f},
+			{-1.0f,  1.0f, -1.0f},
+			{-1.0f,  1.0f,  1.0f},
+			{-1.0f, -1.0f,  1.0f},
+			{ 1.0f, -1.0f, -1.0f},
+			{ 1.0f, -1.0f,  1.0f},
+			{ 1.0f,  1.0f,  1.0f},
+			{ 1.0f,  1.0f,  1.0f},
+			{ 1.0f,  1.0f, -1.0f},
+			{ 1.0f, -1.0f, -1.0f},
+			{-1.0f, -1.0f,  1.0f},
+			{-1.0f,  1.0f,  1.0f},
+			{ 1.0f,  1.0f,  1.0f},
+			{ 1.0f,  1.0f,  1.0f},
+			{ 1.0f, -1.0f,  1.0f},
+			{-1.0f, -1.0f,  1.0f},
+			{-1.0f,  1.0f, -1.0f},
+			{ 1.0f,  1.0f, -1.0f},
+			{ 1.0f,  1.0f,  1.0f},
+			{ 1.0f,  1.0f,  1.0f},
+			{-1.0f,  1.0f,  1.0f},
+			{-1.0f,  1.0f, -1.0f},
+			{-1.0f, -1.0f, -1.0f},
+			{-1.0f, -1.0f,  1.0f},
+			{ 1.0f, -1.0f, -1.0f},
+			{ 1.0f, -1.0f, -1.0f},
+			{-1.0f, -1.0f,  1.0f},
+			{ 1.0f, -1.0f,  1.0f}
+		};
+
+		skyboxShader->Bind();
+		skyboxShader->SetMat4("u_View", glm::mat4(glm::mat3(view)));
+		skyboxShader->SetMat4("u_Projection", projection);
+		skybox->Bind(32);
+		Ref<VertexArray> vao = VertexArray::Create();
+		Ref<VertexBuffer> vbo = VertexBuffer::Create(vertexCount * sizeof(glm::vec3));
+		vbo->SetLayout({
+			{ ShaderDataType::Float3, "a_Position" },
+			});
+		vao->AddVertexBuffer(vbo);
+		vbo->SetData(skyboxVertices, vertexCount * sizeof(glm::vec3));
+		RenderCommand::DrawArrays(vao, vertexCount);
+		
+		RenderCommand::SetDepthFunc(CompareFunc::Less);
 	}
 
 	void Renderer::DrawMesh(const glm::mat4& transform, Ref<Mesh> mesh, int entityID)

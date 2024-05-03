@@ -239,4 +239,12 @@ namespace spg {
 		MeshComponent() = default;
 		MeshComponent(const MeshComponent&) = default;
 	};
+
+	struct SkyboxComponent
+	{
+		Ref<TextureCubeMap> Skybox;
+
+		SkyboxComponent() = default;
+		SkyboxComponent(const SkyboxComponent&) = default;
+	};
 }

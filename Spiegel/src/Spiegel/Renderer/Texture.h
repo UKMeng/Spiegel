@@ -9,7 +9,7 @@
 namespace spg {
 	enum class TextureType {
 		Texture2D = 0,
-		TextureCube = 1
+		TextureCubeMap = 1
 	};
 
 	class Texture {
@@ -41,6 +41,11 @@ namespace spg {
 		static Ref<Texture2D> Create(uint32_t width, uint32_t height);
 		static Ref<Texture2D> Create(const std::filesystem::path& path, bool flip = true);
 		static Ref<Texture2D> Create(const FT_Face& face);
+	};
+
+	class TextureCubeMap : public Texture {
+	public:
+		static Ref<TextureCubeMap> Create(const std::filesystem::path& path);
 	};
 
 	class TextureLibrary {
