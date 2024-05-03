@@ -96,7 +96,33 @@ namespace spg {
 
 	Ref<Mesh> Mesh::CreateSphere()
 	{
-		return Ref<Mesh>();
+		// TODO: use cube sphere https://catlikecoding.com/unity/tutorials/cube-sphere/
+		SubMesh subMesh;
+		const uint32_t X_SEGMENTS = 32;
+		const uint32_t Y_SEGMENTS = 32;
+		const float PI = 3.14159265359f;
+		for (uint32_t x = 0; x <= X_SEGMENTS; ++x) {
+			for (uint32_t y = 0; y <= Y_SEGMENTS; ++y) {
+				float xSegment = (float)x / (float)X_SEGMENTS;
+				float ySegment = (float)y / (float)Y_SEGMENTS;
+				float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+				float yPos = std::cos(ySegment * PI);
+				float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+				subMesh.Vertices.push_back({ {xPos, yPos, zPos}, {xSegment, ySegment}, {xPos, yPos, zPos} });
+			}
+		}
+		// Counter-clockwise
+		for (uint32_t x = 0; x < X_SEGMENTS; ++x) {
+			for (uint32_t y = 0; y < Y_SEGMENTS; ++y) {
+				subMesh.Indices.push_back((Y_SEGMENTS + 1) * x + y);
+				subMesh.Indices.push_back((Y_SEGMENTS + 1) * (x + 1) + y);
+				subMesh.Indices.push_back((Y_SEGMENTS + 1) * (x + 1) + y + 1);
+				subMesh.Indices.push_back((Y_SEGMENTS + 1) * x + y);
+				subMesh.Indices.push_back((Y_SEGMENTS + 1) * (x + 1) + y + 1);
+				subMesh.Indices.push_back((Y_SEGMENTS + 1) * x + y + 1);
+			}
+		}
+		return CreateRef<Mesh>("Sphere", std::vector<SubMesh>{ subMesh });
 	}
 
 	void Mesh::LoadMesh(const std::filesystem::path& path)
@@ -199,11 +225,19 @@ namespace spg {
 
 	Ref<Mesh> MeshLibrary::Load(const std::filesystem::path& filepath)
 	{
+		if (Exists(filepath.stem().string())) {
+			SPG_CORE_WARN("Mesh already exist: {0}", filepath.stem().string());
+			return Get(filepath.stem().string());
+		}
 		return Load(filepath.stem().string(), filepath);
 	}
 
 	Ref<Mesh> MeshLibrary::Load(const std::string& name, const std::filesystem::path& filepath)
 	{
+		if (Exists(name)) {
+			SPG_CORE_WARN("Mesh already exist: {0}", name);
+			return Get(name);
+		}
 		auto mesh = Mesh::Create(filepath);
 		Add(name, mesh);
 		return mesh;

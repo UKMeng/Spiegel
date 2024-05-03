@@ -506,11 +506,33 @@ namespace spg {
 		});
 
 		DrawComponent<MeshComponent>("Mesh", entity, [](auto& component) {
+			const char* BasicMeshStrings[] = { "Cube", "Sphere" };
+			
+			if (component.isBasic) {
+				if (ImGui::BeginCombo("Basic Mesh", component.CurrentMesh)) {
+					for (int i = 0; i < 2; i++) {
+						bool isSelected = component.CurrentMesh == BasicMeshStrings[i];
+						if (ImGui::Selectable(BasicMeshStrings[i], isSelected)) {
+							component.CurrentMesh = BasicMeshStrings[i];
+							component.Mesh = AssetManager::GetMeshLibrary()->Get(BasicMeshStrings[i]);
+						}
+						if (isSelected) ImGui::SetItemDefaultFocus();
+					}
+					ImGui::EndCombo();
+				}
+			}
+			
 			ImGui::Button("Model", { 128.0f, 128.0f });
 			if (ImGui::BeginDragDropTarget()) {
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
 					const wchar_t* path = (const wchar_t*)payload->Data;
-					component.Mesh = CreateRef<Mesh>(path);
+					std::filesystem::path filePath = std::filesystem::path(path);
+					std::string extension = filePath.extension().string();
+					if (extension == ".obj") {
+						// TODO: Check if the mesh is loaded successfully
+						component.Mesh = AssetManager::GetMeshLibrary()->Load(filePath);
+						component.isBasic = false;
+					}
 				}
 				ImGui::EndDragDropTarget();
 			}

@@ -17,7 +17,7 @@ namespace spg {
 		
 		s_MeshLibrary = CreateRef<MeshLibrary>();
 		s_MeshLibrary->Add("Cube", Mesh::CreateCube());
-		s_MeshLibrary->Add("Shpere", Mesh::CreateSphere());
+		s_MeshLibrary->Add("Sphere", Mesh::CreateSphere());
 	}
 
 	void AssetManager::Shutdown()

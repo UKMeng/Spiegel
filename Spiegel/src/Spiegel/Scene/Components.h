@@ -232,6 +232,9 @@ namespace spg {
 	struct MeshComponent
 	{
 		Ref<Mesh> Mesh;
+		bool isBasic = true;
+		const char* CurrentMesh = "Cube";
+		// TODO: Material
 
 		MeshComponent() = default;
 		MeshComponent(const MeshComponent&) = default;
