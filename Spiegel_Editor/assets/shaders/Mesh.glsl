@@ -112,8 +112,8 @@ void main() {
 	vec3 viewDir = normalize(u_ViewPosition - v_Pos);
 
 	// TODO: vec4 adding alpha channel is better
-	vec3 diffuseColor = vec3(0.0f);
-	vec3 specularColor = vec3(0.0f);
+	vec3 diffuseColor = vec3(1.0, 1.0, 1.0);
+	vec3 specularColor = vec3(1.0, 1.0, 1.0);
 	if(v_DiffuseTextureID != 0.0) diffuseColor = vec3(texture(u_Textures[int(v_DiffuseTextureID)], v_TexCoord));
 	if(v_SpecularTextureID != 0.0) specularColor = vec3(texture(u_Textures[int(v_SpecularTextureID)], v_TexCoord));
 	//
@@ -139,7 +139,7 @@ void main() {
 		// vec3 specular = light.color * light.specular * (spec * material.specular);
 		vec3 pointSpecular = point.color * point.specular * pointSpec * specularColor;
 		// Point Light Result
-		pointLightResult += (pointAmbient + pointDiffuse + pointSpecular) * attenuation;
+		pointLightResult = (pointAmbient + pointDiffuse + pointSpecular) * attenuation;
 	}
 	
 	/////////
@@ -150,11 +150,12 @@ void main() {
 		vec3 dirAmbient = dirLight.color * dirLight.ambient * diffuseColor;
 		// Diffusion Lighting
 		vec3 dirLightDir = normalize(-dirLight.direction);
+		vec3 halfwayDir = normalize(dirLightDir + viewDir);
 		float dirDiff = max(dot(norm, dirLightDir), 0.0);
 		vec3 dirDiffuse = dirLight.color * dirLight.diffuse * dirDiff * diffuseColor;
 		// Specular Lighting
 		vec3 dirReflectDir = reflect(-dirLightDir, norm);
-		float dirSpec = pow(max(dot(viewDir, dirReflectDir), 0.0), material.shininess);
+		float dirSpec = pow(max(dot(norm, halfwayDir), 0.0), material.shininess);
 		vec3 dirSpecular = dirLight.color * dirLight.specular * dirSpec * specularColor;
 		// Direction Light Result
 		dirLightResult = dirAmbient + dirDiffuse + dirSpecular;
