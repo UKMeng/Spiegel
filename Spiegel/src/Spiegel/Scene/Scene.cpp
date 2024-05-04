@@ -375,7 +375,7 @@ namespace spg {
 						dirLightCount++;
 					
 						meshMaterial->SetFloat3("dirLight.direction", light.Dir.direction);
-						meshMaterial->SetFloat3("dirLight.color", light.Color);
+						meshMaterial->SetFloat3("dirLight.color", light.Color * light.HDRIntensity);
 						meshMaterial->SetFloat3("dirLight.ambient", glm::vec3(light.Dir.ambient));
 						meshMaterial->SetFloat3("dirLight.diffuse", glm::vec3(light.Dir.diffuse));
 						meshMaterial->SetFloat3("dirLight.specular", glm::vec3(light.Dir.specular));
@@ -383,7 +383,8 @@ namespace spg {
 					else if (light.Type == LightComponent::LightType::Point) {
 						std::string pointIndex = "pointLights[" + std::to_string(pointLightCount) + "]";
 						meshMaterial->SetFloat3(pointIndex+ ".position", transform.Translation);
-						meshMaterial->SetFloat3(pointIndex + ".color", light.Color);
+						// TODO: Is it right?
+						meshMaterial->SetFloat3(pointIndex + ".color", light.Color * light.HDRIntensity);
 						meshMaterial->SetFloat3(pointIndex + ".ambient", glm::vec3(light.Point.ambient));
 						meshMaterial->SetFloat3(pointIndex + ".diffuse", glm::vec3(light.Point.diffuse));
 						meshMaterial->SetFloat3(pointIndex + ".specular", glm::vec3(light.Point.specular));

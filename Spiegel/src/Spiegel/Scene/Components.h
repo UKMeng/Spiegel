@@ -220,7 +220,8 @@ namespace spg {
 
 
 		LightType Type = LightType::Directional;
-		glm::vec4 Color = { 1.0f, 1.0f, 1.0f, 1.0f };
+		glm::vec3 Color = { 1.0f, 1.0f, 1.0f };
+		float HDRIntensity = 1.0f;
 		DirectionalLight Dir;
 		PointLight Point;
 		SpotLight Spot;

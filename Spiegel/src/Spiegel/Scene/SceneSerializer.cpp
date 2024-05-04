@@ -278,6 +278,7 @@ namespace spg {
 			auto& lc = entity.GetComponent<LightComponent>();
 			out << YAML::Key << "Color" << YAML::Value << lc.Color;
             out << YAML::Key << "Type" << YAML::Value << (int)lc.Type;
+            out << YAML::Key << "HDRIntensity" << YAML::Value << lc.HDRIntensity;
 			out << YAML::Key << "Dir.direction" << YAML::Value << lc.Dir.direction;
             out << YAML::Key << "Dir.ambient" << YAML::Value << lc.Dir.ambient;
             out << YAML::Key << "Dir.diffuse" << YAML::Value << lc.Dir.diffuse;
@@ -468,7 +469,8 @@ namespace spg {
                 auto lightComponent = entity["LightComponent"];
                 if (lightComponent) {
                     auto& lc = deserializedEntity.AddComponent<LightComponent>();
-                    lc.Color = lightComponent["Color"].as<glm::vec4>();
+                    lc.Color = lightComponent["Color"].as<glm::vec3>();
+                    lc.HDRIntensity = lightComponent["HDRIntensity"].as<float>();
                     lc.Type = (LightComponent::LightType)lightComponent["Type"].as<int>();
                     LightComponent::DirectionalLight dir;
                     dir.direction = lightComponent["Dir.direction"].as<glm::vec3>();

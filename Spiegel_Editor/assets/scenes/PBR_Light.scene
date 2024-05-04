@@ -1,10 +1,10 @@
 Scene: Scene Name
 Entities:
-  - Entity: 15238675227332845922
+  - Entity: 1844452076167691232
     TagComponent:
-      Tag: Light 4
+      Tag: Light 2
     TransformComponent:
-      Position: [10, -10, 10]
+      Position: [-10, 10, 10]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     RelationshipComponent:
@@ -12,8 +12,9 @@ Entities:
       Children:
         []
     LightComponent:
-      Color: [1, 1, 1, 1]
+      Color: [1, 1, 1]
       Type: 1
+      HDRIntensity: 300
       Dir.direction: [-0.200000003, -1, -0.300000012]
       Dir.ambient: 0.0500000007
       Dir.diffuse: 0.800000012
@@ -32,11 +33,11 @@ Entities:
       Spot.constant: 1
       Spot.linear: 0.0900000036
       Spot.quadratic: 0.0320000015
-  - Entity: 8914692311708490205
+  - Entity: 12797424993180408586
     TagComponent:
-      Tag: Light 3
+      Tag: Light 1
     TransformComponent:
-      Position: [-10, -10, 10]
+      Position: [10, 10, 10]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     RelationshipComponent:
@@ -44,8 +45,9 @@ Entities:
       Children:
         []
     LightComponent:
-      Color: [1, 1, 1, 1]
+      Color: [1, 1, 1]
       Type: 1
+      HDRIntensity: 300
       Dir.direction: [-0.200000003, -1, -0.300000012]
       Dir.ambient: 0.0500000007
       Dir.diffuse: 0.800000012
@@ -75,11 +77,11 @@ Entities:
       Parent: 0
       Children:
         []
-  - Entity: 12797424993180408586
+  - Entity: 8914692311708490205
     TagComponent:
-      Tag: Light 1
+      Tag: Light 3
     TransformComponent:
-      Position: [10, 10, 10]
+      Position: [-10, -10, 10]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     RelationshipComponent:
@@ -87,8 +89,9 @@ Entities:
       Children:
         []
     LightComponent:
-      Color: [1, 1, 1, 1]
+      Color: [1, 1, 1]
       Type: 1
+      HDRIntensity: 300
       Dir.direction: [-0.200000003, -1, -0.300000012]
       Dir.ambient: 0.0500000007
       Dir.diffuse: 0.800000012
@@ -107,11 +110,11 @@ Entities:
       Spot.constant: 1
       Spot.linear: 0.0900000036
       Spot.quadratic: 0.0320000015
-  - Entity: 1844452076167691232
+  - Entity: 15238675227332845922
     TagComponent:
-      Tag: Light 2
+      Tag: Light 4
     TransformComponent:
-      Position: [-10, 10, 10]
+      Position: [10, -10, 10]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     RelationshipComponent:
@@ -119,8 +122,9 @@ Entities:
       Children:
         []
     LightComponent:
-      Color: [1, 1, 1, 1]
+      Color: [1, 1, 1]
       Type: 1
+      HDRIntensity: 300
       Dir.direction: [-0.200000003, -1, -0.300000012]
       Dir.ambient: 0.0500000007
       Dir.diffuse: 0.800000012

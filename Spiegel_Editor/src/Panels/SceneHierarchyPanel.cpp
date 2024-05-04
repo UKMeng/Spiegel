@@ -471,6 +471,7 @@ namespace spg {
 
 		DrawComponent<LightComponent>("Light", entity, [](auto& component) {
 				ImGui::ColorEdit3("Color", glm::value_ptr(component.Color));
+				ImGui::DragFloat("Intensity", &component.HDRIntensity, 0.1f, 0.1f, 1000.0f);
 				const char* lightTypeStrings[] = { "Directional Light", "Point Light", "Spot Light" };
 				const char* currentLightTypeString = lightTypeStrings[(int)component.Type];
 

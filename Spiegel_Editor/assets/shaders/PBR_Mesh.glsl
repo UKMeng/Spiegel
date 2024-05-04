@@ -98,7 +98,7 @@ float DistributionGGX(vec3 N, vec3 H, float roughness) {
 // Geometry Function
 float GeometrySchlickGGX(float NdotV, float roughness) {
 	float num = NdotV;
-	float denom = NdotV * (1.0 - roughness) + roughness + 0.000001;
+	float denom = NdotV * (1.0 - roughness) + roughness + 0.00001;
 	return num / denom;
 }
 
@@ -127,8 +127,6 @@ vec3 getNormalFromMap() {
 	return normalize(TBN * tangentNormal);
 }
 
-vec3  lightColor  = vec3(300.0, 300.0, 300.0);
-
 void main() {
 	vec3 albedo = material.useAlbedoMap == 0.0 ? material.albedo : pow(texture(u_Textures[1], v_TexCoord).rgb, vec3(2.2));
 	vec3 N = material.useNormalMap == 0.0 ? normalize(v_Normal) : getNormalFromMap();
@@ -149,8 +147,8 @@ void main() {
 		vec3 H = normalize(V + L);
 		float distance = length(pointLights[i].position - v_Pos);
 		float attenuation = 1.0 / (distance * distance);
-		// vec3 radiance = pointLights[i].color * attenuation;
-		vec3 radiance = lightColor * attenuation;
+		vec3 radiance = pointLights[i].color * attenuation;
+		// vec3 radiance = lightColor * attenuation;
 
 		// Cook-Torrance BRDF
 		float NDF = DistributionGGX(N, H, roughness);
@@ -162,7 +160,7 @@ void main() {
 		kD *= 1.0 - metallic;
 
 		vec3 numerator = NDF * G * F;
-		float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.001;
+		float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.00001;
 		vec3 specular = numerator / denominator;
 
 		float NdotL = max(dot(N, L), 0.0);
@@ -172,7 +170,7 @@ void main() {
 	vec3 ambient = vec3(0.03) * albedo * ao;
 	vec3 color = ambient + Lo;
 
-	color = color / (color + vec3(1.0)); // HDR
+	color = color / (color + vec3(1.0)); // HDR Tone Mapping
 	color = pow(color, vec3(1.0 / 2.2)); // gamma correction
 
 	o_Color = vec4(color, 1.0);
