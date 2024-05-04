@@ -528,6 +528,11 @@ namespace spg {
 					ImGui::EndCombo();
 				}
 			}
+
+			ImGui::ColorEdit3("Color", glm::value_ptr(component.Albedo));
+			ImGui::DragFloat("Metallic", &component.Metallic, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Roughness", &component.Roughness, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Ambient Occlusion", &component.AO, 0.01f, 0.0f, 1.0f);
 			
 			ImGui::Button("Model", { 128.0f, 128.0f });
 			if (ImGui::BeginDragDropTarget()) {

@@ -234,7 +234,12 @@ namespace spg {
 		Ref<Mesh> Mesh;
 		bool isBasic = true;
 		const char* CurrentMesh = "Cube";
-		// TODO: Material
+		
+		// PBR Material
+		glm::vec3 Albedo = { 0.5f, 0.0f, 0.0f };
+		float Metallic = 0.0f;
+		float Roughness = 0.5f;
+		float AO = 1.0f;
 
 		MeshComponent() = default;
 		MeshComponent(const MeshComponent&) = default;

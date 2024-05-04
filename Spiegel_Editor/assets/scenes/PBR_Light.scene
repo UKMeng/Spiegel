@@ -1,0 +1,141 @@
+Scene: Scene Name
+Entities:
+  - Entity: 15238675227332845922
+    TagComponent:
+      Tag: Light 4
+    TransformComponent:
+      Position: [10, -10, 10]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+    LightComponent:
+      Color: [1, 1, 1, 1]
+      Type: 1
+      Dir.direction: [-0.200000003, -1, -0.300000012]
+      Dir.ambient: 0.0500000007
+      Dir.diffuse: 0.800000012
+      Dir.specular: 1
+      Point.ambient: 0.0500000007
+      Point.diffuse: 0.800000012
+      Point.specular: 1
+      Point.constant: 1
+      Point.linear: 0.0900000036
+      Point.quadratic: 0.0320000015
+      Spot.cutOff: 12.5
+      Spot.outerCutOff: 15
+      Spot.ambient: 0.0500000007
+      Spot.diffuse: 0.800000012
+      Spot.specular: 1
+      Spot.constant: 1
+      Spot.linear: 0.0900000036
+      Spot.quadratic: 0.0320000015
+  - Entity: 8914692311708490205
+    TagComponent:
+      Tag: Light 3
+    TransformComponent:
+      Position: [-10, -10, 10]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+    LightComponent:
+      Color: [1, 1, 1, 1]
+      Type: 1
+      Dir.direction: [-0.200000003, -1, -0.300000012]
+      Dir.ambient: 0.0500000007
+      Dir.diffuse: 0.800000012
+      Dir.specular: 1
+      Point.ambient: 0.0500000007
+      Point.diffuse: 0.800000012
+      Point.specular: 1
+      Point.constant: 1
+      Point.linear: 0.0900000036
+      Point.quadratic: 0.0320000015
+      Spot.cutOff: 12.5
+      Spot.outerCutOff: 15
+      Spot.ambient: 0.0500000007
+      Spot.diffuse: 0.800000012
+      Spot.specular: 1
+      Spot.constant: 1
+      Spot.linear: 0.0900000036
+      Spot.quadratic: 0.0320000015
+  - Entity: 8740860045938977178
+    TagComponent:
+      Tag: Ball
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+  - Entity: 12797424993180408586
+    TagComponent:
+      Tag: Light 1
+    TransformComponent:
+      Position: [10, 10, 10]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+    LightComponent:
+      Color: [1, 1, 1, 1]
+      Type: 1
+      Dir.direction: [-0.200000003, -1, -0.300000012]
+      Dir.ambient: 0.0500000007
+      Dir.diffuse: 0.800000012
+      Dir.specular: 1
+      Point.ambient: 0.0500000007
+      Point.diffuse: 0.800000012
+      Point.specular: 1
+      Point.constant: 1
+      Point.linear: 0.0900000036
+      Point.quadratic: 0.0320000015
+      Spot.cutOff: 12.5
+      Spot.outerCutOff: 15
+      Spot.ambient: 0.0500000007
+      Spot.diffuse: 0.800000012
+      Spot.specular: 1
+      Spot.constant: 1
+      Spot.linear: 0.0900000036
+      Spot.quadratic: 0.0320000015
+  - Entity: 1844452076167691232
+    TagComponent:
+      Tag: Light 2
+    TransformComponent:
+      Position: [-10, 10, 10]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+    LightComponent:
+      Color: [1, 1, 1, 1]
+      Type: 1
+      Dir.direction: [-0.200000003, -1, -0.300000012]
+      Dir.ambient: 0.0500000007
+      Dir.diffuse: 0.800000012
+      Dir.specular: 1
+      Point.ambient: 0.0500000007
+      Point.diffuse: 0.800000012
+      Point.specular: 1
+      Point.constant: 1
+      Point.linear: 0.0900000036
+      Point.quadratic: 0.0320000015
+      Spot.cutOff: 12.5
+      Spot.outerCutOff: 15
+      Spot.ambient: 0.0500000007
+      Spot.diffuse: 0.800000012
+      Spot.specular: 1
+      Spot.constant: 1
+      Spot.linear: 0.0900000036
+      Spot.quadratic: 0.0320000015

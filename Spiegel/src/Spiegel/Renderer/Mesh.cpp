@@ -26,7 +26,7 @@ namespace spg {
 		: m_Name(name), m_SubMeshes(subMeshes)
 	{
 		// TODO: Need a Material Library
-		Ref<Material> material = Material::Create("Mesh", AssetManager::GetShaderLibrary()->Get("Mesh"));
+		Ref<Material> material = Material::Create("Mesh", AssetManager::GetShaderLibrary()->Get("PBR_Mesh"));
 		material->SetInt("dirLightCount", 0);
 		material->SetInt("pointLightCount", 0);
 		material->SetFloat3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));

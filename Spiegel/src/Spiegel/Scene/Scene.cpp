@@ -403,8 +403,8 @@ namespace spg {
 					}*/
 				}
 			
-				meshMaterial->SetInt("dirLightCount", dirLightCount);
-				meshMaterial->SetInt("pointLightCount", pointLightCount);
+				meshMaterial->SetInt("u_DirLightCount", dirLightCount); // TODO: Shader not set u_ yet
+				meshMaterial->SetInt("u_PointLightCount", pointLightCount);
 			}
 			
 		}
@@ -414,6 +414,14 @@ namespace spg {
 			auto view = m_Registry.view<TransformComponent, MeshComponent>();
 			for (auto entity : view) {
 				auto [transform, mesh] = view.get<TransformComponent, MeshComponent>(entity);
+				if (mesh.Mesh) {
+					Ref<Material> material = mesh.Mesh->GetMaterial();
+					material->SetFloat3("material.albedo", mesh.Albedo);
+					material->SetFloat("material.metallic", mesh.Metallic);
+					material->SetFloat("material.roughness", mesh.Roughness);
+					material->SetFloat("material.ao", mesh.AO);
+				}
+				
 				Renderer::DrawMesh(GetTransformRelatedToParents({ entity, this }), mesh.Mesh, (int)entity);
 			}
 		}
