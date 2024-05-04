@@ -271,6 +271,33 @@ namespace spg {
 			out << YAML::EndMap; // TextComponent
         }
 
+        if (entity.CheckComponent<LightComponent>()) {
+            out << YAML::Key << "LightComponent";
+			out << YAML::BeginMap; // LightComponent
+			auto& lc = entity.GetComponent<LightComponent>();
+			out << YAML::Key << "Color" << YAML::Value << lc.Color;
+            out << YAML::Key << "Type" << YAML::Value << (int)lc.Type;
+			out << YAML::Key << "Dir.direction" << YAML::Value << lc.Dir.direction;
+            out << YAML::Key << "Dir.ambient" << YAML::Value << lc.Dir.ambient;
+            out << YAML::Key << "Dir.diffuse" << YAML::Value << lc.Dir.diffuse;
+            out << YAML::Key << "Dir.specular" << YAML::Value << lc.Dir.specular;
+            out << YAML::Key << "Point.ambient" << YAML::Value << lc.Point.ambient;
+            out << YAML::Key << "Point.diffuse" << YAML::Value << lc.Point.diffuse;
+            out << YAML::Key << "Point.specular" << YAML::Value << lc.Point.specular;
+            out << YAML::Key << "Point.constant" << YAML::Value << lc.Point.constant;
+            out << YAML::Key << "Point.linear" << YAML::Value << lc.Point.linear;
+            out << YAML::Key << "Point.quadratic" << YAML::Value << lc.Point.quadratic;
+            out << YAML::Key << "Spot.cutOff" << YAML::Value << lc.Spot.cutOff;
+            out << YAML::Key << "Spot.outerCutOff" << YAML::Value << lc.Spot.outerCutOff;
+            out << YAML::Key << "Spot.ambient" << YAML::Value << lc.Spot.ambient;
+            out << YAML::Key << "Spot.diffuse" << YAML::Value << lc.Spot.diffuse;
+            out << YAML::Key << "Spot.specular" << YAML::Value << lc.Spot.specular;
+            out << YAML::Key << "Spot.constant" << YAML::Value << lc.Spot.constant;
+            out << YAML::Key << "Spot.linear" << YAML::Value << lc.Spot.linear;
+            out << YAML::Key << "Spot.quadratic" << YAML::Value << lc.Spot.quadratic;
+			out << YAML::EndMap; // LightComponent
+        }
+
         out << YAML::EndMap; // Entity
     }
 
@@ -426,6 +453,37 @@ namespace spg {
 					c2d.Restitution = circleCollider2DComponent["Restitution"].as<float>();
 					c2d.RestitutionThreshold = circleCollider2DComponent["RestitutionThreshold"].as<float>();
 				}
+
+                auto lightComponent = entity["LightComponent"];
+                if (lightComponent) {
+                    auto& lc = deserializedEntity.AddComponent<LightComponent>();
+                    lc.Color = lightComponent["Color"].as<glm::vec4>();
+                    lc.Type = (LightComponent::LightType)lightComponent["Type"].as<int>();
+                    LightComponent::DirectionalLight dir;
+                    dir.direction = lightComponent["Dir.direction"].as<glm::vec3>();
+                    dir.ambient = lightComponent["Dir.ambient"].as<float>();
+                    dir.diffuse = lightComponent["Dir.diffuse"].as<float>();
+                    dir.specular = lightComponent["Dir.specular"].as<float>();
+                    lc.Dir = dir;
+                    LightComponent::PointLight point;
+                    point.ambient = lightComponent["Point.ambient"].as<float>();
+                    point.diffuse = lightComponent["Point.diffuse"].as<float>();
+                    point.specular = lightComponent["Point.specular"].as<float>();
+                    point.constant = lightComponent["Point.constant"].as<float>();
+                    point.linear = lightComponent["Point.linear"].as<float>();
+                    point.quadratic = lightComponent["Point.quadratic"].as<float>();
+                    lc.Point = point;
+                    LightComponent::SpotLight spot;
+                    spot.cutOff = lightComponent["Spot.cutOff"].as<float>();
+                    spot.outerCutOff = lightComponent["Spot.outerCutOff"].as<float>();
+                    spot.ambient = lightComponent["Spot.ambient"].as<float>();
+                    spot.diffuse = lightComponent["Spot.diffuse"].as<float>();
+                    spot.specular = lightComponent["Spot.specular"].as<float>();
+                    spot.constant = lightComponent["Spot.constant"].as<float>();
+                    spot.linear = lightComponent["Spot.linear"].as<float>();
+                    spot.quadratic = lightComponent["Spot.quadratic"].as<float>();
+                    lc.Spot = spot;
+                }
 			}
 		}
 

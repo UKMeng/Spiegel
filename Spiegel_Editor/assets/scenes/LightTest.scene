@@ -1,0 +1,45 @@
+Scene: Scene Name
+Entities:
+  - Entity: 15261755262199701524
+    TagComponent:
+      Tag: Light
+    TransformComponent:
+      Position: [1.11422408, 1.48710632, -0.447509766]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+    LightComponent:
+      Color: [1, 1, 1, 1]
+      Type: 1
+      Dir.direction: [-0.200000003, -1, -0.300000012]
+      Dir.ambient: 0.0500000007
+      Dir.diffuse: 0.800000012
+      Dir.specular: 1
+      Point.ambient: 0.0500000007
+      Point.diffuse: 0.800000012
+      Point.specular: 1
+      Point.constant: 1
+      Point.linear: 0.0900000036
+      Point.quadratic: 0.0320000015
+      Spot.cutOff: 12.5
+      Spot.outerCutOff: 15
+      Spot.ambient: 0.0500000007
+      Spot.diffuse: 0.800000012
+      Spot.specular: 1
+      Spot.constant: 1
+      Spot.linear: 0.0900000036
+      Spot.quadratic: 0.0320000015
+  - Entity: 16339356218470998899
+    TagComponent:
+      Tag: Empty Entity
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [7.66018915, 1, 6.9049015]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
