@@ -477,7 +477,11 @@ namespace spg {
 			if (cameraComponent.Primary)
 				return Entity{ entity, this };
 		}
-		return {};
+		// No Primary Camera Found
+		SPG_CORE_ERROR("No Primary Camera Entity Found!");
+		Entity camera = CreateEntity("Primary Camera");
+		camera.AddComponent<CameraComponent>();
+		return camera;
 	}
 
 	//// TODO: Refactor this

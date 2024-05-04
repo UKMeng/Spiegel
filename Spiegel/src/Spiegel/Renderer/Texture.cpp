@@ -59,22 +59,17 @@ namespace spg {
 		Add(name, texture);
 	}
 
-	Ref<Texture> TextureLibrary::Load(const std::string& filepath, TextureType type, bool flip) {
-		Ref<Texture> texture;
-		switch (type)
-		{
-			case TextureType::Texture2D:
-				texture = Texture2D::Create(filepath, flip);
-				break;
-			default:
-				SPG_CORE_ASSERT(false, "Unknown TextureType!");
-				break;
-		}
-		Add(texture);
-		return texture;
+	Ref<Texture> TextureLibrary::Load(const std::filesystem::path& filepath, TextureType type, bool flip) {
+		auto name = filepath.stem().string();
+		return Load(name, filepath, type, flip);
 	}
 
-	Ref<Texture> TextureLibrary::Load(const std::string& name, const std::string& filepath, TextureType type, bool flip) {
+	Ref<Texture> TextureLibrary::Load(const std::string& name, const std::filesystem::path& filepath, TextureType type, bool flip) {
+		if (Exists(name))
+		{
+			SPG_CORE_WARN("Texture {0} already exist!", name);
+			return Get(name);
+		}
 		Ref<Texture> texture;
 		switch (type)
 		{

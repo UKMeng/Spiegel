@@ -1,5 +1,18 @@
 Scene: Scene Name
 Entities:
+  - Entity: 16339356218470998899
+    TagComponent:
+      Tag: SKybox
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [7.66018915, 1, 6.9049015]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+    SkyboxComponent:
+      Skybox: assets\skybox\skybox_water
   - Entity: 15261755262199701524
     TagComponent:
       Tag: Light
@@ -32,14 +45,3 @@ Entities:
       Spot.constant: 1
       Spot.linear: 0.0900000036
       Spot.quadratic: 0.0320000015
-  - Entity: 16339356218470998899
-    TagComponent:
-      Tag: Empty Entity
-    TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [7.66018915, 1, 6.9049015]
-    RelationshipComponent:
-      Parent: 0
-      Children:
-        []

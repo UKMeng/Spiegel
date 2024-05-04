@@ -2,6 +2,7 @@
 #include "SceneSerializer.h"
 #include "Entity.h"
 #include "Components.h"
+#include "Spiegel/Asset/AssetManager.h"
 #include "Spiegel/Renderer/Font.h"
 
 #include <yaml-cpp/yaml.h>
@@ -298,6 +299,16 @@ namespace spg {
 			out << YAML::EndMap; // LightComponent
         }
 
+        if (entity.CheckComponent<SkyboxComponent>()) {
+            out << YAML::Key << "SkyboxComponent";
+			out << YAML::BeginMap; // SkyboxComponent
+			auto& sc = entity.GetComponent<SkyboxComponent>();
+            if (sc.Skybox && sc.Skybox->IsLoaded()) {
+                out << YAML::Key << "Skybox" << YAML::Value << sc.Skybox->GetPath();
+            }
+			out << YAML::EndMap; // SkyboxComponent
+        }
+
         out << YAML::EndMap; // Entity
     }
 
@@ -483,6 +494,15 @@ namespace spg {
                     spot.linear = lightComponent["Spot.linear"].as<float>();
                     spot.quadratic = lightComponent["Spot.quadratic"].as<float>();
                     lc.Spot = spot;
+                }
+
+                auto skyboxComponent = entity["SkyboxComponent"];
+                if (skyboxComponent) {
+                    auto& sc = deserializedEntity.AddComponent<SkyboxComponent>();
+					if (skyboxComponent["Skybox"]) {
+						std::string skyboxPath = skyboxComponent["Skybox"].as<std::string>();
+						sc.Skybox = std::static_pointer_cast<TextureCubeMap>(AssetManager::GetTextureLibrary()->Load(skyboxPath, TextureType::TextureCubeMap));
+					}
                 }
 			}
 		}

@@ -52,8 +52,8 @@ namespace spg {
 	public:
 		void Add(const Ref<Texture>& texture);
 		void Add(const std::string& name, const Ref<Texture>& texture);
-		Ref<Texture> Load(const std::string& filepath, TextureType type, bool flip = true);
-		Ref<Texture> Load(const std::string& name, const std::string& filepath, TextureType type, bool flip = true);
+		Ref<Texture> Load(const std::filesystem::path& filepath, TextureType type, bool flip = true);
+		Ref<Texture> Load(const std::string& name, const std::filesystem::path& filepath, TextureType type, bool flip = true);
 
 		Ref<Texture> Get(const std::string& name);
 
