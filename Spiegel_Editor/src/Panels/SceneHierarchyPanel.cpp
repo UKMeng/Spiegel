@@ -529,11 +529,87 @@ namespace spg {
 				}
 			}
 
-			ImGui::ColorEdit3("Color", glm::value_ptr(component.Albedo));
+			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+			ImVec2 buttonSize = { lineHeight, lineHeight };
+
+			ImGui::ColorEdit3("Base Color", glm::value_ptr(component.Albedo));
+			ImGui::SameLine();
+			ImGui::Button("", buttonSize);
+			if (ImGui::BeginDragDropTarget()) {
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					std::filesystem::path filePath = std::filesystem::path(path);
+					std::string extension = filePath.extension().string();
+					if (extension == ".png" || extension == ".jpg") {
+						// TODO: Check if the mesh is loaded successfully
+						component.AlbedoMap = std::static_pointer_cast<Texture2D>(AssetManager::GetTextureLibrary()->Load(filePath, TextureType::Texture2D));
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+
 			ImGui::DragFloat("Metallic", &component.Metallic, 0.01f, 0.0f, 1.0f);
+			ImGui::SameLine();
+			ImGui::Button("", buttonSize);
+			if (ImGui::BeginDragDropTarget()) {
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					std::filesystem::path filePath = std::filesystem::path(path);
+					std::string extension = filePath.extension().string();
+					if (extension == ".png" || extension == ".jpg") {
+						// TODO: Check if the mesh is loaded successfully
+						component.MetallicMap = std::static_pointer_cast<Texture2D>(AssetManager::GetTextureLibrary()->Load(filePath, TextureType::Texture2D));
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+
 			ImGui::DragFloat("Roughness", &component.Roughness, 0.01f, 0.0f, 1.0f);
-			ImGui::DragFloat("Ambient Occlusion", &component.AO, 0.01f, 0.0f, 1.0f);
-			
+			ImGui::SameLine();
+			ImGui::Button("", buttonSize);
+			if (ImGui::BeginDragDropTarget()) {
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					std::filesystem::path filePath = std::filesystem::path(path);
+					std::string extension = filePath.extension().string();
+					if (extension == ".png" || extension == ".jpg") {
+						// TODO: Check if the mesh is loaded successfully
+						component.RoughnessMap = std::static_pointer_cast<Texture2D>(AssetManager::GetTextureLibrary()->Load(filePath, TextureType::Texture2D));
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+
+			ImGui::DragFloat("AO", &component.AO, 0.01f, 0.0f, 1.0f);
+			ImGui::SameLine();
+			ImGui::Button("", buttonSize);
+			if (ImGui::BeginDragDropTarget()) {
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					std::filesystem::path filePath = std::filesystem::path(path);
+					std::string extension = filePath.extension().string();
+					if (extension == ".png" || extension == ".jpg") {
+						// TODO: Check if the mesh is loaded successfully
+						component.AOMap = std::static_pointer_cast<Texture2D>(AssetManager::GetTextureLibrary()->Load(filePath, TextureType::Texture2D));
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+
+			ImGui::Button("NormalMap", { 128.0f, 128.0f });
+			if (ImGui::BeginDragDropTarget()) {
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					std::filesystem::path filePath = std::filesystem::path(path);
+					std::string extension = filePath.extension().string();
+					if (extension == ".png" || extension == ".jpg") {
+						// TODO: Check if the mesh is loaded successfully
+						component.NormalMap = std::static_pointer_cast<Texture2D>(AssetManager::GetTextureLibrary()->Load(filePath, TextureType::Texture2D));
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+
 			ImGui::Button("Model", { 128.0f, 128.0f });
 			if (ImGui::BeginDragDropTarget()) {
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {

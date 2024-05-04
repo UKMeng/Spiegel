@@ -6,5 +6,6 @@ vcpkg_installed/
 Spiegel_Editor/assets/fonts/
 Spiegel_Editor/assets/meshes/
 Spiegel_Editor/assets/skybox/
+Spiegel_Editor/assets/textures/PBR_Textures/
 SpiegelProfile-*.json
 *.user

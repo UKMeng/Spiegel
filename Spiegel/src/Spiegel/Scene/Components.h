@@ -240,6 +240,11 @@ namespace spg {
 		float Metallic = 0.0f;
 		float Roughness = 0.5f;
 		float AO = 1.0f;
+		Ref<Texture2D> AlbedoMap;
+		Ref<Texture2D> NormalMap;
+		Ref<Texture2D> MetallicMap;
+		Ref<Texture2D> RoughnessMap;
+		Ref<Texture2D> AOMap;
 
 		MeshComponent() = default;
 		MeshComponent(const MeshComponent&) = default;

@@ -70,6 +70,11 @@ struct Material {
 	float metallic;
 	float roughness;
 	float ao;
+	float useAlbedoMap;
+	float useNormalMap;
+	float useMetallicMap;
+	float useRoughnessMap;
+	float useAOMap;
 };
 
 uniform Material material;
@@ -109,14 +114,32 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0) {
 	return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
+vec3 getNormalFromMap() {
+	vec3 tangentNormal = texture(u_Textures[2], v_TexCoord).xyz * 2.0 - 1.0;
+	vec3 Q1 = dFdx(v_Pos);
+	vec3 Q2 = dFdy(v_Pos);
+	vec2 st1 = dFdx(v_TexCoord);
+	vec2 st2 = dFdy(v_TexCoord);
+	vec3 N = normalize(v_Normal);
+	vec3 T = normalize(Q1 * st2.t - Q2 * st1.t);
+	vec3 B = -normalize(cross(N, T));
+	mat3 TBN = mat3(T, B, N);
+	return normalize(TBN * tangentNormal);
+}
+
 vec3  lightColor  = vec3(300.0, 300.0, 300.0);
 
 void main() {
-	vec3 N = normalize(v_Normal);
+	vec3 albedo = material.useAlbedoMap == 0.0 ? material.albedo : pow(texture(u_Textures[1], v_TexCoord).rgb, vec3(2.2));
+	vec3 N = material.useNormalMap == 0.0 ? normalize(v_Normal) : getNormalFromMap();
+	float metallic = material.useMetallicMap == 0.0 ? material.metallic : texture(u_Textures[3], v_TexCoord).r;
+	float roughness = material.useRoughnessMap == 0.0 ? material.roughness : texture(u_Textures[4], v_TexCoord).r;
+	float ao = material.useAOMap == 0.0 ? material.ao : texture(u_Textures[5], v_TexCoord).r;
+
 	vec3 V = normalize(u_ViewPosition - v_Pos);
 
 	vec3 F0 = vec3(0.04);
-	F0 = mix(F0, material.albedo, material.metallic);
+	F0 = mix(F0, albedo, metallic);
 
 	vec3 Lo = vec3(0.0);
 
@@ -130,23 +153,23 @@ void main() {
 		vec3 radiance = lightColor * attenuation;
 
 		// Cook-Torrance BRDF
-		float NDF = DistributionGGX(N, H, material.roughness);
-		float G = GeometrySmith(N, V, L, material.roughness);
+		float NDF = DistributionGGX(N, H, roughness);
+		float G = GeometrySmith(N, V, L, roughness);
 		vec3 F = fresnelSchlick(max(dot(H, V), 0.0), F0);
 
 		vec3 kS = F;
 		vec3 kD = vec3(1.0) - kS;
-		kD *= 1.0 - material.metallic;
+		kD *= 1.0 - metallic;
 
 		vec3 numerator = NDF * G * F;
 		float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.001;
 		vec3 specular = numerator / denominator;
 
 		float NdotL = max(dot(N, L), 0.0);
-		Lo += (kD * material.albedo / PI + specular) * radiance * NdotL;
+		Lo += (kD * albedo / PI + specular) * radiance * NdotL;
 	}
 
-	vec3 ambient = vec3(0.03) * material.albedo * material.ao;
+	vec3 ambient = vec3(0.03) * albedo * ao;
 	vec3 color = ambient + Lo;
 
 	color = color / (color + vec3(1.0)); // HDR

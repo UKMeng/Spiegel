@@ -420,6 +420,31 @@ namespace spg {
 					material->SetFloat("material.metallic", mesh.Metallic);
 					material->SetFloat("material.roughness", mesh.Roughness);
 					material->SetFloat("material.ao", mesh.AO);
+					material->SetFloat("material.useAlbedoMap", 0.0f);
+					material->SetFloat("material.useNormalMap", 0.0f);
+					material->SetFloat("material.useMetallicMap", 0.0f);
+					material->SetFloat("material.useRoughnessMap", 0.0f);
+					material->SetFloat("material.useAOMap", 0.0f);
+					if (mesh.AlbedoMap) {
+						material->SetTexture2D(1, mesh.AlbedoMap);
+						material->SetFloat("material.useAlbedoMap", 1.0f);
+					}
+					if (mesh.NormalMap) {
+						material->SetTexture2D(2, mesh.NormalMap);
+						material->SetFloat("material.useNormalMap", 1.0f);
+					}
+					if (mesh.MetallicMap) {
+						material->SetTexture2D(3, mesh.MetallicMap);
+						material->SetFloat("material.useMetallicMap", 1.0f);
+					}
+					if (mesh.RoughnessMap) {
+						material->SetTexture2D(4, mesh.RoughnessMap);
+						material->SetFloat("material.useRoughnessMap", 1.0f);
+					}
+					if (mesh.AOMap) {
+						material->SetTexture2D(5, mesh.AOMap);
+						material->SetFloat("material.useAOMap", 1.0f);
+					}
 				}
 				
 				Renderer::DrawMesh(GetTransformRelatedToParents({ entity, this }), mesh.Mesh, (int)entity);

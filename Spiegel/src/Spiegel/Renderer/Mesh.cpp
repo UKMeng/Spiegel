@@ -98,8 +98,8 @@ namespace spg {
 	{
 		// TODO: use cube sphere https://catlikecoding.com/unity/tutorials/cube-sphere/
 		SubMesh subMesh;
-		const uint32_t X_SEGMENTS = 32;
-		const uint32_t Y_SEGMENTS = 32;
+		const uint32_t X_SEGMENTS = 64;
+		const uint32_t Y_SEGMENTS = 64;
 		const float PI = 3.14159265359f;
 		for (uint32_t x = 0; x <= X_SEGMENTS; ++x) {
 			for (uint32_t y = 0; y <= Y_SEGMENTS; ++y) {
