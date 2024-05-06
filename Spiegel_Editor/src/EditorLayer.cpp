@@ -484,6 +484,7 @@ namespace spg {
 			m_EditorScene = newScene;
 			m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_SceneHierarchyPanel.SetContext(m_EditorScene);
+			m_EditorScene->SetEnvironment(m_ActiveScene->GetEnvironment());
 			m_ActiveScene = m_EditorScene;
 			m_EditorScenePath = path;
 		}

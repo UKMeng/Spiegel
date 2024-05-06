@@ -51,7 +51,9 @@ namespace spg {
 		void OnUpdateShadow(Timestep ts);
 
 		void SetEnvironment(uint32_t shadowTextureID) { if(m_ShadowMap == nullptr) m_ShadowMap = Texture2D::Create(shadowTextureID); }
-		
+		void SetEnvironment(Ref<Texture2D> shadowMap) { m_ShadowMap = shadowMap; }
+		Ref<Texture2D> GetEnvironment() { return m_ShadowMap; }
+
 	private:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
@@ -67,10 +69,6 @@ namespace spg {
 		// environment
 		glm::mat4 m_LightSpaceMatrix = glm::mat4(1.0f);
 		Ref<Texture2D> m_ShadowMap;
-
-		// Temporary
-		Ref<Material> m_CubeMaterial;
-		Ref<Material> m_LightMaterial;
 
 		friend class Entity;
 		friend class SceneHierarchyPanel;

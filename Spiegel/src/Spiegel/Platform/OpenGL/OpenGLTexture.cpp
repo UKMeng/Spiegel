@@ -111,11 +111,14 @@ namespace spg {
 	OpenGLTexture2D::OpenGLTexture2D(const uint32_t textureID)
 		: m_TextureID(textureID)
 	{
+		//SPG_CORE_WARN("Texture {0} {1} is being created!", m_TextureID, m_Name);
+		m_Name = "Debug";
 		m_LoadStatus = true;
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
+		//SPG_CORE_WARN("Texture {0} {1} is being destroyed!", m_TextureID, m_Name);
 		glDeleteTextures(1, &m_TextureID);
 	}
 

@@ -234,7 +234,7 @@ namespace spg {
 	{
 		Ref<Mesh> Mesh;
 		bool isBasic = true;
-		const char* CurrentMesh = "Cube";
+		std::string CurrentMesh = "Cube";
 		
 		// PBR Material
 		glm::vec3 Albedo = { 0.5f, 0.0f, 0.0f };

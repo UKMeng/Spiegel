@@ -36,28 +36,7 @@ namespace spg {
 
 	Scene::Scene()
 	{
-		// Todo:: Remove this
-		m_CubeMaterial = Material::Create("Test", AssetManager::GetShaderLibrary()->Get("Test"));
-		m_LightMaterial = Material::Create("Light", AssetManager::GetShaderLibrary()->Get("Light"));
-		m_CubeMaterial->SetFloat4("objectColor", glm::vec4(1.0f, 0.5f, 0.31f, 1.0f));
-		m_CubeMaterial->SetInt("dirLightCount", 0);
-		m_CubeMaterial->SetInt("pointLightCount", 0);
-
-		m_CubeMaterial->SetFloat3("spotLight.color", glm::vec3(1.0f, 1.0f, 1.0f));
-		m_CubeMaterial->SetFloat3("spotLight.ambient", glm::vec3(0.2f));
-		m_CubeMaterial->SetFloat3("spotLight.diffuse", glm::vec3(12.0f));
-		m_CubeMaterial->SetFloat3("spotLight.specular", glm::vec3(15.0f));
-		m_CubeMaterial->SetFloat("spotLight.constant", 1.0f);
-		m_CubeMaterial->SetFloat("spotLight.linear", 0.09f);
-		m_CubeMaterial->SetFloat("spotLight.quadratic", 0.032f);
-		m_CubeMaterial->SetFloat3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
-		m_CubeMaterial->SetFloat3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
-		m_CubeMaterial->SetFloat3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
-		m_CubeMaterial->SetFloat("material.shininess", 128.0f);
-		Ref<Texture2D> texture3 = Texture2D::Create("assets/textures/container.png");
-		Ref<Texture2D> texture4 = Texture2D::Create("assets/textures/container_specular.png");
-		m_CubeMaterial->SetTexture2D(18, texture3);
-		m_CubeMaterial->SetTexture2D(19, texture4);
+		
 	}
 
 	Scene::~Scene()
@@ -117,9 +96,6 @@ namespace spg {
 		CopyComponent<LightComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
 		CopyComponent<MeshComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
 		CopyComponent<SkyboxComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
-		// Tempoary
-		newScene->m_CubeMaterial = other->m_CubeMaterial;
-		newScene->m_LightMaterial = other->m_LightMaterial;
 
 		return newScene;
 	}

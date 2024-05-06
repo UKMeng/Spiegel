@@ -1,0 +1,109 @@
+Scene: Scene Name
+Entities:
+  - Entity: 282277757421050746
+    TagComponent:
+      Tag: Floor
+    TransformComponent:
+      Position: [-0.431312621, -2.43109131, 0.619201481]
+      Rotation: [0, 0, 0]
+      Scale: [20.1678715, 0.317795992, 16.7036819]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+    MeshComponent:
+      BaiscMesh: true
+      CurrentMesh: Cube
+      Albedo: [0.501960814, 0, 0]
+      Metallic: 0
+      Roughness: 0.5
+      AO: 1
+      AlbedoMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_albedo.png
+      NormalMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_normal-dx.png
+      MetallicMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_metallic.png
+      RoughnessMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_roughness.png
+      AOMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_ao.png
+  - Entity: 97341566284622040
+    TagComponent:
+      Tag: Nano Suit
+    TransformComponent:
+      Position: [-0.889968097, -2.29951596, 3.04647756]
+      Rotation: [0, -62.3954124, 0]
+      Scale: [0.270000011, 0.270000041, 0.270000011]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+  - Entity: 17704606318490845781
+    TagComponent:
+      Tag: Ball
+    TransformComponent:
+      Position: [-5.67174101, -1.35831797, -2.77166772]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+    MeshComponent:
+      BaiscMesh: true
+      CurrentMesh: Sphere
+      Albedo: [0.5, 0, 0]
+      Metallic: 0
+      Roughness: 0.5
+      AO: 1
+      AlbedoMap: assets\textures\PBR_Textures\rustediron2\rustediron2_basecolor.png
+      NormalMap: assets\textures\PBR_Textures\rustediron2\rustediron2_normal.png
+      MetallicMap: assets\textures\PBR_Textures\rustediron2\rustediron2_metallic.png
+      RoughnessMap: assets\textures\PBR_Textures\rustediron2\rustediron2_roughness.png
+  - Entity: 12025398044494709561
+    TagComponent:
+      Tag: Cube
+    TransformComponent:
+      Position: [-2.99628043, -1.75242269, 0.0536499545]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+    MeshComponent:
+      BaiscMesh: true
+      CurrentMesh: Cube
+      Albedo: [0.0531562343, 0.0382373556, 0.521235526]
+      Metallic: 0
+      Roughness: 0.5
+      AO: 1
+  - Entity: 1578787732716344529
+    TagComponent:
+      Tag: Light
+    TransformComponent:
+      Position: [-3.27353764, 2.16907191, 1.87409484]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+    LightComponent:
+      Color: [1, 1, 1]
+      Type: 1
+      HDRIntensity: 16.5
+      Dir.direction: [-0.200000003, -1, -0.300000012]
+      Dir.ambient: 0.0500000007
+      Dir.diffuse: 0.800000012
+      Dir.specular: 1
+      Point.ambient: 0.0500000007
+      Point.diffuse: 0.800000012
+      Point.specular: 1
+      Point.constant: 1
+      Point.linear: 0.0900000036
+      Point.quadratic: 0.0320000015
+      Spot.cutOff: 12.5
+      Spot.outerCutOff: 15
+      Spot.ambient: 0.0500000007
+      Spot.diffuse: 0.800000012
+      Spot.specular: 1
+      Spot.constant: 1
+      Spot.linear: 0.0900000036
+      Spot.quadratic: 0.0320000015

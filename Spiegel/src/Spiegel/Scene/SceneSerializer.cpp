@@ -310,6 +310,40 @@ namespace spg {
 			out << YAML::EndMap; // SkyboxComponent
         }
 
+        if (entity.CheckComponent<MeshComponent>()) {
+            out << YAML::Key << "MeshComponent";
+			out << YAML::BeginMap; // MeshComponent
+			auto& mc = entity.GetComponent<MeshComponent>();
+            out << YAML::Key << "BaiscMesh" << YAML::Value << mc.isBasic;
+            if (mc.isBasic) {
+                out << YAML::Key << "CurrentMesh" << YAML::Value << mc.CurrentMesh;
+            }
+            else {
+                out << YAML::Key << "CurrentMesh" << YAML::Value << mc.Mesh->GetFilePath().string();
+            }
+            out << YAML::Key << "Albedo" << YAML::Value << mc.Albedo;
+            out << YAML::Key << "Metallic" << YAML::Value << mc.Metallic;
+            out << YAML::Key << "Roughness" << YAML::Value << mc.Roughness;
+            out << YAML::Key << "AO" << YAML::Value << mc.AO;
+            if (mc.AlbedoMap != nullptr) {
+                out << YAML::Key << "AlbedoMap" << YAML::Value << mc.AlbedoMap->GetPath();
+            }
+            if (mc.NormalMap != nullptr) {
+                out << YAML::Key << "NormalMap" << YAML::Value << mc.NormalMap->GetPath();
+            }
+            if (mc.MetallicMap != nullptr) {
+                out << YAML::Key << "MetallicMap" << YAML::Value << mc.MetallicMap->GetPath();
+            }
+            if (mc.RoughnessMap != nullptr) {
+				out << YAML::Key << "RoughnessMap" << YAML::Value << mc.RoughnessMap->GetPath();
+			}
+            if (mc.AOMap != nullptr) {
+				out << YAML::Key << "AOMap" << YAML::Value << mc.AOMap->GetPath();
+			}
+            
+			out << YAML::EndMap; // MeshComponent
+        }
+
         out << YAML::EndMap; // Entity
     }
 
@@ -504,6 +538,44 @@ namespace spg {
 					if (skyboxComponent["Skybox"]) {
 						std::string skyboxPath = skyboxComponent["Skybox"].as<std::string>();
 						sc.Skybox = std::static_pointer_cast<TextureCubeMap>(AssetManager::GetTextureLibrary()->Load(skyboxPath, TextureType::TextureCubeMap));
+					}
+                }
+
+                auto meshComponent = entity["MeshComponent"];
+                if (meshComponent) {
+                    auto& mc = deserializedEntity.AddComponent<MeshComponent>();
+                    mc.isBasic = meshComponent["BaiscMesh"].as<bool>();
+                    if (mc.isBasic) {
+                        mc.CurrentMesh = meshComponent["CurrentMesh"].as<std::string>();
+                        mc.Mesh = AssetManager::GetMeshLibrary()->Get(mc.CurrentMesh);
+                    }
+                    else {
+                        std::string meshPath = meshComponent["CurrentMesh"].as<std::string>();
+						mc.Mesh = AssetManager::GetMeshLibrary()->Load(meshPath);
+                    }
+                    mc.Albedo = meshComponent["Albedo"].as<glm::vec3>();
+                    mc.Metallic = meshComponent["Metallic"].as<float>();
+                    mc.Roughness = meshComponent["Roughness"].as<float>();
+                    mc.AO = meshComponent["AO"].as<float>();
+                    if (meshComponent["AlbedoMap"]) {
+						std::string albedoMapPath = meshComponent["AlbedoMap"].as<std::string>();
+						mc.AlbedoMap = std::static_pointer_cast<Texture2D>(AssetManager::GetTextureLibrary()->Load(albedoMapPath, TextureType::Texture2D));
+					}
+                    if (meshComponent["NormalMap"]) {
+                        std::string normalMapPath = meshComponent["NormalMap"].as<std::string>();
+                        mc.NormalMap = std::static_pointer_cast<Texture2D>(AssetManager::GetTextureLibrary()->Load(normalMapPath, TextureType::Texture2D));
+                    }
+                    if (meshComponent["MetallicMap"]) {
+						std::string metallicMapPath = meshComponent["MetallicMap"].as<std::string>();
+						mc.MetallicMap = std::static_pointer_cast<Texture2D>(AssetManager::GetTextureLibrary()->Load(metallicMapPath, TextureType::Texture2D));
+					}
+                    if (meshComponent["RoughnessMap"]) {
+                        std::string roughnessMapPath = meshComponent["RoughnessMap"].as<std::string>();
+                        mc.RoughnessMap = std::static_pointer_cast<Texture2D>(AssetManager::GetTextureLibrary()->Load(roughnessMapPath, TextureType::Texture2D));
+                    }
+                    if (meshComponent["AOMap"]) {
+						std::string aoMapPath = meshComponent["AOMap"].as<std::string>();
+						mc.AOMap = std::static_pointer_cast<Texture2D>(AssetManager::GetTextureLibrary()->Load(aoMapPath, TextureType::Texture2D));
 					}
                 }
 			}

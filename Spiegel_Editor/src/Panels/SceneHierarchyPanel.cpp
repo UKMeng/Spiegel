@@ -514,13 +514,13 @@ namespace spg {
 		});
 
 		DrawComponent<MeshComponent>("Mesh", entity, [](auto& component) {
-			const char* BasicMeshStrings[] = { "Cube", "Sphere" };
+			const std::string BasicMeshStrings[] = { "Cube", "Sphere" };
 			
 			if (component.isBasic) {
-				if (ImGui::BeginCombo("Basic Mesh", component.CurrentMesh)) {
+				if (ImGui::BeginCombo("Basic Mesh", component.CurrentMesh.c_str())) {
 					for (int i = 0; i < 2; i++) {
 						bool isSelected = component.CurrentMesh == BasicMeshStrings[i];
-						if (ImGui::Selectable(BasicMeshStrings[i], isSelected)) {
+						if (ImGui::Selectable(BasicMeshStrings[i].c_str(), isSelected)) {
 							component.CurrentMesh = BasicMeshStrings[i];
 							component.Mesh = AssetManager::GetMeshLibrary()->Get(BasicMeshStrings[i]);
 						}
