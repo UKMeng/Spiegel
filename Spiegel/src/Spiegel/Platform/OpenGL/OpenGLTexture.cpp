@@ -108,6 +108,12 @@ namespace spg {
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	}
 
+	OpenGLTexture2D::OpenGLTexture2D(const uint32_t textureID)
+		: m_TextureID(textureID)
+	{
+		m_LoadStatus = true;
+	}
+
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
 		glDeleteTextures(1, &m_TextureID);

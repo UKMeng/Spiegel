@@ -53,6 +53,7 @@
     <ClInclude Include="src\Spiegel\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Spiegel\Renderer\Renderer.h" />
     <ClInclude Include="src\Spiegel\Renderer\RendererAPI.h" />
+    <ClInclude Include="src\Spiegel\Renderer\RenderPass.h" />
     <ClInclude Include="src\Spiegel\Renderer\Shader.h" />
     <ClInclude Include="src\Spiegel\Renderer\SubTexture2D.h" />
     <ClInclude Include="src\Spiegel\Renderer\Texture.h" />
@@ -103,6 +104,7 @@
     <ClCompile Include="src\Spiegel\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\RenderCommand.cpp" />
+    <ClCompile Include="src\Spiegel\Renderer\RenderPass.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Shader.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\SubTexture2D.cpp" />
     <ClCompile Include="src\Spiegel\Renderer\Texture.cpp" />

@@ -8,15 +8,17 @@ layout(location = 3) in float a_DiffuseTextureID;
 layout(location = 4) in float a_SpecularTextureID;
 layout(location = 5) in int a_EntityID;
 
-
 layout(std140, binding = 1) uniform Camera {
 	mat4 u_ViewProjection;
 	vec3 u_ViewPosition;
 };
 
+uniform	mat4 u_LightSpaceMatrix;
+
 out vec2 v_TexCoord;
 out vec3 v_Normal;
 out vec3 v_Pos;
+out vec4 v_FragPosLightSpace;
 out flat float v_DiffuseTextureID;
 out flat float v_SpecularTextureID;
 out flat int v_EntityID;
@@ -25,6 +27,7 @@ void main() {
 	v_TexCoord = a_TexCoord;
 	v_Normal = a_Normal;
 	v_Pos = a_Position.xyz;
+	v_FragPosLightSpace = u_LightSpaceMatrix * a_Position;
 	v_DiffuseTextureID = a_DiffuseTextureID;
 	v_SpecularTextureID = a_SpecularTextureID;
 	v_EntityID = a_EntityID;
@@ -40,6 +43,7 @@ layout(location = 1) out int o_EntityID;
 in vec2 v_TexCoord;
 in vec3 v_Normal;
 in vec3 v_Pos;
+in vec4 v_FragPosLightSpace;
 in flat float v_DiffuseTextureID;
 in flat float v_SpecularTextureID;
 in flat int v_EntityID;
@@ -110,11 +114,12 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness) {
 	return ggx1 * ggx2;
 }
 
-vec3 fresnelSchlick(float cosTheta, vec3 F0) {
+vec3 FresnelSchlick(float cosTheta, vec3 F0) {
 	return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
-vec3 getNormalFromMap() {
+vec3 GetNormalFromMap() {
+	// How To Calculate TBN Matrix
 	vec3 tangentNormal = texture(u_Textures[2], v_TexCoord).xyz * 2.0 - 1.0;
 	vec3 Q1 = dFdx(v_Pos);
 	vec3 Q2 = dFdy(v_Pos);
@@ -127,9 +132,21 @@ vec3 getNormalFromMap() {
 	return normalize(TBN * tangentNormal);
 }
 
+float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir) {
+	float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+	vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+	projCoords = projCoords * 0.5 + 0.5;
+	float closestDepth = texture(u_Textures[31], projCoords.xy).r; // slot 31 is the shadow map
+	float currentDepth = projCoords.z;
+	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+	if(projCoords.z > 1.0)
+        shadow = 0.0;
+	return shadow;
+}
+
 void main() {
 	vec3 albedo = material.useAlbedoMap == 0.0 ? material.albedo : pow(texture(u_Textures[1], v_TexCoord).rgb, vec3(2.2));
-	vec3 N = material.useNormalMap == 0.0 ? normalize(v_Normal) : getNormalFromMap();
+	vec3 N = material.useNormalMap == 0.0 ? normalize(v_Normal) : GetNormalFromMap();
 	float metallic = material.useMetallicMap == 0.0 ? material.metallic : texture(u_Textures[3], v_TexCoord).r;
 	float roughness = material.useRoughnessMap == 0.0 ? material.roughness : texture(u_Textures[4], v_TexCoord).r;
 	float ao = material.useAOMap == 0.0 ? material.ao : texture(u_Textures[5], v_TexCoord).r;
@@ -140,6 +157,7 @@ void main() {
 	F0 = mix(F0, albedo, metallic);
 
 	vec3 Lo = vec3(0.0);
+	float shadow = 1.0;
 
 	for (int i = 0; i < u_PointLightCount; ++i) {
 		// Calculate per-light radiance
@@ -153,7 +171,7 @@ void main() {
 		// Cook-Torrance BRDF
 		float NDF = DistributionGGX(N, H, roughness);
 		float G = GeometrySmith(N, V, L, roughness);
-		vec3 F = fresnelSchlick(max(dot(H, V), 0.0), F0);
+		vec3 F = FresnelSchlick(max(dot(H, V), 0.0), F0);
 
 		vec3 kS = F;
 		vec3 kD = vec3(1.0) - kS;
@@ -165,10 +183,12 @@ void main() {
 
 		float NdotL = max(dot(N, L), 0.0);
 		Lo += (kD * albedo / PI + specular) * radiance * NdotL;
+
+		if(i == 0) shadow = ShadowCalculation(v_FragPosLightSpace, N, L);
 	}
 
 	vec3 ambient = vec3(0.03) * albedo * ao;
-	vec3 color = ambient + Lo;
+	vec3 color = ambient + Lo * (1.0 - shadow);
 
 	color = color / (color + vec3(1.0)); // HDR Tone Mapping
 	color = pow(color, vec3(1.0 / 2.2)); // gamma correction

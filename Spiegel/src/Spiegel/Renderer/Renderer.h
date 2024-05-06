@@ -30,6 +30,7 @@ namespace spg {
 
 		// Draw
 		static void DrawMesh(const glm::mat4& transform, Ref<Mesh> mesh, int entityID = -1);
+		static void DrawMeshWithoutMaterial(const glm::mat4& transform, Ref<Mesh> mesh);
 		static void DrawSkybox(const glm::mat4& view, const glm::mat4& projection, Ref<TextureCubeMap> skybox);
 	};
 }

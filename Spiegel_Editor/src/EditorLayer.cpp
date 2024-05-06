@@ -11,14 +11,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace spg {
-	static const uint32_t s_MapWidth = 12;
-	static const char* s_MapTiles =
-		"wwwwwwwwwwww"
-		"wwwDDDDDDwww"
-		"wDDDDDDDDDww"
-		"wwwDDDDDDwww"
-		"wwwwwwwwwwww";
-
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer")
 	{
@@ -30,18 +22,8 @@ namespace spg {
 		ScriptEngine::Init();
 
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard.png");
-		m_SpriteSheet = Texture2D::Create("assets/game/textures/RPGpack_sheet_2X.png");
-
 		m_IconPlay = Texture2D::Create("assets/icons/Play.png");
 		m_IconStop = Texture2D::Create("assets/icons/Stop.png");
-
-		m_TextureStairs = SubTexture2D::CreateFromCoords(m_SpriteSheet, { 7, 6 }, { 128, 128 });
-		m_TextureTree = SubTexture2D::CreateFromCoords(m_SpriteSheet, { 2, 1 }, { 128, 128 }, { 1, 2 });
-
-		m_MapWidth = s_MapWidth;
-		m_MapHeight = strlen(s_MapTiles) / s_MapWidth;
-		m_TextureMap['D'] = SubTexture2D::CreateFromCoords(m_SpriteSheet, { 1, 11 }, { 128, 128 }); // grass
-		m_TextureMap['w'] = SubTexture2D::CreateFromCoords(m_SpriteSheet, { 11, 11 }, { 128, 128 }); // water
 
 		// m_CameraController.SetZoomLevel(5.0f);
 
@@ -51,6 +33,13 @@ namespace spg {
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_Framebuffer = Framebuffer::Create(fbSpec);
+
+		// temporary
+		FramebufferSpecification shadowMapSpec;
+		shadowMapSpec.Attachments = { FramebufferTextureFormat::Depth };
+		shadowMapSpec.Width = 1024;
+		shadowMapSpec.Height = 1024;
+		m_ShadowPass = CreateRef<RenderPass>(shadowMapSpec);
 
 		NewScene();
 
@@ -88,13 +77,21 @@ namespace spg {
 		// Renderer
 		Renderer2D::ResetStats();
 
+		// Shadow Pass
+		m_ShadowPass->Begin();
+		m_ActiveScene->OnUpdateShadow(ts);
+		m_ShadowPass->End();
+
+		m_ActiveScene->SetEnvironment(m_ShadowPass->GetFramebuffer()->GetDepthAttachmentTextureID());
+		
+		// Main Pass
 		m_Framebuffer->Bind();
 
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RenderCommand::Clear();
 		// Clear Attachment to -1
 		m_Framebuffer->ClearAttachment(1, (void*)-1);
-
+		
 		switch (m_SceneState)
 		{
 			case SceneState::Edit:
@@ -263,7 +260,7 @@ namespace spg {
 			m_ViewportSize = { viewportWindowSize.x, viewportWindowSize.y };
 			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 		}
-		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID(0);
+		uint32_t textureID = m_Framebuffer->GetColorAttachmentTextureID(0);
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		// Drag and Drop to Viewport
@@ -361,6 +358,14 @@ namespace spg {
 		ImGui::PopStyleVar();
 		// Viewport window End
 
+		// Shadow Viewport Begin
+		ImGui::Begin("Shadow Map");
+		ImVec2 ShadowMapWindowSize = ImGui::GetContentRegionAvail();
+		uint32_t ShadowMapID = m_ShadowPass->GetFramebuffer()->GetDepthAttachmentTextureID();
+		ImGui::Image((void*)ShadowMapID, ShadowMapWindowSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::End();
+		// Shadow Viewport End
+		
 		UI_Toolbar();
 
 		ImGui::End();

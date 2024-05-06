@@ -38,6 +38,17 @@ namespace spg {
 		return nullptr;
 	}
 
+	Ref<Texture2D> Texture2D::Create(uint32_t textureID)
+	{
+		switch (RendererAPI::GetAPI()) {
+			case RendererAPI::API::None:    SPG_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
+			case RendererAPI::API::OpenGL:  return CreateRef<OpenGLTexture2D>(textureID);
+		}
+
+		SPG_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
+	}
+
 	Ref<TextureCubeMap> TextureCubeMap::Create(const std::filesystem::path& path)
 	{
 		switch (RendererAPI::GetAPI()) {

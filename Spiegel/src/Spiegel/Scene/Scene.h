@@ -47,6 +47,11 @@ namespace spg {
 			return m_Registry.view<Components...>();
 		}
 
+		// Temporary, Should Defined by Render Pass
+		void OnUpdateShadow(Timestep ts);
+
+		void SetEnvironment(uint32_t shadowTextureID) { if(m_ShadowMap == nullptr) m_ShadowMap = Texture2D::Create(shadowTextureID); }
+		
 	private:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
@@ -58,6 +63,10 @@ namespace spg {
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 
 		b2World* m_b2World = nullptr;
+
+		// environment
+		glm::mat4 m_LightSpaceMatrix = glm::mat4(1.0f);
+		Ref<Texture2D> m_ShadowMap;
 
 		// Temporary
 		Ref<Material> m_CubeMaterial;

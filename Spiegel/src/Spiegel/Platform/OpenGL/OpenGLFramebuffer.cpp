@@ -191,8 +191,12 @@ namespace spg {
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 		glViewport(0, 0, m_Specification.Width, m_Specification.Height);
-		int value = -1;
-		ClearAttachment(1, &value);
+
+		//// Mouse Picking Temporary, Need to be moved to Somewhere else
+		//if (m_ColorAttachments.size() > 2) {
+		//	int value = -1;
+		//	ClearAttachment(1, &value);
+		//}
 	}
 
 	void OpenGLFramebuffer::Unbind()

@@ -12,6 +12,7 @@ namespace spg {
 		OpenGLTexture2D(uint32_t width, uint32_t height);
 		OpenGLTexture2D(const std::string& path, bool flip = true);
 		OpenGLTexture2D(const FT_Face& face);
+		OpenGLTexture2D(const uint32_t textureID);
 		virtual ~OpenGLTexture2D();
 
 		virtual uint32_t GetWidth() const override { return m_Width; }

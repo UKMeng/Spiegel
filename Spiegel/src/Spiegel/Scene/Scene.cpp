@@ -340,7 +340,43 @@ namespace spg {
 		}
 	}
 
-	glm::mat4 Scene::GetTransformRelatedToParents(Entity entity) {
+	void Scene::OnUpdateShadow(Timestep ts)
+	{
+		int pointLightCount = 0;
+
+		{
+			auto view = m_Registry.view<TransformComponent, LightComponent>();
+			for (auto entity : view) {
+				auto [transform, light] = view.get<TransformComponent, LightComponent>(entity);
+				if (light.Type == LightComponent::LightType::Point) {
+					// Maybe Use a Fake Camera
+					float Near = 1.0f, Far = 15.0f;
+					glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, Near, Far);
+					glm::mat4 lightView = glm::lookAt(transform.Translation, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+					m_LightSpaceMatrix = lightProjection * lightView;
+					pointLightCount = 1;
+					break;
+				}
+			}
+		}
+		
+		if (pointLightCount == 0) return;
+		
+		Ref<Shader> shader = AssetManager::GetShader("ShadowMap");
+		shader->Bind();
+		shader->SetMat4("u_ViewProjection", m_LightSpaceMatrix);
+
+		{
+			auto view = m_Registry.view<TransformComponent, MeshComponent>();
+			for (auto entity : view) {
+				auto [transform, mesh] = view.get<TransformComponent, MeshComponent>(entity);
+				Renderer::DrawMeshWithoutMaterial(GetTransformRelatedToParents({ entity, this }), mesh.Mesh);
+			}
+		}
+	}
+
+	glm::mat4 Scene::GetTransformRelatedToParents(Entity entity)
+	{
 		glm::mat4 parentTransform = glm::mat4(1.0f);
 		if (entity.HasParent()) {
 			Entity parentEntity = GetEntityByUUID(entity.GetParent());
@@ -351,8 +387,6 @@ namespace spg {
 
 	void Scene::RenderScene() 
 	{
-		
-
 		// Light
 		// TODO: Defered Shading
 		{
@@ -369,6 +403,7 @@ namespace spg {
 			
 			if (meshMaterial != nullptr) {
 				auto view = m_Registry.view<TransformComponent, LightComponent>();
+				bool firstPointLight = true; // TODO: Can only have one light shadow now
 				for (auto entity : view) {
 					auto [transform, light] = view.get<TransformComponent, LightComponent>(entity);
 					if (light.Type == LightComponent::LightType::Directional) {
@@ -396,6 +431,12 @@ namespace spg {
 						glm::mat4 lightTransform = glm::mat4(1.0f);
 						lightTransform = glm::translate(glm::mat4(1.0f), transform.Translation) * glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
 						// TODO: a light texture
+
+						if (firstPointLight) {
+							meshMaterial->SetMat4("u_LightSpaceMatrix", m_LightSpaceMatrix);
+							if(m_ShadowMap != nullptr) meshMaterial->SetTexture2D(31, m_ShadowMap);
+							firstPointLight = false;
+						}
 					}
 
 					/*else if (light.Type == LightComponent::Type::Spot) {

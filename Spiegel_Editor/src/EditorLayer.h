@@ -49,8 +49,6 @@ namespace spg {
 		// Texture
 		Ref<Texture2D> m_CheckerboardTexture;
 		Ref<Texture2D> m_IconPlay, m_IconStop;
-		Ref<Texture2D> m_SpriteSheet;
-		Ref<SubTexture2D> m_TextureStairs, m_TextureTree;
 		
 
 		size_t m_MapWidth, m_MapHeight;
@@ -87,5 +85,8 @@ namespace spg {
 		// Info
 		float m_FrameTime = 0.0f;
 		float m_TempFrameTimeForRefresh = 0.0f;
+
+		// RenderPass temporary
+		Ref<RenderPass> m_ShadowPass;
 	};
 }

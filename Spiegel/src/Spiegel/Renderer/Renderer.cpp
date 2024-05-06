@@ -255,6 +255,72 @@ namespace spg {
 		RenderCommand::SetCullFace(false);
 	}
 
+	void Renderer::DrawMeshWithoutMaterial(const glm::mat4& transform, Ref<Mesh> mesh)
+	{
+		// Should Bind Shader Before Calling This Function
+		RenderCommand::SetCullFace(true);
+		RenderCommand::SetCullFaceSide(CullFace::Front);
+
+		struct MeshVertex
+		{
+			glm::vec4 Position;
+		};
+
+		size_t vertexCount = 0;
+		size_t indexCount = 0;
+
+		for (auto& subMesh : mesh->GetSubMeshes()) {
+			vertexCount += subMesh.Vertices.size();
+			indexCount += subMesh.Indices.size();
+		}
+
+		MeshVertex* MeshVertexBase = nullptr;
+		MeshVertex* MeshVertexPtr = nullptr;
+
+		for (auto& subMesh : mesh->GetSubMeshes())
+		{
+			Ref<VertexArray> vao = VertexArray::Create();
+			Ref<VertexBuffer> vbo = VertexBuffer::Create(vertexCount * sizeof(MeshVertex));
+			vbo->SetLayout({
+				{ ShaderDataType::Float4, "a_Position" },
+				});
+			vao->AddVertexBuffer(vbo);
+
+			// Index Buffer
+			size_t indexCount = subMesh.Indices.size();
+			uint32_t* meshIndices = new uint32_t[indexCount];
+			for (auto i = 0; i < subMesh.Indices.size(); i++) {
+				meshIndices[i] = subMesh.Indices[i];
+			}
+			Ref<IndexBuffer> ibo = IndexBuffer::Create(meshIndices, indexCount);
+			vao->SetIndexBuffer(ibo);
+			delete[] meshIndices;
+
+			float dtextureIndex = 0.0f;
+			float stextureIndex = 0.0f;
+
+			MeshVertex* MeshVertexBase = new MeshVertex[subMesh.Vertices.size()];
+			MeshVertex* MeshVertexPtr = MeshVertexBase;
+
+			// Vertex Buffer Data
+			for (uint32_t i = 0; i < subMesh.Vertices.size(); i++)
+			{
+				Mesh::Vertex vertex = subMesh.Vertices[i];
+				MeshVertexPtr->Position = transform * glm::vec4(vertex.Position, 1.0);
+				MeshVertexPtr++;
+			}
+
+			uint32_t dataSize = (uint8_t*)MeshVertexPtr - (uint8_t*)MeshVertexBase;
+			vbo->SetData(MeshVertexBase, dataSize);
+			RenderCommand::DrawIndexed(vao, indexCount);
+
+			delete[] MeshVertexBase;
+			MeshVertexBase = nullptr;
+			MeshVertexPtr = nullptr;
+		}
+		RenderCommand::SetCullFace(false);
+	}
+
 	void Renderer::EndScene()
 	{
 		RenderCommand::SetBlend(true);
