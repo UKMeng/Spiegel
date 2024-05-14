@@ -83,6 +83,8 @@ namespace spg {
 			uuidMap[uuid] = (entt::entity)newEntity;
 		}
 
+		newScene->SetEnvironment(other->GetEnvironment());
+
 		CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
 		CopyComponent<RelationshipComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
 		CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, uuidMap);
@@ -324,11 +326,11 @@ namespace spg {
 			auto view = m_Registry.view<TransformComponent, LightComponent>();
 			for (auto entity : view) {
 				auto [transform, light] = view.get<TransformComponent, LightComponent>(entity);
-				if (light.Type == LightComponent::LightType::Point) {
+				if (light.Type == LightComponent::LightType::Directional) {
 					// Maybe Use a Fake Camera
 					float Near = 1.0f, Far = 15.0f;
 					glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, Near, Far);
-					glm::mat4 lightView = glm::lookAt(transform.Translation, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+					glm::mat4 lightView = glm::lookAt(-light.Dir.direction, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 					m_LightSpaceMatrix = lightProjection * lightView;
 					pointLightCount = 1;
 					break;
@@ -390,6 +392,10 @@ namespace spg {
 						meshMaterial->SetFloat3("dirLight.ambient", glm::vec3(light.Dir.ambient));
 						meshMaterial->SetFloat3("dirLight.diffuse", glm::vec3(light.Dir.diffuse));
 						meshMaterial->SetFloat3("dirLight.specular", glm::vec3(light.Dir.specular));
+
+						meshMaterial->SetMat4("u_LightSpaceMatrix", m_LightSpaceMatrix);
+						if (m_ShadowMap != nullptr) meshMaterial->SetTexture2D(31, m_ShadowMap);
+						firstPointLight = false;
 					}
 					else if (light.Type == LightComponent::LightType::Point) {
 						std::string pointIndex = "pointLights[" + std::to_string(pointLightCount) + "]";
@@ -407,12 +413,6 @@ namespace spg {
 						glm::mat4 lightTransform = glm::mat4(1.0f);
 						lightTransform = glm::translate(glm::mat4(1.0f), transform.Translation) * glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
 						// TODO: a light texture
-
-						if (firstPointLight) {
-							meshMaterial->SetMat4("u_LightSpaceMatrix", m_LightSpaceMatrix);
-							if(m_ShadowMap != nullptr) meshMaterial->SetTexture2D(31, m_ShadowMap);
-							firstPointLight = false;
-						}
 					}
 
 					/*else if (light.Type == LightComponent::Type::Spot) {
@@ -421,7 +421,7 @@ namespace spg {
 					}*/
 				}
 			
-				meshMaterial->SetInt("u_DirLightCount", dirLightCount); // TODO: Shader not set u_ yet
+				meshMaterial->SetInt("u_DirLightCount", dirLightCount);
 				meshMaterial->SetInt("u_PointLightCount", pointLightCount);
 			}
 			

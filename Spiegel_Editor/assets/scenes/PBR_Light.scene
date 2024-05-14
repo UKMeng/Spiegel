@@ -1,10 +1,28 @@
 Scene: Scene Name
 Entities:
-  - Entity: 1844452076167691232
+  - Entity: 4816375122046577192
     TagComponent:
-      Tag: Light 2
+      Tag: Empty Entity
     TransformComponent:
-      Position: [-10, 10, 10]
+      Position: [2.32348585, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+    MeshComponent:
+      BaiscMesh: true
+      CurrentMesh: Sphere
+      Albedo: [0.71414274, 0.718146682, 0.657145798]
+      Metallic: 0.920000017
+      Roughness: 0.289999992
+      AO: 1
+  - Entity: 15238675227332845922
+    TagComponent:
+      Tag: Light 4
+    TransformComponent:
+      Position: [10, -10, 10]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     RelationshipComponent:
@@ -33,11 +51,11 @@ Entities:
       Spot.constant: 1
       Spot.linear: 0.0900000036
       Spot.quadratic: 0.0320000015
-  - Entity: 12797424993180408586
+  - Entity: 8914692311708490205
     TagComponent:
-      Tag: Light 1
+      Tag: Light 3
     TransformComponent:
-      Position: [10, 10, 10]
+      Position: [-10, -10, 10]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     RelationshipComponent:
@@ -77,11 +95,23 @@ Entities:
       Parent: 0
       Children:
         []
-  - Entity: 8914692311708490205
+    MeshComponent:
+      BaiscMesh: true
+      CurrentMesh: Sphere
+      Albedo: [0.5, 0, 0]
+      Metallic: 0
+      Roughness: 0.5
+      AO: 1
+      AlbedoMap: assets\textures\PBR_Textures\ribbed-chipped-metal\ribbed-chipped-metal_albedo.png
+      NormalMap: assets\textures\PBR_Textures\ribbed-chipped-metal\ribbed-chipped-metal_normal-dx.png
+      MetallicMap: assets\textures\PBR_Textures\ribbed-chipped-metal\ribbed-chipped-metal_metallic.png
+      RoughnessMap: assets\textures\PBR_Textures\ribbed-chipped-metal\ribbed-chipped-metal_roughness.png
+      AOMap: assets\textures\PBR_Textures\ribbed-chipped-metal\ribbed-chipped-metal_ao.png
+  - Entity: 12797424993180408586
     TagComponent:
-      Tag: Light 3
+      Tag: Light 1
     TransformComponent:
-      Position: [-10, -10, 10]
+      Position: [10, 10, 10]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     RelationshipComponent:
@@ -110,11 +140,11 @@ Entities:
       Spot.constant: 1
       Spot.linear: 0.0900000036
       Spot.quadratic: 0.0320000015
-  - Entity: 15238675227332845922
+  - Entity: 1844452076167691232
     TagComponent:
-      Tag: Light 4
+      Tag: Light 2
     TransformComponent:
-      Position: [10, -10, 10]
+      Position: [-10, 10, 10]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     RelationshipComponent:

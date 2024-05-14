@@ -54,6 +54,17 @@ layout(std140, binding = 1) uniform Camera {
 };
 
 uniform int u_PointLightCount;
+uniform int u_DirLightCount;
+
+struct DirLight {
+	vec3 direction;
+	vec3 color;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+};
+
+uniform DirLight dirLight;
 
 struct PointLight {
 	vec3 position;
@@ -133,12 +144,25 @@ vec3 GetNormalFromMap() {
 }
 
 float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir) {
-	float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+	float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.01);
 	vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
 	projCoords = projCoords * 0.5 + 0.5;
-	float closestDepth = texture(u_Textures[31], projCoords.xy).r; // slot 31 is the shadow map
+	//float closestDepth = texture(u_Textures[31], projCoords.xy).r; // slot 31 is the shadow map
 	float currentDepth = projCoords.z;
-	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+	//float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+	
+	// PCF
+	float shadow = 0.0;
+	vec2 texelSize = 1.0 / textureSize(u_Textures[31], 0);
+	for(int x = -1; x <= 1; ++x)
+	{
+		for(int y = -1; y <= 1; ++y)
+		{
+			float pcfDepth = texture(u_Textures[31], projCoords.xy + vec2(x, y) * texelSize).r; 
+			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
+		}    
+	}
+	shadow /= 9.0;
 	if(projCoords.z > 1.0)
         shadow = 0.0;
 	return shadow;
@@ -183,12 +207,35 @@ void main() {
 
 		float NdotL = max(dot(N, L), 0.0);
 		Lo += (kD * albedo / PI + specular) * radiance * NdotL;
+	}
 
-		if(i == 0) shadow = ShadowCalculation(v_FragPosLightSpace, N, L);
+	if (u_DirLightCount == 1) {
+		vec3 L = normalize(-dirLight.direction);  // Light direction
+		vec3 H = normalize(V + L);
+
+		vec3 radiance = dirLight.color;  // Radiance
+
+		// Cook-Torrance BRDF
+		float NDF = DistributionGGX(N, H, roughness);
+		float G = GeometrySmith(N, V, L, roughness);
+		vec3 F = FresnelSchlick(max(dot(H, V), 0.0), F0);
+
+		vec3 kS = F;
+		vec3 kD = vec3(1.0) - kS;
+		kD *= 1.0 - metallic;
+
+		vec3 numerator = NDF * G * F;
+		float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.00001;
+		vec3 specular = numerator / denominator;
+
+		float NdotL = max(dot(N, L), 0.0);
+		shadow = ShadowCalculation(v_FragPosLightSpace, N, L);
+		Lo += (kD * albedo / PI + specular) * radiance * NdotL * (1.0 - shadow);
+		
 	}
 
 	vec3 ambient = vec3(0.03) * albedo * ao;
-	vec3 color = ambient + Lo * (1.0 - shadow);
+	vec3 color = ambient + Lo;// * (1.0 - shadow);
 
 	color = color / (color + vec3(1.0)); // HDR Tone Mapping
 	color = pow(color, vec3(1.0 / 2.2)); // gamma correction

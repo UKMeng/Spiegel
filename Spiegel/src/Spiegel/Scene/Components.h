@@ -119,7 +119,6 @@ namespace spg {
 		//template<typename T>
 		void Bind()
 		{
-			// InstantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
 			InstantiateScript = ScriptEngine::GetInstantiateScript("CreateCameraController");
 			DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
 		}

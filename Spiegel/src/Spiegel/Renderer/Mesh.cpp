@@ -12,7 +12,7 @@ namespace spg {
 	{
 		LoadMesh(path);
 		// TODO: Need a Material Library
-		Ref<Material> material = Material::Create("Mesh", AssetManager::GetShaderLibrary()->Get("Mesh"));
+		Ref<Material> material = Material::Create("Mesh", AssetManager::GetShaderLibrary()->Get("PBR_Mesh"));
 		material->SetInt("dirLightCount", 0);
 		material->SetInt("pointLightCount", 0);
 		material->SetFloat3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
@@ -123,6 +123,21 @@ namespace spg {
 			}
 		}
 		return CreateRef<Mesh>("Sphere", std::vector<SubMesh>{ subMesh });
+	}
+
+	Ref<Mesh> Mesh::CreatePlane()
+	{
+		SubMesh subMesh;
+		subMesh.Vertices = {
+			{{-0.5, -0.5, 0.0}, {0.0, 0.0}, {0.0, 0.0, 1.0}},
+			{{ 0.5, -0.5, 0.0}, {1.0, 0.0}, {0.0, 0.0, 1.0}},
+			{{ 0.5,  0.5, 0.0}, {1.0, 1.0}, {0.0, 0.0, 1.0}},
+			{{-0.5,  0.5, 0.0}, {0.0, 1.0}, {0.0, 0.0, 1.0}}
+		};
+
+		subMesh.Indices = { 0, 1, 2, 2, 3, 0 };// 0, 2, 1, 2, 0, 3
+
+		return CreateRef<Mesh>("Plane", std::vector<SubMesh>{ subMesh });
 	}
 
 	void Mesh::LoadMesh(const std::filesystem::path& path)

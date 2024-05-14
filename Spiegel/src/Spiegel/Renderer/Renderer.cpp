@@ -215,12 +215,16 @@ namespace spg {
 				}
 
 				if (type == MeshTextureType::DIFFUSE) {
-					material->SetTexture2D((int)textureIndex, texture);
-					dtextureIndex = textureIndex;
+					material->SetTexture2D(1, texture);
+					material->SetFloat("material.useAlbedoMap", 1.0f);
+					/*material->SetTexture2D((int)textureIndex, texture);
+					dtextureIndex = textureIndex;*/
 				}
 				else {
-					material->SetTexture2D((int)textureIndex, texture);
-					stextureIndex = textureIndex;
+					material->SetTexture2D(3, texture);
+					material->SetFloat("material.useMetallicMap", 1.0f);
+					/*material->SetTexture2D((int)textureIndex, texture);
+					stextureIndex = textureIndex;*/
 				}
 			}
 
@@ -258,8 +262,8 @@ namespace spg {
 	void Renderer::DrawMeshWithoutMaterial(const glm::mat4& transform, Ref<Mesh> mesh)
 	{
 		// Should Bind Shader Before Calling This Function
-		RenderCommand::SetCullFace(true);
-		RenderCommand::SetCullFaceSide(CullFace::Front);
+		//RenderCommand::SetCullFace(true);
+		//RenderCommand::SetCullFaceSide(CullFace::Front);
 
 		struct MeshVertex
 		{
@@ -318,7 +322,7 @@ namespace spg {
 			MeshVertexBase = nullptr;
 			MeshVertexPtr = nullptr;
 		}
-		RenderCommand::SetCullFace(false);
+		//RenderCommand::SetCullFace(false);
 	}
 
 	void Renderer::EndScene()

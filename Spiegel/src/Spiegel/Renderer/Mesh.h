@@ -48,6 +48,7 @@ namespace spg {
 		static Ref<Mesh> Create(const std::filesystem::path& path);
 		static Ref<Mesh> CreateCube();
 		static Ref<Mesh> CreateSphere();
+		static Ref<Mesh> CreatePlane();
 	private:
 		void LoadMesh(const std::filesystem::path& path);
 		void ProcessNode(aiNode* node, const aiScene* scene);
