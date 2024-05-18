@@ -4,9 +4,7 @@
 layout(location = 0) in vec4 a_Position;
 layout(location = 1) in vec2 a_TexCoord;
 layout(location = 2) in vec3 a_Normal;
-layout(location = 3) in float a_DiffuseTextureID;
-layout(location = 4) in float a_SpecularTextureID;
-layout(location = 5) in int a_EntityID;
+layout(location = 3) in int a_EntityID;
 
 layout(std140, binding = 1) uniform Camera {
 	mat4 u_ViewProjection;
@@ -19,8 +17,6 @@ out vec2 v_TexCoord;
 out vec3 v_Normal;
 out vec3 v_Pos;
 out vec4 v_FragPosLightSpace;
-out flat float v_DiffuseTextureID;
-out flat float v_SpecularTextureID;
 out flat int v_EntityID;
 
 void main() {
@@ -28,8 +24,6 @@ void main() {
 	v_Normal = a_Normal;
 	v_Pos = a_Position.xyz;
 	v_FragPosLightSpace = u_LightSpaceMatrix * a_Position;
-	v_DiffuseTextureID = a_DiffuseTextureID;
-	v_SpecularTextureID = a_SpecularTextureID;
 	v_EntityID = a_EntityID;
 	gl_Position = u_ViewProjection * a_Position;
 }
@@ -44,8 +38,6 @@ in vec2 v_TexCoord;
 in vec3 v_Normal;
 in vec3 v_Pos;
 in vec4 v_FragPosLightSpace;
-in flat float v_DiffuseTextureID;
-in flat float v_SpecularTextureID;
 in flat int v_EntityID;
 
 layout(std140, binding = 1) uniform Camera {
@@ -169,16 +161,20 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir) {
 }
 
 void main() {
-	vec3 albedo = material.useAlbedoMap == 0.0 ? material.albedo : pow(texture(u_Textures[1], v_TexCoord).rgb, vec3(2.2));
+	vec4 albedo = material.useAlbedoMap == 0.0 ? vec4(material.albedo, 1.0) : vec4(pow(texture(u_Textures[1], v_TexCoord).rgb, vec3(2.2)), texture(u_Textures[1], v_TexCoord).a);
 	vec3 N = material.useNormalMap == 0.0 ? normalize(v_Normal) : GetNormalFromMap();
 	float metallic = material.useMetallicMap == 0.0 ? material.metallic : texture(u_Textures[3], v_TexCoord).r;
 	float roughness = material.useRoughnessMap == 0.0 ? material.roughness : texture(u_Textures[4], v_TexCoord).r;
 	float ao = material.useAOMap == 0.0 ? material.ao : texture(u_Textures[5], v_TexCoord).r;
 
+
+	// alpha blend discard transplant 
+	if(albedo.a < 0.1) discard; 
+
 	vec3 V = normalize(u_ViewPosition - v_Pos);
 
 	vec3 F0 = vec3(0.04);
-	F0 = mix(F0, albedo, metallic);
+	F0 = mix(F0, albedo.rgb, metallic);
 
 	vec3 Lo = vec3(0.0);
 	float shadow = 1.0;
@@ -206,7 +202,7 @@ void main() {
 		vec3 specular = numerator / denominator;
 
 		float NdotL = max(dot(N, L), 0.0);
-		Lo += (kD * albedo / PI + specular) * radiance * NdotL;
+		Lo += (kD * albedo.rgb / PI + specular) * radiance * NdotL;
 	}
 
 	if (u_DirLightCount == 1) {
@@ -230,16 +226,16 @@ void main() {
 
 		float NdotL = max(dot(N, L), 0.0);
 		shadow = ShadowCalculation(v_FragPosLightSpace, N, L);
-		Lo += (kD * albedo / PI + specular) * radiance * NdotL * (1.0 - shadow);
+		Lo += (kD * albedo.rgb / PI + specular) * radiance * NdotL * (1.0 - shadow);
 		
 	}
 
-	vec3 ambient = vec3(0.03) * albedo * ao;
+	vec3 ambient = vec3(0.03) * albedo.rgb * ao;
 	vec3 color = ambient + Lo;// * (1.0 - shadow);
 
 	color = color / (color + vec3(1.0)); // HDR Tone Mapping
 	color = pow(color, vec3(1.0 / 2.2)); // gamma correction
 
-	o_Color = vec4(color, 1.0);
+	o_Color = vec4(color, albedo.a);
 	o_EntityID = v_EntityID;
 }

@@ -389,7 +389,11 @@ namespace spg {
 				if (ImGui::BeginDragDropTarget()) {
 					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
 						const wchar_t* path = (const wchar_t*)payload->Data;
-						component.Texture = Texture2D::Create(path);
+						std::filesystem::path filePath = std::filesystem::path(path);
+						std::string extension = filePath.extension().string();
+						if (extension == ".png" || extension == ".jpg" || extension == ".jpeg") {
+							component.Texture = std::static_pointer_cast<Texture2D>(AssetManager::GetTextureLibrary()->Load(filePath, TextureType::Texture2D));
+						}					
 					}
 					ImGui::EndDragDropTarget();
 				}

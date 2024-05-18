@@ -1,0 +1,95 @@
+Scene: Scene Name
+Entities:
+  - Entity: 6473125709287590665
+    TagComponent:
+      Tag: Window
+    TransformComponent:
+      Position: [0.242009103, 0.0768488199, 1.66618347]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+    MeshComponent:
+      BaiscMesh: true
+      CurrentMesh: Plane
+      Albedo: [0.5, 0, 0]
+      Metallic: 0
+      Roughness: 0.5
+      AO: 1
+      AlbedoMap: assets\textures\blending_transparent_window.png
+  - Entity: 16107687992452060193
+    TagComponent:
+      Tag: floor
+    TransformComponent:
+      Position: [0.690089464, -1.04771304, 0.334289163]
+      Rotation: [0, 0, 0]
+      Scale: [6.36940908, 1, 9.91599751]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+    MeshComponent:
+      BaiscMesh: true
+      CurrentMesh: Cube
+      Albedo: [0.5, 0, 0]
+      Metallic: 0
+      Roughness: 0.5
+      AO: 1
+      AlbedoMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_albedo.png
+      NormalMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_normal-dx.png
+      MetallicMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_metallic.png
+      RoughnessMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_roughness.png
+  - Entity: 15772567832276243401
+    TagComponent:
+      Tag: Light
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+    LightComponent:
+      Color: [1, 1, 1]
+      Type: 0
+      HDRIntensity: 1
+      Dir.direction: [-0.200000003, -1, -0.300000012]
+      Dir.ambient: 0.0500000007
+      Dir.diffuse: 0.800000012
+      Dir.specular: 1
+      Point.ambient: 0.0500000007
+      Point.diffuse: 0.800000012
+      Point.specular: 1
+      Point.constant: 1
+      Point.linear: 0.0900000036
+      Point.quadratic: 0.0320000015
+      Spot.cutOff: 12.5
+      Spot.outerCutOff: 15
+      Spot.ambient: 0.0500000007
+      Spot.diffuse: 0.800000012
+      Spot.specular: 1
+      Spot.constant: 1
+      Spot.linear: 0.0900000036
+      Spot.quadratic: 0.0320000015
+  - Entity: 15375978835998056761
+    TagComponent:
+      Tag: Grass
+    TransformComponent:
+      Position: [0.000408274354, -0.0318230987, 0.0270385817]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    RelationshipComponent:
+      Parent: 0
+      Children:
+        []
+    MeshComponent:
+      BaiscMesh: true
+      CurrentMesh: Plane
+      Albedo: [0.5, 0, 0]
+      Metallic: 0
+      Roughness: 0.5
+      AO: 1
+      AlbedoMap: assets\textures\grass.png

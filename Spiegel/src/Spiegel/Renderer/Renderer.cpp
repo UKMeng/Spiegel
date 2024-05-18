@@ -146,14 +146,16 @@ namespace spg {
 	void Renderer::DrawMesh(const glm::mat4& transform, Ref<Mesh> mesh, int entityID)
 	{
 		RenderCommand::SetCullFace(true);
+		RenderCommand::SetBlend(true);
+
 
 		struct MeshVertex
 		{
 			glm::vec4 Position;
 			glm::vec2 TexCoord;
 			glm::vec3 Normal;
-			float DiffuseTextureID;
-			float SpecularTextureID;
+			//float DiffuseTextureID;
+			//float SpecularTextureID;
 			int EntityID;
 		};
 
@@ -178,8 +180,8 @@ namespace spg {
 				{ ShaderDataType::Float4, "a_Position" },
 				{ ShaderDataType::Float2, "a_TexCoord" },
 				{ ShaderDataType::Float3, "a_Normal" },
-				{ ShaderDataType::Float, "a_DiffuseTextureID"},
-				{ ShaderDataType::Float, "a_SpecularTextureID"},
+				//{ ShaderDataType::Float, "a_DiffuseTextureID"},
+				//{ ShaderDataType::Float, "a_SpecularTextureID"},
 				{ ShaderDataType::Int, "a_EntityID"},
 				});
 			vao->AddVertexBuffer(vbo);
@@ -194,8 +196,8 @@ namespace spg {
 			vao->SetIndexBuffer(ibo);
 			delete[] meshIndices;
 
-			float dtextureIndex = 0.0f;
-			float stextureIndex = 0.0f;
+			//float dtextureIndex = 0.0f;
+			//float stextureIndex = 0.0f;
 			for (auto& [type, texture] : subMesh.Textures)
 			{
 				float textureIndex = 0.0f;
@@ -241,8 +243,8 @@ namespace spg {
 				// Reference: http://www.lighthouse3d.com/tutorials/glsl-12-tutorial/the-normal-matrix/
 				MeshVertexPtr->Normal = glm::mat3(glm::transpose(glm::inverse(transform))) * vertex.Normal;
 				MeshVertexPtr->EntityID = entityID;
-				MeshVertexPtr->DiffuseTextureID = dtextureIndex;
-				MeshVertexPtr->SpecularTextureID = stextureIndex;
+				//MeshVertexPtr->DiffuseTextureID = dtextureIndex;
+				//MeshVertexPtr->SpecularTextureID = stextureIndex;
 				MeshVertexPtr++;
 			}
 
