@@ -626,7 +626,9 @@ namespace spg {
 	{
 		// TODO: a cube mesh
 		// component.Mesh = CreateRef<Mesh>("assets/meshes/nanosuit/nanosuit.obj");
-		component.Mesh = AssetManager::GetMeshLibrary()->Get("Cube");
+		if (!component.Mesh) {
+			component.Mesh = AssetManager::GetMeshLibrary()->Get("Cube");
+		}
 	}
 
 	template<>
