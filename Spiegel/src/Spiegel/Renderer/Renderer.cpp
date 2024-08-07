@@ -145,6 +145,7 @@ namespace spg {
 
 	void Renderer::DrawMesh(const glm::mat4& transform, Ref<Mesh> mesh, int entityID)
 	{
+		// TODO: Saparete Transparent Meshes and Opaque Meshes with Render Pass
 		RenderCommand::SetCullFace(true);
 		RenderCommand::SetBlend(true);
 
@@ -180,8 +181,6 @@ namespace spg {
 				{ ShaderDataType::Float4, "a_Position" },
 				{ ShaderDataType::Float2, "a_TexCoord" },
 				{ ShaderDataType::Float3, "a_Normal" },
-				//{ ShaderDataType::Float, "a_DiffuseTextureID"},
-				//{ ShaderDataType::Float, "a_SpecularTextureID"},
 				{ ShaderDataType::Int, "a_EntityID"},
 				});
 			vao->AddVertexBuffer(vbo);

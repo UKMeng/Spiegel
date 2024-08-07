@@ -149,7 +149,7 @@ namespace spg {
 		// aiProcess_GenNormals: Generate normals if the model doesn't have them.
 		// aiProcess_SplitLargeMeshes: Split large meshes into smaller sub-meshes.
 		// aiProcess_OptimizeMeshes: Merge small meshes into larger meshes.
-		const aiScene* scene = importer.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs);
+		const aiScene* scene = importer.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_OptimizeMeshes);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 			SPG_CORE_ERROR("Assimp error: {0}", importer.GetErrorString());

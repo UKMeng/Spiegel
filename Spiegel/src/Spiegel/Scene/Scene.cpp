@@ -624,8 +624,6 @@ namespace spg {
 	template<>
 	void Scene::OnComponentAdded<MeshComponent>(Entity entity, MeshComponent& component)
 	{
-		// TODO: a cube mesh
-		// component.Mesh = CreateRef<Mesh>("assets/meshes/nanosuit/nanosuit.obj");
 		if (!component.Mesh) {
 			component.Mesh = AssetManager::GetMeshLibrary()->Get("Cube");
 		}
