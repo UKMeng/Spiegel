@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Shader.h"
+#include "Spiegel/Asset/Shader.h"
 #include "Texture.h"
 
 namespace spg {

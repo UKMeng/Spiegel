@@ -1,7 +1,7 @@
 #pragma once
 
 // #include "Asset.h"
-#include "Spiegel/Renderer/Shader.h"
+#include "Shader.h"
 #include "Spiegel/Renderer/Texture.h"
 #include "Spiegel/Renderer/Material.h"
 #include "Spiegel/Renderer/Mesh.h"

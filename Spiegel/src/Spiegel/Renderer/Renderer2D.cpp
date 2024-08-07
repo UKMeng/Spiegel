@@ -1,7 +1,8 @@
 #include "spgpch.h"
 #include "Renderer2D.h"
 
-#include "Shader.h"
+#include "Spiegel/Asset/AssetManager.h"
+#include "Spiegel/Asset/Shader.h"
 #include "Font.h"
 #include "VertexArray.h"
 #include "RenderCommand.h"
@@ -9,6 +10,8 @@
 #include "Spiegel/Utils/PlatformUtils.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+
+
 
 namespace spg {
 
@@ -231,7 +234,7 @@ namespace spg {
 		s_Renderer2DData.TextVertexArray->AddVertexBuffer(s_Renderer2DData.TextVertexBuffer);
 		s_Renderer2DData.TextVertexArray->SetIndexBuffer(quadIB);
 		s_Renderer2DData.TextVertexBufferBase = new TextVertex[s_Renderer2DData.MaxVertices];
-		s_Renderer2DData.TextShader = Shader::Create("assets/shaders/Text.glsl");
+		s_Renderer2DData.TextShader = AssetManager::GetShader("Text");
 		// -------------Text-----------------
 
 		// -------------Material-------------

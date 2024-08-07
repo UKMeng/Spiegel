@@ -15,6 +15,7 @@
 #include "Spiegel/Core/UUID.h"
 
 #include "Spiegel/Asset/AssetManager.h"
+#include "Spiegel/Asset/Shader.h"
 
 #include "Spiegel/ImGui/ImGuiLayer.h"
 
@@ -30,7 +31,6 @@
 #include "Spiegel/Renderer/Buffer.h"
 #include "Spiegel/Renderer/Framebuffer.h"
 #include "Spiegel/Renderer/RendererAPI.h"
-#include "Spiegel/Renderer/Shader.h"
 #include "Spiegel/Renderer/Font.h"
 #include "Spiegel/Renderer/Texture.h"
 #include "Spiegel/Renderer/SubTexture2D.h"

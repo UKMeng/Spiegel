@@ -158,12 +158,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\shaders\Text.glsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="assets\fonts\Noto_Sans\NotoSansJP-Black.ttf" />
     <Content Include="assets\fonts\Noto_Sans\NotoSansJP-Bold.ttf" />
     <Content Include="assets\fonts\Noto_Sans\NotoSansJP-ExtraBold.ttf" />
@@ -255,6 +249,8 @@
     <Content Include="assets\shaders\ShadowMap.glsl" />
     <Content Include="assets\shaders\Skybox.glsl" />
     <Content Include="assets\shaders\Test.glsl" />
+    <Content Include="assets\shaders\Text\Text.frag" />
+    <Content Include="assets\shaders\Text\Text.vert" />
     <Content Include="assets\skybox\skybox_water\back.jpg" />
     <Content Include="assets\skybox\skybox_water\bottom.jpg" />
     <Content Include="assets\skybox\skybox_water\front.jpg" />

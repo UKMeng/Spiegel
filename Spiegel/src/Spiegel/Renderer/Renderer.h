@@ -1,12 +1,13 @@
 #pragma once
 
 #include "RenderCommand.h"
-#include "Shader.h"
 #include "Texture.h"
 #include "Material.h"
 #include "Mesh.h"
 #include "Camera.h"
 #include "EditorCamera.h"
+
+#include "Spiegel/Asset/Shader.h"
 
 
 namespace spg {

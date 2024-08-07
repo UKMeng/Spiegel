@@ -17,6 +17,23 @@ namespace spg {
 		auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
 		m_Name = filepath.substr(lastSlash, count);
 	}
+	
+	OpenGLShader::OpenGLShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
+	{
+		std::unordered_map<GLenum, std::string> shaderSources;
+		std::string vertSource = ReadFile(vertexShaderPath);
+		std::string fragSource = ReadFile(fragmentShaderPath);
+		shaderSources[GL_VERTEX_SHADER] = vertSource;
+		shaderSources[GL_FRAGMENT_SHADER] = fragSource;
+		Compile(shaderSources);
+
+		// Extract shader name from filepath
+		auto lastSlash = fragmentShaderPath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = fragmentShaderPath.rfind('.');
+		auto count = lastDot == std::string::npos ? fragmentShaderPath.size() - lastSlash : lastDot - lastSlash;
+		m_Name = fragmentShaderPath.substr(lastSlash, count);
+	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 		: m_Name(name)
@@ -50,6 +67,9 @@ namespace spg {
 		return result;
 	}
 
+	/// \brief spilt shader source code into vert and frag
+	/// \param source Shader source code including vert and frag
+	/// \return 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
 	{
 		std::unordered_map<GLenum, std::string> shaderSources;

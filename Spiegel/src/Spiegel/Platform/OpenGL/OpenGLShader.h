@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Spiegel/Renderer/Shader.h"
+#include "Spiegel/Asset/Shader.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -10,6 +10,7 @@ namespace spg {
 	class OpenGLShader : public Shader {
 	public:
 		OpenGLShader(const std::string& filepath);
+		OpenGLShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
 		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 		~OpenGLShader();
 

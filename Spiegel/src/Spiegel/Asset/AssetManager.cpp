@@ -13,6 +13,7 @@ namespace spg {
 		s_ShaderLibrary->Load("Skybox", "assets/shaders/Skybox.glsl");
 		s_ShaderLibrary->Load("PBR_Mesh", "assets/shaders/PBR_Mesh.glsl");
 		s_ShaderLibrary->Load("ShadowMap", "assets/shaders/ShadowMap.glsl");
+		s_ShaderLibrary->Load("Text", "assets/shaders/Text/Text.vert", "assets/shaders/Text/Text.frag");
 		
 		s_TextureLibrary = CreateRef<TextureLibrary>();
 		

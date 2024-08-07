@@ -8,7 +8,7 @@
 #include "Spiegel/Core/Timestep.h"
 #include "Spiegel/ImGui/ImGuiLayer.h"
 
-#include "Spiegel/Renderer/Shader.h"
+#include "Spiegel/Asset/Shader.h"
 #include "Spiegel/Renderer/Buffer.h"
 #include "Spiegel/Renderer/VertexArray.h"
 
