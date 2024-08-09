@@ -2,6 +2,7 @@
 
 #include "Framebuffer.h"
 #include "Texture.h"
+#include "Spiegel/Scene/Scene.h"
 
 namespace spg {
 
@@ -9,12 +10,11 @@ namespace spg {
 	{
 	public:
 		RenderPass();
-		RenderPass(FramebufferSpecification spec);
+		RenderPass(FramebufferSpecification spec, std::function<void(Ref<Framebuffer>, Ref<Scene>)> renderFunc);
 
 		~RenderPass() = default;
 
-		void Begin();
-		void End();
+		void Exec(Ref<Scene> scene);
 
 		/*void SetClearColor(float r, float g, float b, float a);
 		void Clear();*/
@@ -44,6 +44,8 @@ namespace spg {
 		Ref<Texture2D> GetDepthAttachmentTexture() { return Texture2D::Create(m_Framebuffer->GetDepthAttachmentTextureID()); }
 	private:
 		Ref<Framebuffer> m_Framebuffer;
+
+		std::function<void(Ref<Framebuffer>, Ref<Scene>)> m_RenderFunc;
 	};
 
 }

@@ -23,6 +23,6 @@ namespace spg {
 
 	void OpenGLContext::SwapBuffers()
 	{
-		glfwSwapBuffers(m_WindowHandle); // 交换颜色缓冲（它是一个储存着GLFW窗口每一个像素颜色的大缓冲），它在这一迭代中被用来绘制，并且将会作为输出显示在屏幕上。
+		glfwSwapBuffers(m_WindowHandle);
 	}
 }

@@ -40,7 +40,7 @@ namespace spg {
 		Entity GetPrimaryCameraEntity();
 
 		glm::mat4 GetTransformRelatedToParents(Entity entity);
-
+		
 		template<typename... Components>
 		auto GetAllEntitiesWith()
 		{
@@ -52,7 +52,8 @@ namespace spg {
 
 		void SetEnvironment(uint32_t shadowTextureID) { if(m_ShadowMap == nullptr) m_ShadowMap = Texture2D::Create(shadowTextureID); }
 		void SetEnvironment(Ref<Texture2D> shadowMap) { m_ShadowMap = shadowMap; }
-		Ref<Texture2D> GetEnvironment() { return m_ShadowMap; }
+		const Ref<Texture2D>& GetEnvironment() { return m_ShadowMap; }
+		glm::mat4& GetLightSpaceMatrix() { return m_LightSpaceMatrix; }
 
 	private:
 		template<typename T>

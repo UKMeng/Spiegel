@@ -86,6 +86,9 @@ namespace spg {
 		float m_FrameTime = 0.0f;
 		float m_TempFrameTimeForRefresh = 0.0f;
 
+		// Render Pipeline
+		Ref<Pipeline> m_Pipeline;
+
 		// RenderPass temporary
 		Ref<RenderPass> m_ShadowPass;
 	};

@@ -34,12 +34,55 @@ namespace spg {
 		fbSpec.Height = 720;
 		m_Framebuffer = Framebuffer::Create(fbSpec);
 
-		// temporary
+		// temporary RenderPass test
 		FramebufferSpecification shadowMapSpec;
 		shadowMapSpec.Attachments = { FramebufferTextureFormat::Depth };
 		shadowMapSpec.Width = 1024;
 		shadowMapSpec.Height = 1024;
-		m_ShadowPass = CreateRef<RenderPass>(shadowMapSpec);
+
+		std::function<void(Ref<Framebuffer>, Ref<Scene>)> shadowPassFunc = [](Ref<Framebuffer> framebuffer, Ref<Scene> scene)
+		{
+			int pointLightCount = 0;
+			
+			glm::mat4& lightSpaceMatrix = scene->GetLightSpaceMatrix();
+			auto view = scene->GetAllEntitiesWith<TransformComponent, LightComponent>();
+			for (auto entity : view) {
+				auto [transform, light] = view.get<TransformComponent, LightComponent>(entity);
+				if (light.Type == LightComponent::LightType::Directional) {
+					// Maybe Use a Fake Camera
+					float Near = 1.0f, Far = 15.0f;
+					glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, Near, Far);
+					glm::mat4 lightView = glm::lookAt(-light.Dir.direction, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+					
+					lightSpaceMatrix = lightProjection * lightView;
+					pointLightCount = 1;
+					break;
+				}
+			}
+		
+			if (pointLightCount == 0) return;
+		
+			Ref<Shader> shader = AssetManager::GetShader("ShadowMap");
+			shader->Bind();
+			shader->SetMat4("u_ViewProjection", lightSpaceMatrix);
+
+			{
+				auto view = scene->GetAllEntitiesWith<TransformComponent, MeshComponent>();
+				for (auto entity : view) {
+					auto [transform, mesh] = view.get<TransformComponent, MeshComponent>(entity);
+					Renderer::DrawMeshWithoutMaterial(scene->GetTransformRelatedToParents({ entity, scene.get() }), mesh.Mesh);
+				}
+			}
+
+			framebuffer->Unbind();
+
+			scene->SetEnvironment(framebuffer->GetDepthAttachmentTextureID());
+		};
+
+		m_Pipeline = CreateRef<Pipeline>();
+		m_Pipeline->AddPass(CreateRef<RenderPass>(shadowMapSpec, shadowPassFunc));
+		
+		//m_ShadowPass = CreateRef<RenderPass>(shadowMapSpec, shadowPassFunc);
 
 		NewScene();
 
@@ -78,11 +121,14 @@ namespace spg {
 		Renderer2D::ResetStats();
 
 		// Shadow Pass
-		m_ShadowPass->Begin();
-		m_ActiveScene->OnUpdateShadow(ts);
-		m_ShadowPass->End();
+		// m_ShadowPass->Begin();
+		// m_ActiveScene->OnUpdateShadow(ts);
+		// m_ShadowPass->End();
+		//
+		// m_ActiveScene->SetEnvironment(m_ShadowPass->GetFramebuffer()->GetDepthAttachmentTextureID());
+		//m_ShadowPass->Exec(m_ActiveScene);
 
-		m_ActiveScene->SetEnvironment(m_ShadowPass->GetFramebuffer()->GetDepthAttachmentTextureID());
+		m_Pipeline->Exec(m_ActiveScene);
 		
 		// Main Pass
 		m_Framebuffer->Bind();
@@ -361,8 +407,12 @@ namespace spg {
 		// Shadow Viewport Begin
 		ImGui::Begin("Shadow Map");
 		ImVec2 ShadowMapWindowSize = ImGui::GetContentRegionAvail();
-		uint32_t ShadowMapID = m_ShadowPass->GetFramebuffer()->GetDepthAttachmentTextureID();
-		ImGui::Image((void*)ShadowMapID, ShadowMapWindowSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		const Ref<Texture2D>& shadowMap =  m_ActiveScene->GetEnvironment();
+		if (shadowMap != nullptr)
+		{
+			uint32_t ShadowMapID = shadowMap->GetTextureID();
+			ImGui::Image((void*)ShadowMapID, ShadowMapWindowSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		}
 		ImGui::End();
 		// Shadow Viewport End
 		

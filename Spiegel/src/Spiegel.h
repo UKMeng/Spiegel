@@ -37,3 +37,4 @@
 #include "Spiegel/Renderer/VertexArray.h"
 #include "Spiegel/Renderer/EditorCamera.h"
 #include "Spiegel/Renderer/RenderPass.h"
+#include "Spiegel/Renderer/Pipeline.h"
