@@ -41,7 +41,11 @@ namespace spg
 	
 	void ShaderLibrary::Add(const std::string& name, const Ref<Shader>& shader)
 	{
-		SPG_CORE_ASSERT(!Exists(name), "Shader already exist!");
+		if (Exists(name))
+		{
+			SPG_CORE_INFO("ShaderLibrary: Shader with name {0} already exists! Replace it.", name);
+			
+		}
 		m_Shaders[name] = shader;
 	}
 
@@ -64,6 +68,7 @@ namespace spg
 		Add(name, shader);
 		return shader;
 	}
+	
 	Ref<Shader> ShaderLibrary::Load(const std::string& name, const std::string& vertexShaderPath, const std::string& fragShaderPath)
 	{
 		auto shader = Shader::Create(vertexShaderPath, fragShaderPath);

@@ -19,6 +19,9 @@ namespace spg {
 
 		static void Init();
 		static void Shutdown();
+
+		static void LoadShaders();
+		static void LoadMeshes();
 		
 		static Ref<ShaderLibrary> GetShaderLibrary() { return s_ShaderLibrary; }
 		static Ref<Shader> GetShader(const std::string& name) { return s_ShaderLibrary->Get(name); }

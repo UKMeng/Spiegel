@@ -244,6 +244,8 @@
     <Content Include="assets\shaders\Light.glsl" />
     <Content Include="assets\shaders\Line.glsl" />
     <Content Include="assets\shaders\Mesh.glsl" />
+    <Content Include="assets\shaders\PBR\MeshWithPCSS.frag" />
+    <Content Include="assets\shaders\PBR\MeshWithPCSS.vert" />
     <Content Include="assets\shaders\PBR_Mesh.glsl" />
     <Content Include="assets\shaders\Quad.glsl" />
     <Content Include="assets\shaders\ShadowMap.glsl" />

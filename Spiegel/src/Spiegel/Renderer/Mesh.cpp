@@ -234,7 +234,10 @@ namespace spg {
 
 	void MeshLibrary::Add(const std::string& name, const Ref<Mesh>& mesh)
 	{
-		SPG_CORE_ASSERT(!Exists(name), "Shader already exist!");
+		if (Exists(name))
+		{
+			SPG_CORE_INFO("MeshLibrary: Mesh with name {0} already exists! Replace it.", name);
+		}
 		m_Meshes[name] = mesh;
 	}
 

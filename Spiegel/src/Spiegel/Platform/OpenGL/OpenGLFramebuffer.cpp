@@ -227,7 +227,7 @@ namespace spg {
 	{
 		SPG_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Attachment index out of range!");
 		auto& spec = m_ColorAttachmentSpecs[attachmentIndex];
-		// glClearTexImage ¡ª fills all a texture image with a constant value
+		// glClearTexImage fills all a texture image with a constant value
 		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, Utils::TextureFormatToGL(spec.TextureFormat), Utils::GLDataType(spec.TextureFormat), &value);
 	}
 }

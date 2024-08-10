@@ -37,8 +37,8 @@ namespace spg {
 		// temporary RenderPass test
 		FramebufferSpecification shadowMapSpec;
 		shadowMapSpec.Attachments = { FramebufferTextureFormat::Depth };
-		shadowMapSpec.Width = 1024;
-		shadowMapSpec.Height = 1024;
+		shadowMapSpec.Width = 2048;
+		shadowMapSpec.Height = 2048;
 
 		std::function<void(Ref<Framebuffer>, Ref<Scene>)> shadowPassFunc = [](Ref<Framebuffer> framebuffer, Ref<Scene> scene)
 		{
@@ -50,9 +50,10 @@ namespace spg {
 				auto [transform, light] = view.get<TransformComponent, LightComponent>(entity);
 				if (light.Type == LightComponent::LightType::Directional) {
 					// Maybe Use a Fake Camera
-					float Near = 1.0f, Far = 15.0f;
-					glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, Near, Far);
-					glm::mat4 lightView = glm::lookAt(-light.Dir.direction, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+					float Near = 2.0f, Far = 100.0f;
+					float right = 30.0f, left = -right, top = 30.0f, bottom = -top;
+					glm::mat4 lightProjection = glm::ortho(left, right, bottom, top, Near, Far);
+					glm::mat4 lightView = glm::lookAt(-light.Dir.direction * 5.0f, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 					
 					lightSpaceMatrix = lightProjection * lightView;
 					pointLightCount = 1;
@@ -277,6 +278,13 @@ namespace spg {
 		if (ImGui::Checkbox("VSync", &m_VSync)) {
 			Application::Get().GetWindow().SetVSync(m_VSync);
 		};
+		if (ImGui::Button("Reload Shaders"))
+		{
+			// For debug shaders
+			AssetManager::LoadShaders();
+			AssetManager::LoadMeshes();
+			// OpenScene(m_EditorScenePath);
+		}
 		ImGui::End();
 		// Setting Panel End
 
