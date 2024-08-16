@@ -133,8 +133,6 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir) {
 
 /////////// PCSS Begin
 
-// TODO: Adaptive Shadow Bias algorithm: https://zhuanlan.zhihu.com/p/370951892
-
 // Shadow map related variables
 #define LIGHT_WORLD_SIZE 0.1
 #define LIGHT_FRUSTUM_WIDTH 30.0
@@ -148,7 +146,19 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir) {
 #define PCF_NUM_SAMPLES NUM_SAMPLES
 #define NUM_RINGS 10
 
+#define FRAG_SIZE (LIGHT_FRUSTUM_WIDTH / RESOLUTION / 2.0)
+
 vec2 poissonDisk[NUM_SAMPLES];
+
+// Adaptive Shadow Bias Algorithm
+// reference: https://zhuanlan.zhihu.com/p/370951892
+// c is a user defined constant to control the bias
+const float c_normal = 0.1;
+
+float getShaodowBias(float filterRadius, vec3 normal, vec3 lightDir) {
+    float fragSize = (1.0 + ceil(filterRadius * RESOLUTION)) * FRAG_SIZE;
+    return c_normal * fragSize * (1.0 - dot(normal, lightDir));
+}
 
 highp float rand_2to1(vec2 uv) {
     // 0 - 1
@@ -194,31 +204,36 @@ float findBlocker(sampler2D shadowMap, vec2 uv, float zReceiver) {
 }
 
 float PCF_Filter(sampler2D shadowMap, vec2 uv, float zReceiver,
-                 float filterRadius) {
+                 float filterRadius, float bias) {
     float sum = 0.0;
 
     for (int i = 0; i < PCF_NUM_SAMPLES; i++) {
         float depth = texture(shadowMap, uv + poissonDisk[i] * filterRadius).r;
-        if (zReceiver < depth + EPS) sum += 1.0;
+        if (zReceiver - bias < depth) sum += 1.0;
     }
 
     for (int i = 0; i < PCF_NUM_SAMPLES; i++) {
         float depth = texture(shadowMap, uv + -poissonDisk[i].yx * filterRadius).r;
-        if (zReceiver < depth + EPS) sum += 1.0;
+        if (zReceiver - bias < depth) sum += 1.0;
     }
 
     return sum / (2.0 * float(PCF_NUM_SAMPLES));
 }
 
-float PCF(sampler2D shadowMap, vec4 coords) {
+float PCF(sampler2D shadowMap, vec4 coords, vec3 normal, vec3 lightDir) {
     vec2 uv = coords.xy;
     float zReceiver = coords.z; // Assumed to be eye-space z in this code
 
     poissonDiskSamples(uv);
-    return PCF_Filter(shadowMap, uv, zReceiver, 0.001);
+    
+    float filterSize = 10.0 / RESOLUTION;
+    
+    float bias = getShaodowBias(filterSize, normal, lightDir);
+    
+    return PCF_Filter(shadowMap, uv, zReceiver, filterSize, bias);
 }
 
-float PCSS(sampler2D shadowMap, vec4 coords) {
+float PCSS(sampler2D shadowMap, vec4 coords, vec3 normal, vec3 lightDir) {
     vec2 uv = coords.xy;
     float zReceiver = coords.z; // Assumed to be eye-space z in this code
     // STEP 1: blocker search
@@ -231,10 +246,12 @@ float PCSS(sampler2D shadowMap, vec4 coords) {
     // STEP 2: penumbra size
     float penumbraRatio = (zReceiver - avgBlockerDepth) / avgBlockerDepth;
     float filterSize = penumbraRatio * LIGHT_SIZE_UV * NEAR_PLANE / zReceiver;
+    
+    float bias = getShaodowBias(filterSize, normal, lightDir);
 
     // STEP 3: filtering
     // return avgBlockerDepth;
-    return PCF_Filter(shadowMap, coords.xy, zReceiver, filterSize);
+    return PCF_Filter(shadowMap, coords.xy, zReceiver, filterSize, bias);
 }
 
 
@@ -313,8 +330,8 @@ void main() {
         // Cal Visibility for shadows
         vec3 shadowCoord = v_FragPosLightSpace.xyz / v_FragPosLightSpace.w;
         shadowCoord = shadowCoord * 0.5 + 0.5;
-        // visibility = PCF(u_Textures[31], vec4(shadowCoord, 1.0));
-        visibility = PCSS(u_Textures[31], vec4(shadowCoord, 1.0));
+        //visibility = PCF(u_Textures[31], vec4(shadowCoord, 1.0), N, L);
+        visibility = PCSS(u_Textures[31], vec4(shadowCoord, 1.0), N, L);
 
         
         Lo += (kD * albedo.rgb / PI + specular) * radiance * NdotL; // * visibility;
