@@ -283,6 +283,9 @@ namespace spg {
             out << YAML::Key << "Dir.ambient" << YAML::Value << lc.Dir.ambient;
             out << YAML::Key << "Dir.diffuse" << YAML::Value << lc.Dir.diffuse;
             out << YAML::Key << "Dir.specular" << YAML::Value << lc.Dir.specular;
+        	out << YAML::Key << "Dir.znear" << YAML::Value << lc.Dir.znear;
+        	out << YAML::Key << "Dir.zfar" << YAML::Value << lc.Dir.zfar;
+        	out << YAML::Key << "Dir.frustumWidth" << YAML::Value << lc.Dir.frustumWidth;
             out << YAML::Key << "Point.ambient" << YAML::Value << lc.Point.ambient;
             out << YAML::Key << "Point.diffuse" << YAML::Value << lc.Point.diffuse;
             out << YAML::Key << "Point.specular" << YAML::Value << lc.Point.specular;
@@ -511,6 +514,9 @@ namespace spg {
                     dir.ambient = lightComponent["Dir.ambient"].as<float>();
                     dir.diffuse = lightComponent["Dir.diffuse"].as<float>();
                     dir.specular = lightComponent["Dir.specular"].as<float>();
+                	dir.znear = lightComponent["Dir.znear"].as<float>();
+                	dir.zfar = lightComponent["Dir.zfar"].as<float>();
+                	dir.frustumWidth = lightComponent["Dir.frustumWidth"].as<float>();
                     lc.Dir = dir;
                     LightComponent::PointLight point;
                     point.ambient = lightComponent["Point.ambient"].as<float>();

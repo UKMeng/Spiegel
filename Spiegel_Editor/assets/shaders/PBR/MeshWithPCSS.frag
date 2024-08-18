@@ -134,29 +134,29 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir) {
 /////////// PCSS Begin
 
 // Shadow map related variables
-#define LIGHT_WORLD_SIZE 0.1
-#define LIGHT_FRUSTUM_WIDTH 30.0
+#define LIGHT_WORLD_SIZE 1.0
+#define LIGHT_FRUSTUM_WIDTH 25.0
 #define LIGHT_SIZE_UV (LIGHT_WORLD_SIZE / LIGHT_FRUSTUM_WIDTH)
 
-#define RESOLUTION 2048.0
-#define NEAR_PLANE 2.0
+#define RESOLUTION 1024.0
+#define NEAR_PLANE 0.1
 
 #define NUM_SAMPLES 25
 #define BLOCKER_SEARCH_NUM_SAMPLES NUM_SAMPLES
 #define PCF_NUM_SAMPLES NUM_SAMPLES
 #define NUM_RINGS 10
 
-#define FRAG_SIZE (LIGHT_FRUSTUM_WIDTH / RESOLUTION / 2.0)
+#define FRAG_SIZE (LIGHT_FRUSTUM_WIDTH / RESOLUTION)
 
 vec2 poissonDisk[NUM_SAMPLES];
 
 // Adaptive Shadow Bias Algorithm
 // reference: https://zhuanlan.zhihu.com/p/370951892
 // c is a user defined constant to control the bias
-const float c_normal = 0.1;
+const float c_normal = 0.28;
 
 float getShaodowBias(float filterRadius, vec3 normal, vec3 lightDir) {
-    float fragSize = (1.0 + ceil(filterRadius * RESOLUTION)) * FRAG_SIZE;
+    float fragSize = (1.0 + ceil(filterRadius * RESOLUTION)) * FRAG_SIZE * 0.5;
     return c_normal * fragSize * (1.0 - dot(normal, lightDir));
 }
 

@@ -496,6 +496,9 @@ namespace spg {
 					ImGui::DragFloat("Ambient", &component.Dir.ambient, 0.01f);
 					ImGui::DragFloat("Diffuse", &component.Dir.diffuse, 0.1f);
 					ImGui::DragFloat("Specular", &component.Dir.specular, 0.1f);
+					ImGui::DragFloat("Near", &component.Dir.znear, 0.1f);
+					ImGui::DragFloat("Far", &component.Dir.zfar, 1.0f);
+					ImGui::DragFloat("Frustum Width", &component.Dir.frustumWidth, 1.0f);
 				}
 				if (component.Type == LightComponent::LightType::Point) {
 					ImGui::DragFloat("Ambient", &component.Point.ambient, 0.01f);

@@ -37,8 +37,8 @@ namespace spg {
 		// temporary RenderPass test
 		FramebufferSpecification shadowMapSpec;
 		shadowMapSpec.Attachments = { FramebufferTextureFormat::Depth };
-		shadowMapSpec.Width = 2048;
-		shadowMapSpec.Height = 2048;
+		shadowMapSpec.Width = 1024;
+		shadowMapSpec.Height = 1024;
 
 		std::function<void(Ref<Framebuffer>, Ref<Scene>)> shadowPassFunc = [](Ref<Framebuffer> framebuffer, Ref<Scene> scene)
 		{
@@ -50,10 +50,10 @@ namespace spg {
 				auto [transform, light] = view.get<TransformComponent, LightComponent>(entity);
 				if (light.Type == LightComponent::LightType::Directional) {
 					// Maybe Use a Fake Camera
-					float Near = 2.0f, Far = 100.0f;
-					float right = 30.0f, left = -right, top = 30.0f, bottom = -top;
+					float Near = light.Dir.znear, Far = light.Dir.zfar;
+					float right = light.Dir.frustumWidth / 2.0f, left = -right, top = right, bottom = -top;
 					glm::mat4 lightProjection = glm::ortho(left, right, bottom, top, Near, Far);
-					glm::mat4 lightView = glm::lookAt(-light.Dir.direction * 5.0f, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+					glm::mat4 lightView = glm::lookAt(-light.Dir.direction * 1.5f, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 					
 					lightSpaceMatrix = lightProjection * lightView;
 					pointLightCount = 1;

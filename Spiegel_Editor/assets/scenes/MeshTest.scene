@@ -1,28 +1,5 @@
 Scene: Scene Name
 Entities:
-  - Entity: 282277757421050746
-    TagComponent:
-      Tag: Floor
-    TransformComponent:
-      Position: [-0.711021721, -2.38723755, 0.627837718]
-      Rotation: [0, 0, 0]
-      Scale: [20.1678715, 0.317795992, 16.7036819]
-    RelationshipComponent:
-      Parent: 0
-      Children:
-        []
-    MeshComponent:
-      BaiscMesh: true
-      CurrentMesh: Cube
-      Albedo: [0.501960814, 0, 0]
-      Metallic: 0
-      Roughness: 0.970000029
-      AO: 1
-      AlbedoMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_albedo.png
-      NormalMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_normal-dx.png
-      MetallicMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_metallic.png
-      RoughnessMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_roughness.png
-      AOMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_ao.png
   - Entity: 97341566284622040
     TagComponent:
       Tag: Nano Suit
@@ -74,39 +51,29 @@ Entities:
       Metallic: 0
       Roughness: 0.5
       AO: 1
-  - Entity: 1578787732716344529
+  - Entity: 282277757421050746
     TagComponent:
-      Tag: Light
+      Tag: Floor
     TransformComponent:
-      Position: [3.05246282, 0.591207266, 3.40888453]
+      Position: [-0.711021721, -2.38723755, 0.627837718]
       Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
+      Scale: [20.1678715, 0.317795992, 16.7036819]
     RelationshipComponent:
       Parent: 0
       Children:
         []
-    LightComponent:
-      Color: [1, 1, 1]
-      Type: 1
-      HDRIntensity: 21.2000008
-      Dir.direction: [-0.200000003, -1, -0.300000012]
-      Dir.ambient: 0.0500000007
-      Dir.diffuse: 0.800000012
-      Dir.specular: 1
-      Point.ambient: 0.0500000007
-      Point.diffuse: 0.800000012
-      Point.specular: 1
-      Point.constant: 1
-      Point.linear: 0.0900000036
-      Point.quadratic: 0.0320000015
-      Spot.cutOff: 12.5
-      Spot.outerCutOff: 15
-      Spot.ambient: 0.0500000007
-      Spot.diffuse: 0.800000012
-      Spot.specular: 1
-      Spot.constant: 1
-      Spot.linear: 0.0900000036
-      Spot.quadratic: 0.0320000015
+    MeshComponent:
+      BaiscMesh: true
+      CurrentMesh: Cube
+      Albedo: [0.501960814, 0, 0]
+      Metallic: 0
+      Roughness: 0.980000019
+      AO: 1
+      AlbedoMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_albedo.png
+      NormalMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_normal-dx.png
+      MetallicMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_metallic.png
+      RoughnessMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_roughness.png
+      AOMap: assets\textures\PBR_Textures\hungarian-point-flooring-ue\hungarian-point-flooring_ao.png
   - Entity: 8711304613333127194
     TagComponent:
       Tag: God Light
@@ -122,10 +89,13 @@ Entities:
       Color: [1, 1, 1]
       Type: 0
       HDRIntensity: 1
-      Dir.direction: [0.5, -2.5, 4]
+      Dir.direction: [-0.899999976, -3.20000005, 4]
       Dir.ambient: 0.0500000007
       Dir.diffuse: 0.800000012
       Dir.specular: 1
+      Dir.znear: 0.100000001
+      Dir.zfar: 20
+      Dir.frustumWidth: 25
       Point.ambient: 0.0500000007
       Point.diffuse: 0.800000012
       Point.specular: 1

@@ -192,6 +192,9 @@ namespace spg {
 			float ambient = 0.05f;
 			float diffuse = 0.8f;
 			float specular = 1.0f;
+			float znear = 1.0f;
+			float zfar = 100.0f;
+			float frustumWidth = 100.f;
 		};
 
 		struct PointLight
